@@ -7,10 +7,11 @@ import static au.com.bytecode.opencsv.CSVWriter.DEFAULT_SEPARATOR;
 import static jp.gr.java_conf.afterthesunrise.commons.log.Logs.logWarn;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -26,7 +27,6 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
-import com.google.common.io.Closeables;
 
 /**
  * @author takanori.takase
@@ -72,53 +72,36 @@ public class CsvWriterImpl implements CsvWriter {
 	public void write(File file, List<String> headers,
 			Iterable<List<String>> iterable) throws IOException {
 
-		CSVWriter writer = createWriter(file);
+		OutputStream out = generateOutputStream(file);
 
-		try {
+		try (CSVWriter writer = createWriter(out)) {
 
-			writeHeaders(writer, headers);
+			String[] line = headers.toArray(new String[headers.size()]);
 
-			writeValues(writer, headers.size(), iterable);
+			writer.writeNext(line);
 
-			writer.flush();
+			writeValues(writer, line.length, iterable);
 
-		} finally {
-			Closeables.closeQuietly(writer);
 		}
 
 	}
 
 	@VisibleForTesting
-	CSVWriter createWriter(File file) throws IOException {
+	OutputStream generateOutputStream(File file) throws FileNotFoundException {
+		return new FileOutputStream(file, false);
+	}
 
-		if (file == null) {
-			throw new IOException("File is null.");
-		}
-
-		FileOutputStream out = new FileOutputStream(file);
+	@VisibleForTesting
+	CSVWriter createWriter(OutputStream out) throws IOException {
 
 		OutputStreamWriter writer = new OutputStreamWriter(out, charset);
 
-		return generateWriter(writer);
-
-	}
-
-	@VisibleForTesting
-	CSVWriter generateWriter(Writer writer) {
 		return new CSVWriter(writer, separator, quote, escape, lineEnd);
-	}
-
-	@VisibleForTesting
-	void writeHeaders(CSVWriter writer, List<String> headers) {
-
-		String[] line = headers.toArray(new String[headers.size()]);
-
-		writer.writeNext(line);
 
 	}
 
-	@VisibleForTesting
-	void writeValues(CSVWriter writer, int columns, Iterable<List<String>> itr) {
+	private void writeValues(CSVWriter writer, int columns,
+			Iterable<List<String>> itr) {
 
 		long row = 0L;
 
