@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jp.gr.java_conf.afterthesunrise.commons.comparator.NullSafeComparator;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ObjectUtils;
 
@@ -19,6 +21,10 @@ public final class Comparisons {
 
 	public static boolean equals(Object o1, Object o2, Object o3) {
 		return ObjectUtils.equals(o1, o2) && ObjectUtils.equals(o2, o3);
+	}
+
+	public static <T> int compare(Comparable<T> o1, Comparable<T> o2) {
+		return NullSafeComparator.get().compare(o1, o2);
 	}
 
 	public static <T> boolean equals(Collection<T> c1, Collection<T> c2) {
