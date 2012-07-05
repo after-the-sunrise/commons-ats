@@ -13,6 +13,8 @@ public final class NullSafeComparator<T extends Comparable<T>> implements
 
 	private static final long serialVersionUID = 4580718469939176830L;
 
+	private static final int EQUALS = 0;
+
 	@SuppressWarnings("rawtypes")
 	private static final NullSafeComparator INSTANCE = new NullSafeComparator();
 
@@ -26,6 +28,10 @@ public final class NullSafeComparator<T extends Comparable<T>> implements
 
 	@Override
 	public int compare(T o1, T o2) {
+
+		if (o1 == o2) {
+			return EQUALS;
+		}
 
 		if (o1 != null && o2 != null) {
 			return o1.compareTo(o2);
