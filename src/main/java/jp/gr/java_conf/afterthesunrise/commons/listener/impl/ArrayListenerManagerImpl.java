@@ -22,7 +22,7 @@ public class ArrayListenerManagerImpl<L> implements PredicateListenerManager<L> 
 	private final List<L> listeners;
 
 	public ArrayListenerManagerImpl() {
-		this.listeners = new CopyOnWriteArrayList<L>();
+		this(new CopyOnWriteArrayList<L>());
 	}
 
 	public ArrayListenerManagerImpl(List<L> listeners) {
