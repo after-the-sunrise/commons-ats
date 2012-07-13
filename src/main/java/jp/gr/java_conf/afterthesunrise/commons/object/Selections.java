@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * @author takanori.takase
@@ -22,6 +23,16 @@ public final class Selections {
 		}
 
 		return c.contains(value) ? value : c.iterator().next();
+
+	}
+
+	public static <T> T selectFirst(T[] c, T value) {
+
+		if (ArrayUtils.isEmpty(c)) {
+			return null;
+		}
+
+		return ArrayUtils.contains(c, value) ? value : c[0];
 
 	}
 

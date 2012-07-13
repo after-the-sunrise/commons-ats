@@ -42,6 +42,7 @@ public class CsvWriterImplTest {
 	public void testSetParameters() throws IOException {
 
 		target.setCharset(Charsets.UTF_16);
+		target.setSeparator(':');
 		target.setQuote('\'');
 		target.setEscape('\\');
 		target.setLineEnd("|EOL|");
@@ -49,14 +50,13 @@ public class CsvWriterImplTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		CSVWriter writer = target.createWriter(out);
-		writer.writeNext(new String[] { "col1", "col2", "col3" });
-		writer.writeNext(new String[] { "r1c1", "r1'c2", "r1c3" });
+		writer.writeNext(new String[] { "col1", "col2" });
+		writer.writeNext(new String[] { "r1c1", "r1'c2" });
 		writer.close();
 
 		String result = new String(out.toByteArray(), Charsets.UTF_16);
 
-		assertEquals("'col1','col2','col3'|EOL|'r1c1','r1\\'c2','r1c3'|EOL|",
-				result);
+		assertEquals("'col1':'col2'|EOL|'r1c1':'r1\\'c2'|EOL|", result);
 
 	}
 
