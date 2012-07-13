@@ -83,8 +83,8 @@ public final class DateFormats {
 
 	}
 
-	public static Date format(String pattern, String value) {
-		return format(pattern, value, null);
+	public static Date format(String format, String value) {
+		return format(format, value, null);
 	}
 
 	public static Date format(String format, String value, TimeZone timeZone) {
