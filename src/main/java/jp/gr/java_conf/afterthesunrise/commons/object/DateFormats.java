@@ -22,6 +22,8 @@ public final class DateFormats {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
+	private static final String DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS z";
+
 	private static final int MAX = 20;
 
 	private static final long DURATION = 1L;
@@ -83,11 +85,11 @@ public final class DateFormats {
 
 	}
 
-	public static Date format(String format, String value) {
-		return format(format, value, null);
+	public static Date parse(String format, String value) {
+		return parse(format, value, null);
 	}
 
-	public static Date format(String format, String value, TimeZone timeZone) {
+	public static Date parse(String format, String value, TimeZone timeZone) {
 
 		if (StringUtils.isBlank(value)) {
 			return null;
@@ -110,6 +112,48 @@ public final class DateFormats {
 		} catch (ParseException e) {
 			return null;
 		}
+
+	}
+
+	public static String format(Long value) {
+		return value == null ? null : format(new Date(value));
+	}
+
+	public static String format(Long value, String format) {
+		return value == null ? null : format(new Date(value), format);
+	}
+
+	public static String format(Long value, String format, TimeZone timeZone) {
+		return value == null ? null : format(new Date(value), format, timeZone);
+	}
+
+	public static String format(Date value) {
+		return format(value, DEFAULT);
+	}
+
+	public static String format(Date value, String format) {
+		return format(value, format, null);
+	}
+
+	public static String format(Date value, String format, TimeZone timeZone) {
+
+		if (value == null) {
+			return null;
+		}
+
+		DateFormat dateFormat = getRaw(format);
+
+		if (dateFormat == null) {
+			return null;
+		}
+
+		if (timeZone == null) {
+			dateFormat.setTimeZone(TimeZone.getDefault());
+		} else {
+			dateFormat.setTimeZone(timeZone);
+		}
+
+		return dateFormat.format(value);
 
 	}
 
