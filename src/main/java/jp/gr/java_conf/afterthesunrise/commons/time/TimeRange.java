@@ -2,8 +2,6 @@ package jp.gr.java_conf.afterthesunrise.commons.time;
 
 import static java.lang.String.format;
 import static java.util.Objects.hash;
-import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.Serializable;
 import java.util.TimeZone;
@@ -14,8 +12,6 @@ import java.util.TimeZone;
 public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 	private static final long serialVersionUID = -7007270029824693640L;
-
-	private static final long MILLIS_PER_DAY = MILLISECONDS.convert(1L, DAYS);
 
 	private final TimeZone timeZone;
 
@@ -84,7 +80,7 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 		// Handle overnight time (cf: 16:00 ~ 01:30)
 		if (e < s) {
-			e += MILLIS_PER_DAY;
+			return !(e < value && value < s);
 		}
 
 		return s <= value && value <= e;
