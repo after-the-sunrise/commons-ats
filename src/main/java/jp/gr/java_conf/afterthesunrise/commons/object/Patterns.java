@@ -27,6 +27,8 @@ public final class Patterns {
 
 	private static final LoadingCache<String, Pattern> CACHE;
 
+	private static final Pattern NULL = Pattern.compile("^$");
+
 	static {
 
 		CacheLoader<String, Pattern> loader = new CacheLoader<String, Pattern>() {
@@ -35,7 +37,7 @@ public final class Patterns {
 				try {
 					return Pattern.compile(key);
 				} catch (Exception e) {
-					return null;
+					return NULL;
 				}
 			}
 		};
@@ -51,7 +53,9 @@ public final class Patterns {
 			return null;
 		}
 
-		return CACHE.getUnchecked(pattern.intern());
+		Pattern p = CACHE.getUnchecked(pattern.intern());
+
+		return p == NULL ? null : p;
 
 	}
 

@@ -27,6 +27,8 @@ public final class Numbers {
 
 	private static final LoadingCache<String, BigDecimal> CACHE;
 
+	private static final BigDecimal NULL = new BigDecimal("0.0");
+
 	static {
 
 		CacheLoader<String, BigDecimal> loader = new CacheLoader<String, BigDecimal>() {
@@ -35,7 +37,7 @@ public final class Numbers {
 				try {
 					return new BigDecimal(key);
 				} catch (Exception e) {
-					return null;
+					return NULL;
 				}
 			}
 		};
@@ -57,7 +59,7 @@ public final class Numbers {
 
 		BigDecimal cached = CACHE.getUnchecked(value.intern());
 
-		return cached != null ? cached : defaultValue;
+		return cached != NULL ? cached : defaultValue;
 
 	}
 

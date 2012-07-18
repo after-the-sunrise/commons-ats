@@ -24,6 +24,10 @@ public final class DateFormats {
 
 	private static final String DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS z";
 
+	private static final DateFormat NULL = new SimpleDateFormat(DEFAULT);
+
+	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+
 	private static final int MAX = 20;
 
 	private static final long DURATION = 1L;
@@ -40,7 +44,7 @@ public final class DateFormats {
 				try {
 					return new SimpleDateFormat(key);
 				} catch (Exception e) {
-					return null;
+					return NULL;
 				}
 			}
 		};
@@ -81,15 +85,17 @@ public final class DateFormats {
 			return null;
 		}
 
-		return LOCAL.get().getUnchecked(format.intern());
+		DateFormat fmt = LOCAL.get().getUnchecked(format.intern());
+
+		return fmt == NULL ? null : fmt;
 
 	}
 
-	public static Date parse(String format, String value) {
-		return parse(format, value, null);
+	public static Date parse(String value, String format) {
+		return parse(value, format, null);
 	}
 
-	public static Date parse(String format, String value, TimeZone timeZone) {
+	public static Date parse(String value, String format, TimeZone timeZone) {
 
 		if (StringUtils.isBlank(value)) {
 			return null;
@@ -155,6 +161,22 @@ public final class DateFormats {
 
 		return dateFormat.format(value);
 
+	}
+
+	public static String formatGMT(Long value) {
+		return value == null ? null : format(new Date(value), DEFAULT, GMT);
+	}
+
+	public static String formatGMT(Long value, String format) {
+		return value == null ? null : format(new Date(value), format, GMT);
+	}
+
+	public static String formatGMT(Date value) {
+		return format(value, DEFAULT, GMT);
+	}
+
+	public static String formatGMT(Date value, String format) {
+		return format(value, format, GMT);
 	}
 
 }
