@@ -54,6 +54,15 @@ public class AbstractEnumsConverterTest {
 	}
 
 	@Test
+	public void testConvert_Blank() {
+
+		List<RoundingMode> list = target.convert("");
+
+		assertEquals(0, list.size());
+
+	}
+
+	@Test
 	public void testConvert_CustomDelimiter() {
 
 		target = new AbstractEnumsConverter<RoundingMode>(RoundingMode.class,

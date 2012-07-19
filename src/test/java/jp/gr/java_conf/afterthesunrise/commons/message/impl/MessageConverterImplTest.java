@@ -2,6 +2,7 @@ package jp.gr.java_conf.afterthesunrise.commons.message.impl;
 
 import static java.util.Locale.JAPAN;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import jp.gr.java_conf.afterthesunrise.commons.locale.LocaleManager;
@@ -48,6 +49,40 @@ public class MessageConverterImplTest {
 		when(messageSource.getMessage(key, null, JAPAN)).thenReturn("hoge");
 
 		assertEquals("hoge", target.convert("test", (Object[]) null));
+
+	}
+
+	@Test
+	public void testConvert_NullKey() {
+
+		// Preset mocks
+		testConvert();
+
+		assertNull(target.convert(null, (Object[]) null));
+
+	}
+
+	@Test
+	public void testConvert_NullLocale() {
+
+		// Preset mocks
+		testConvert();
+
+		when(localeManager.getCurrent()).thenReturn(null);
+
+		assertNull(target.convert("test", (Object[]) null));
+
+	}
+
+	@Test
+	public void testConvert_NullPrefix() {
+
+		// Preset mocks
+		testConvert();
+
+		target.setKeyPrefix(null);
+
+		assertEquals("hoge", target.convert("foo.bar.test", (Object[]) null));
 
 	}
 

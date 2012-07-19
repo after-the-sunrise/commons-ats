@@ -23,14 +23,18 @@ public class NullSafeComparatorTest {
 		list.add("2");
 		list.add("2");
 		list.add(null);
+		list.add(null);
 		list.add("3");
+
+		int size = list.size();
 
 		Collections.shuffle(list);
 
 		Collections.sort(list, NullSafeComparator.get());
 
 		Iterator<String> itr = list.iterator();
-		assertEquals(6, list.size());
+		assertEquals(size, list.size());
+		assertEquals(null, itr.next());
 		assertEquals(null, itr.next());
 		assertEquals(null, itr.next());
 		assertEquals("1", itr.next());

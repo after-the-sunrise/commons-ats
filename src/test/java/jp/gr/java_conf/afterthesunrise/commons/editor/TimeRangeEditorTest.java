@@ -90,4 +90,14 @@ public class TimeRangeEditorTest {
 		target.setAsText("HH:mm:ss:SSS-12:34:56:789 Asia/Tokyo");
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_TooManyStartArguments() {
+		target.setAsText("01:23:45:678:000-12:34:56:789 Asia/Tokyo");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_TooManyEndArguments() {
+		target.setAsText("01:23:45:678-12:34:56:789:000 Asia/Tokyo");
+	}
+
 }
