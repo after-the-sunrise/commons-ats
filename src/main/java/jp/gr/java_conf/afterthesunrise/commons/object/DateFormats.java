@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Objects;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -74,6 +75,9 @@ public final class DateFormats {
 			return null;
 		}
 
+		// Reset time zone
+		raw.setTimeZone(TimeZone.getDefault());
+
 		// Defensive copy
 		return (DateFormat) raw.clone();
 
@@ -81,14 +85,16 @@ public final class DateFormats {
 
 	private static DateFormat getRaw(String format) {
 
-		if (StringUtils.isBlank(format)) {
-			return null;
-		}
+		String pattern = Objects.firstNonNull(format, DEFAULT);
 
-		DateFormat fmt = LOCAL.get().getUnchecked(format.intern());
+		DateFormat fmt = LOCAL.get().getUnchecked(pattern.intern());
 
 		return fmt == NULL ? null : fmt;
 
+	}
+
+	public static Date parse(String value) {
+		return parse(value, null, null);
 	}
 
 	public static Date parse(String value, String format) {
