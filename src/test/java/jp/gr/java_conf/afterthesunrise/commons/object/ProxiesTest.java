@@ -5,22 +5,24 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 
 import org.junit.Test;
 
 /**
  * @author takanori.takase
  */
-public class AutoCloseablesTest {
+public class ProxiesTest {
 
 	@Test(expected = IllegalAccessError.class)
 	public void testConstructor() throws Throwable {
 
-		Class<?> clazz = AutoCloseables.class;
+		Class<?> clazz = Proxies.class;
 
 		Constructor<?> c = clazz.getDeclaredConstructor();
 
@@ -37,32 +39,33 @@ public class AutoCloseablesTest {
 	}
 
 	@Test
-	public void testCloseQuietly() throws Exception {
+	public void testDelegate() throws IOException {
 
-		AutoCloseable c = mock(AutoCloseable.class);
+		Closeable mock = mock(Closeable.class);
 
-		AutoCloseables.closeQuietly(c);
+		Closeable proxy = Proxies.delegate(Closeable.class, mock);
 
-		verify(c).close();
+		assertTrue(Proxy.isProxyClass(proxy.getClass()));
 
-	}
+		proxy.close();
 
-	@Test
-	public void testCloseQuietly_Exception() throws Exception {
-
-		AutoCloseable c = mock(AutoCloseable.class);
-
-		doThrow(new IOException("test")).when(c).close();
-
-		AutoCloseables.closeQuietly(c);
-
-		verify(c).close();
+		verify(mock).close();
 
 	}
 
-	@Test
-	public void testCloseQuietly_Null() throws Exception {
-		AutoCloseables.closeQuietly(null);
+	@Test(expected = IOException.class)
+	public void testDelegate_Exception() throws IOException {
+
+		Closeable mock = mock(Closeable.class);
+
+		doThrow(new IOException("test")).when(mock).close();
+
+		Closeable proxy = Proxies.delegate(Closeable.class, mock);
+
+		assertTrue(Proxy.isProxyClass(proxy.getClass()));
+
+		proxy.close();
+
 	}
 
 }

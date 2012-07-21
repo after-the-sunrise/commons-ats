@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,6 +46,8 @@ public class DateFormatsTest {
 
 		Constructor<?> c = clazz.getDeclaredConstructor();
 
+		assertTrue(Modifier.isPrivate(c.getModifiers()));
+
 		c.setAccessible(true);
 
 		try {
@@ -70,6 +73,19 @@ public class DateFormatsTest {
 	}
 
 	@Test
+	public void testGet_Invalid() {
+
+		assertNull(DateFormats.get(null));
+
+		assertNull(DateFormats.get(""));
+
+		assertNull(DateFormats.get(" "));
+
+		assertNull(DateFormats.get("foo"));
+
+	}
+
+	@Test
 	public void testParse() {
 
 		Date date = new Date();
@@ -77,6 +93,8 @@ public class DateFormatsTest {
 		String value = dateFormat.format(date);
 
 		assertNull(DateFormats.parse(value));
+
+		assertNull(DateFormats.parse(null));
 
 	}
 
@@ -92,6 +110,10 @@ public class DateFormatsTest {
 
 		assertEquals(date, DateFormats.parse(value, pattern));
 
+		assertNull(DateFormats.parse(null, pattern));
+
+		assertNull(DateFormats.parse(value, "foo"));
+
 	}
 
 	@Test
@@ -103,6 +125,10 @@ public class DateFormatsTest {
 
 		assertEquals(date, DateFormats.parse(value, pattern, timeZone));
 
+		assertNull(DateFormats.parse(null, pattern, timeZone));
+
+		assertNull(DateFormats.parse(value, "foo", timeZone));
+
 	}
 
 	@Test
@@ -112,6 +138,8 @@ public class DateFormatsTest {
 		dateFormat.setTimeZone(TimeZone.getDefault());
 
 		Date date = new Date();
+
+		assertNull(DateFormats.format((Date) null));
 
 		assertTrue(DateFormats.format(date).startsWith(dateFormat.format(date)));
 
@@ -127,6 +155,10 @@ public class DateFormatsTest {
 
 		assertEquals(dateFormat.format(date), DateFormats.format(date, pattern));
 
+		assertNull(DateFormats.format((Date) null, pattern));
+
+		assertNull(DateFormats.format(date, "foo"));
+
 	}
 
 	@Test
@@ -137,6 +169,10 @@ public class DateFormatsTest {
 		assertEquals(dateFormat.format(date),
 				DateFormats.format(date, pattern, timeZone));
 
+		assertNull(DateFormats.format((Date) null, pattern, timeZone));
+
+		assertNull(DateFormats.format(date, "foo", timeZone));
+
 	}
 
 	@Test
@@ -146,6 +182,8 @@ public class DateFormatsTest {
 		dateFormat.setTimeZone(TimeZone.getDefault());
 
 		Date date = new Date(0L);
+
+		assertNull(DateFormats.format((Long) null));
 
 		assertTrue(DateFormats.format(date).startsWith(dateFormat.format(0L)));
 
@@ -161,6 +199,10 @@ public class DateFormatsTest {
 
 		assertEquals(dateFormat.format(date), DateFormats.format(0L, pattern));
 
+		assertNull(DateFormats.format((Long) null, pattern));
+
+		assertNull(DateFormats.format(0L, "foo"));
+
 	}
 
 	@Test
@@ -170,6 +212,10 @@ public class DateFormatsTest {
 
 		assertEquals(dateFormat.format(date),
 				DateFormats.format(0L, pattern, timeZone));
+
+		assertNull(DateFormats.format((Long) null, pattern, timeZone));
+
+		assertNull(DateFormats.format(0L, "foo", timeZone));
 
 	}
 
@@ -183,6 +229,8 @@ public class DateFormatsTest {
 		assertTrue(DateFormats.formatGMT(0L)
 				.startsWith(dateFormat.format(date)));
 
+		assertNull(DateFormats.formatGMT((Long) null));
+
 	}
 
 	@Test
@@ -194,6 +242,10 @@ public class DateFormatsTest {
 
 		assertEquals(dateFormat.format(date),
 				DateFormats.formatGMT(0L, pattern));
+
+		assertNull(DateFormats.formatGMT((Long) null, pattern));
+
+		assertNull(DateFormats.formatGMT(0L, "foo"));
 
 	}
 
@@ -207,6 +259,8 @@ public class DateFormatsTest {
 		assertTrue(DateFormats.formatGMT(date).startsWith(
 				dateFormat.format(date)));
 
+		assertNull(DateFormats.formatGMT((Date) null));
+
 	}
 
 	@Test
@@ -218,6 +272,10 @@ public class DateFormatsTest {
 
 		assertEquals(dateFormat.format(date),
 				DateFormats.formatGMT(date, pattern));
+
+		assertNull(DateFormats.formatGMT((Date) null, pattern));
+
+		assertNull(DateFormats.formatGMT((Date) date, "foo"));
 
 	}
 

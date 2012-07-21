@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,6 +29,8 @@ public class ComparisonsTest {
 		Class<?> clazz = Comparisons.class;
 
 		Constructor<?> c = clazz.getDeclaredConstructor();
+
+		assertTrue(Modifier.isPrivate(c.getModifiers()));
 
 		c.setAccessible(true);
 
@@ -87,16 +90,19 @@ public class ComparisonsTest {
 		Collection<String> c3 = Arrays.asList("bar");
 		Collection<String> c4 = Arrays.asList("foo", "bar");
 		Collection<String> c5 = null;
-		Collection<String> c6 = null;
 
 		assertTrue(Comparisons.equals(c1, c1));
 		assertTrue(Comparisons.equals(c1, c2));
 
 		assertFalse(Comparisons.equals(c1, c3));
 		assertFalse(Comparisons.equals(c1, c4));
-		assertFalse(Comparisons.equals(c1, null));
+		assertFalse(Comparisons.equals(c1, c5));
 
-		assertTrue(Comparisons.equals(c5, c6));
+		assertFalse(Comparisons.equals(c3, c1));
+		assertFalse(Comparisons.equals(c4, c1));
+		assertFalse(Comparisons.equals(c5, c1));
+
+		assertTrue(Comparisons.equals(c5, c5));
 
 	}
 
@@ -108,16 +114,19 @@ public class ComparisonsTest {
 		Map<String, String> c3 = Collections.singletonMap("bar", "foo");
 		Map<String, String> c4 = Collections.emptyMap();
 		Map<String, String> c5 = null;
-		Map<String, String> c6 = null;
 
 		assertTrue(Comparisons.equals(c1, c1));
 		assertTrue(Comparisons.equals(c1, c2));
 
 		assertFalse(Comparisons.equals(c1, c3));
 		assertFalse(Comparisons.equals(c1, c4));
-		assertFalse(Comparisons.equals(c1, null));
+		assertFalse(Comparisons.equals(c1, c5));
 
-		assertTrue(Comparisons.equals(c5, c6));
+		assertFalse(Comparisons.equals(c3, c1));
+		assertFalse(Comparisons.equals(c4, c1));
+		assertFalse(Comparisons.equals(c5, c1));
+
+		assertTrue(Comparisons.equals(c5, c5));
 	}
 
 	@Test
