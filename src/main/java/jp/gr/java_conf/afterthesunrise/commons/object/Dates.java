@@ -1,7 +1,5 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -22,9 +20,11 @@ public class Dates {
 		}
 	};
 
-	public static long adjustStartOfDay(long timestamp, TimeZone timeZone) {
+	public static Long adjustStartOfDay(long timestamp, TimeZone timeZone) {
 
-		checkNotNull(timeZone, "TimeZone is null.");
+		if (timeZone == null) {
+			return null;
+		}
 
 		Calendar cal = CALS.get();
 
@@ -40,9 +40,13 @@ public class Dates {
 
 	}
 
-	public static long adjustEndOfDay(long timestamp, TimeZone timeZone) {
+	public static Long adjustEndOfDay(long timestamp, TimeZone timeZone) {
 
-		long sod = adjustStartOfDay(timestamp, timeZone);
+		Long sod = adjustStartOfDay(timestamp, timeZone);
+
+		if (sod == null) {
+			return null;
+		}
 
 		Calendar cal = CALS.get();
 
@@ -54,11 +58,11 @@ public class Dates {
 
 	}
 
-	public static long swapTimeZone(long timestamp, TimeZone from, TimeZone to) {
+	public static Long swapTimeZone(long timestamp, TimeZone from, TimeZone to) {
 
-		checkNotNull(from, "From-TimeZone is null.");
-
-		checkNotNull(to, "To-TimeZone is null.");
+		if (from == null || to == null) {
+			return null;
+		}
 
 		return timestamp + from.getOffset(timestamp) - to.getOffset(timestamp);
 
