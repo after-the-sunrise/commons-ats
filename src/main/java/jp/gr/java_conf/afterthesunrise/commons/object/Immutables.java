@@ -22,6 +22,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+
 /**
  * @author takanori.takase
  */
@@ -37,9 +40,19 @@ public final class Immutables {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
+	@SuppressWarnings("unchecked")
+	public static final <T> SortedSet<T> emptySortedSet() {
+		return SET;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static final <K, V> SortedMap<K, V> emptySortedMap() {
+		return MAP;
+	}
+
 	public static final <T> List<T> arrayList(Collection<T> col) {
 
-		if (col == null) {
+		if (CollectionUtils.isEmpty(col)) {
 			return emptyList();
 		}
 
@@ -49,7 +62,7 @@ public final class Immutables {
 
 	public static final <T> List<T> linkedList(Collection<T> col) {
 
-		if (col == null) {
+		if (CollectionUtils.isEmpty(col)) {
 			return emptyList();
 		}
 
@@ -59,7 +72,7 @@ public final class Immutables {
 
 	public static final <T> Set<T> hashSet(Collection<T> col) {
 
-		if (col == null) {
+		if (CollectionUtils.isEmpty(col)) {
 			return emptySet();
 		}
 
@@ -69,20 +82,17 @@ public final class Immutables {
 
 	public static final <T> SortedSet<T> treeSet(Collection<T> col) {
 
-		@SuppressWarnings("unchecked")
-		SortedSet<T> result = SET;
-
-		if (col != null) {
-			result = unmodifiableSortedSet(new TreeSet<>(col));
+		if (CollectionUtils.isEmpty(col)) {
+			return emptySortedSet();
 		}
 
-		return result;
+		return unmodifiableSortedSet(new TreeSet<>(col));
 
 	}
 
 	public static final <K, V> Map<K, V> hashMap(Map<K, V> map) {
 
-		if (map == null) {
+		if (MapUtils.isEmpty(map)) {
 			return emptyMap();
 		}
 
@@ -92,14 +102,11 @@ public final class Immutables {
 
 	public static final <K, V> SortedMap<K, V> treeMap(Map<K, V> map) {
 
-		@SuppressWarnings("unchecked")
-		SortedMap<K, V> result = MAP;
-
-		if (map != null) {
-			result = unmodifiableSortedMap(new TreeMap<>(map));
+		if (MapUtils.isEmpty(map)) {
+			return emptySortedMap();
 		}
 
-		return result;
+		return unmodifiableSortedMap(new TreeMap<>(map));
 
 	}
 
