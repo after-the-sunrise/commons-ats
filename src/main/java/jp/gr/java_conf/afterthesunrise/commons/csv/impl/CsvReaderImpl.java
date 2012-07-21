@@ -33,6 +33,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
+import com.google.common.io.Closeables;
 
 /**
  * @author takanori.takase
@@ -91,10 +92,12 @@ public class CsvReaderImpl implements CsvReader {
 	@Override
 	public long read(File file, CsvLineHandler handler) throws IOException {
 
-		try (InputStream in = new FileInputStream(file)) {
+		InputStream in = new FileInputStream(file);
 
+		try {
 			return read(in, handler);
-
+		} finally {
+			Closeables.closeQuietly(in);
 		}
 
 	}
@@ -102,10 +105,12 @@ public class CsvReaderImpl implements CsvReader {
 	@Override
 	public long read(URL url, CsvLineHandler handler) throws IOException {
 
-		try (InputStream in = url.openStream()) {
+		InputStream in = url.openStream();
 
+		try {
 			return read(in, handler);
-
+		} finally {
+			Closeables.closeQuietly(in);
 		}
 
 	}
@@ -145,12 +150,16 @@ public class CsvReaderImpl implements CsvReader {
 	private long read(InputStream in, CsvLineHandler handler)
 			throws IOException {
 
-		try (CSVReader reader = createReader(in)) {
+		CSVReader reader = createReader(in);
+
+		try {
 
 			String[] headers = reader.readNext();
 
 			return readValues(headers, reader, handler);
 
+		} finally {
+			Closeables.closeQuietly(reader);
 		}
 
 	}

@@ -27,6 +27,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
+import com.google.common.io.Closeables;
 
 /**
  * @author takanori.takase
@@ -74,14 +75,24 @@ public class CsvWriterImpl implements CsvWriter {
 
 		OutputStream out = generateOutputStream(file);
 
-		try (CSVWriter writer = createWriter(out)) {
+		try {
 
-			String[] line = headers.toArray(new String[headers.size()]);
+			CSVWriter writer = createWriter(out);
 
-			writer.writeNext(line);
+			try {
 
-			writeValues(writer, line.length, iterable);
+				String[] line = headers.toArray(new String[headers.size()]);
 
+				writer.writeNext(line);
+
+				writeValues(writer, line.length, iterable);
+
+			} finally {
+				Closeables.closeQuietly(writer);
+			}
+
+		} finally {
+			Closeables.closeQuietly(out);
 		}
 
 	}
