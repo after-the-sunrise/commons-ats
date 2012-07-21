@@ -93,7 +93,7 @@
 		<dependency.commons-io.version>2.3</dependency.commons-io.version>
 		<dependency.commons-lang.version>2.6</dependency.commons-lang.version>
 		<dependency.commons-log.version>1.1.1</dependency.commons-log.version>
-		<dependency.guava.version>12.0</dependency.guava.version>
+		<dependency.guava.version>12.0.1</dependency.guava.version>
 		<dependency.jcommander.version>1.27</dependency.jcommander.version>
 		<dependency.junit.version>4.10</dependency.junit.version>
 		<dependency.log4j.version>1.2.17</dependency.log4j.version>
