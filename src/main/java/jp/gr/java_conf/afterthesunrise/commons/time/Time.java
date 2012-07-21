@@ -12,6 +12,8 @@ public class Time implements Serializable, Comparable<Time> {
 
 	private static final long serialVersionUID = 1761936346784382781L;
 
+	private static final int ZERO = 0;
+
 	private final int hour;
 
 	private final int minute;
@@ -19,6 +21,22 @@ public class Time implements Serializable, Comparable<Time> {
 	private final int second;
 
 	private final int millisecond;
+
+	public Time() {
+		this(ZERO);
+	}
+
+	public Time(int hour) {
+		this(hour, ZERO);
+	}
+
+	public Time(int hour, int minute) {
+		this(hour, minute, ZERO);
+	}
+
+	public Time(int hour, int minute, int second) {
+		this(hour, minute, second, ZERO);
+	}
 
 	public Time(int hour, int minute, int second, int millisecond) {
 		this.hour = hour;

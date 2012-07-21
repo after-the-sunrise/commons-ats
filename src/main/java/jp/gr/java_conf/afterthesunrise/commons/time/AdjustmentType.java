@@ -5,6 +5,7 @@ import static java.util.Calendar.DAY_OF_WEEK;
 import static java.util.Calendar.MONTH;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
@@ -12,8 +13,6 @@ import java.util.TimeZone;
 import jp.gr.java_conf.afterthesunrise.commons.object.Dates;
 
 import org.apache.commons.collections.CollectionUtils;
-
-import com.google.common.base.Objects;
 
 /**
  * @author takanori.takase
@@ -124,16 +123,18 @@ public enum AdjustmentType {
 		}
 	};
 
-	public long getNext(long timestamp, TimeZone timeZone,
-			Set<DayType> holidayTypes, Set<Long> holidayDates) {
+	public Long getNext(Long timestamp, TimeZone timeZone,
+			Collection<DayType> holidayTypes, Collection<Long> holidayDates) {
 
-		TimeZone tz = Objects.firstNonNull(timeZone, TimeZone.getDefault());
+		if (timestamp == null || timeZone == null) {
+			return null;
+		}
 
 		Set<Integer> calDays = convert(holidayTypes);
 
-		Set<Long> sods = adjustSod(holidayDates, tz);
+		Set<Long> sods = adjustSod(holidayDates, timeZone);
 
-		return getNextInternal(timestamp, tz, calDays, sods);
+		return getNextInternal(timestamp, timeZone, calDays, sods);
 
 	}
 
@@ -147,7 +148,7 @@ public enum AdjustmentType {
 		}
 	};
 
-	private static Set<Integer> convert(Set<DayType> days) {
+	private static Set<Integer> convert(Collection<DayType> days) {
 
 		if (CollectionUtils.isEmpty(days)) {
 			return null;
@@ -173,7 +174,7 @@ public enum AdjustmentType {
 
 	}
 
-	private static Set<Long> adjustSod(Set<Long> dates, TimeZone timeZone) {
+	private static Set<Long> adjustSod(Collection<Long> dates, TimeZone timeZone) {
 
 		if (CollectionUtils.isEmpty(dates)) {
 			return null;
@@ -204,7 +205,9 @@ public enum AdjustmentType {
 	private static boolean isHoliday(Calendar cal, Set<Integer> days,
 			Set<Long> dates, TimeZone timeZone) {
 
-		if (days != null && days.contains(cal.get(DAY_OF_WEEK))) {
+		int dayOfWeek = cal.get(DAY_OF_WEEK);
+
+		if (days != null && days.contains(dayOfWeek)) {
 			return true;
 		}
 

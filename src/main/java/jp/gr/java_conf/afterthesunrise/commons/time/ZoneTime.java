@@ -26,11 +26,6 @@ public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 
 	private final TimeZone timeZone;
 
-	public ZoneTime(int hour, int minute, int second, int milli, TimeZone tz) {
-		this.time = new Time(hour, minute, second, milli);
-		this.timeZone = (TimeZone) checkNotNull(tz).clone();
-	}
-
 	public ZoneTime(Time time, TimeZone tz) {
 		this.time = checkNotNull(time);
 		this.timeZone = (TimeZone) checkNotNull(tz).clone();
@@ -67,7 +62,12 @@ public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 
 	}
 
-	public long adjust(long timestamp) {
+	public Long adjust(Long timestamp) {
+
+		if (timestamp == null) {
+			return null;
+		}
+
 		Calendar cal = CAL.get();
 		cal.setTimeZone(timeZone);
 		cal.setTimeInMillis(timestamp);

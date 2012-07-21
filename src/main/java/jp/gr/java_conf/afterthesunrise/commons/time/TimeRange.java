@@ -73,6 +73,10 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 	}
 
 	public boolean inRange(long value) {
+		return inRange(value, true, false);
+	}
+
+	public boolean inRange(long value, boolean includeStart, boolean includeEnd) {
 
 		long s = start.adjust(value);
 
@@ -80,10 +84,44 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 		// Handle overnight time (cf: 16:00 ~ 01:30)
 		if (e < s) {
-			return !(e < value && value < s);
+
+			if (includeStart) {
+				if (s <= value) {
+					return true;
+				}
+			} else {
+				if (s < value) {
+					return true;
+				}
+			}
+
+			if (includeEnd) {
+				if (value <= e) {
+					return true;
+				}
+			} else {
+				if (value < e) {
+					return true;
+				}
+			}
+
+			return false;
+
 		}
 
-		return s <= value && value <= e;
+		if (includeStart) {
+			if (includeEnd) {
+				return s <= value && value <= e;
+			} else {
+				return s <= value && value < e;
+			}
+		} else {
+			if (includeEnd) {
+				return s < value && value <= e;
+			} else {
+				return s < value && value < e;
+			}
+		}
 
 	}
 
