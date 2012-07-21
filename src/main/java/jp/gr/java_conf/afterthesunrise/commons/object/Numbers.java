@@ -1,8 +1,10 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
+import static java.math.BigDecimal.ONE;
+import static java.math.RoundingMode.DOWN;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -23,8 +25,6 @@ public final class Numbers {
 
 	private static final long DURATION = 1L;
 
-	private static final TimeUnit UNIT = TimeUnit.MINUTES;
-
 	private static final LoadingCache<String, BigDecimal> CACHE;
 
 	private static final BigDecimal NULL = new BigDecimal("0.0");
@@ -42,7 +42,7 @@ public final class Numbers {
 			}
 		};
 
-		CACHE = CacheBuilder.newBuilder().expireAfterAccess(DURATION, UNIT)
+		CACHE = CacheBuilder.newBuilder().expireAfterAccess(DURATION, MINUTES)
 				.maximumSize(MAX).build(loader);
 
 	}
@@ -63,6 +63,10 @@ public final class Numbers {
 
 	}
 
+	public static BigDecimal round(BigDecimal value) {
+		return round(value, ONE, null);
+	}
+
 	public static BigDecimal round(BigDecimal value, BigDecimal unit) {
 		return round(value, unit, null);
 	}
@@ -74,7 +78,7 @@ public final class Numbers {
 			return defaultValue;
 		}
 
-		BigDecimal quotient = value.divide(unit, 0, RoundingMode.DOWN);
+		BigDecimal quotient = value.divide(unit, 0, DOWN);
 
 		return unit.multiply(quotient);
 
