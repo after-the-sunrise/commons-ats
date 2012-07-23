@@ -23,6 +23,7 @@ import java.util.Map;
 import jp.gr.java_conf.afterthesunrise.commons.csv.CsvLineHandler;
 import jp.gr.java_conf.afterthesunrise.commons.csv.CsvReader;
 
+import org.apache.commons.io.input.CloseShieldInputStream;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -147,10 +148,26 @@ public class CsvReaderImpl implements CsvReader {
 
 	}
 
-	private long read(InputStream in, CsvLineHandler handler)
-			throws IOException {
+	@Override
+	public List<Map<String, String>> read(InputStream in) throws IOException {
 
-		CSVReader reader = createReader(in);
+		final List<Map<String, String>> lines = new ArrayList<>();
+
+		read(in, new CsvLineHandler() {
+			@Override
+			public void handle(Map<String, String> map) {
+				lines.add(map);
+			}
+		});
+
+		return lines;
+
+	}
+
+	@Override
+	public long read(InputStream in, CsvLineHandler handler) throws IOException {
+
+		CSVReader reader = createReader(new CloseShieldInputStream(in));
 
 		try {
 

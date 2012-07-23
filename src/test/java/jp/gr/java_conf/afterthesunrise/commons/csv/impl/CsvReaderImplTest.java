@@ -20,6 +20,7 @@ import org.junit.Test;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.Closeables;
 import com.google.common.io.Resources;
 
 /**
@@ -132,6 +133,21 @@ public class CsvReaderImplTest {
 		URL url = Resources.getResource("CsvReaderImplTest.csv");
 
 		checkContent(target.read(url));
+
+	}
+
+	@Test
+	public void testRead_Stream() throws IOException {
+
+		URL url = Resources.getResource("CsvReaderImplTest.csv");
+
+		InputStream in = url.openStream();
+
+		try {
+			checkContent(target.read(in));
+		} finally {
+			Closeables.closeQuietly(in);
+		}
 
 	}
 
