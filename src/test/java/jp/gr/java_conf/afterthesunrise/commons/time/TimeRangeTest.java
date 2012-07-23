@@ -89,7 +89,7 @@ public class TimeRangeTest {
 		TimeZone tz = TimeZone.getTimeZone("America/New_York");
 		assertEquals(+0, target.compareTo(target));
 		assertEquals(+0, target.compareTo(new TimeRange(timeZone, start, end)));
-		assertEquals(-1, target.compareTo(new TimeRange(tz, start, end)));
+		assertEquals(+1, target.compareTo(new TimeRange(tz, start, end)));
 		assertEquals(+1,
 				target.compareTo(new TimeRange(timeZone, new Time(), end)));
 		assertEquals(+1,
