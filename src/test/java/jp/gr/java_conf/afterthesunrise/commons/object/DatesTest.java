@@ -71,6 +71,8 @@ public class DatesTest {
 
 		assertEquals(Long.valueOf(expect.getTime()), result);
 
+		assertNull(Dates.adjustStartOfDay(null, tz));
+
 		assertNull(Dates.adjustStartOfDay(date.getTime(), null));
 
 	}
@@ -85,6 +87,8 @@ public class DatesTest {
 		Long result = Dates.adjustEndOfDay(date.getTime(), tz);
 
 		assertEquals(Long.valueOf(expect.getTime()), result);
+
+		assertNull(Dates.adjustEndOfDay(null, tz));
 
 		assertNull(Dates.adjustEndOfDay(date.getTime(), null));
 
@@ -104,6 +108,8 @@ public class DatesTest {
 		Long result = Dates.swapTimeZone(date.getTime(), tz, toTz);
 
 		assertEquals(Long.valueOf(expect.getTime()), result);
+
+		assertNull(Dates.swapTimeZone(null, tz, toTz));
 
 		assertNull(Dates.swapTimeZone(date.getTime(), tz, null));
 
@@ -133,7 +139,7 @@ public class DatesTest {
 	}
 
 	@Test
-	public void testToSqlDate() {
+	public void testToSqlDate_Long() {
 
 		long now = System.currentTimeMillis();
 
@@ -141,14 +147,44 @@ public class DatesTest {
 
 		assertEquals(now, date.getTime());
 
-		assertNull(Dates.toSqlDate(null));
+		assertNull(Dates.toSqlDate((Long) null));
 
 		assertSame(date, Dates.toSqlDate(date));
 
 	}
 
 	@Test
-	public void testToSqlTime() {
+	public void testToSqlDate_Date() {
+
+		long now = System.currentTimeMillis();
+
+		java.sql.Date date = Dates.toSqlDate(new Date(now));
+
+		assertEquals(now, date.getTime());
+
+		assertNull(Dates.toSqlDate((Date) null));
+
+		assertSame(date, Dates.toSqlDate(date));
+
+	}
+
+	@Test
+	public void testToSqlTime_Long() {
+
+		long now = System.currentTimeMillis();
+
+		java.sql.Timestamp time = Dates.toSqlTime(now);
+
+		assertEquals(now, time.getTime());
+
+		assertNull(Dates.toSqlTime((Long) null));
+
+		assertSame(time, Dates.toSqlTime(time));
+
+	}
+
+	@Test
+	public void testToSqlTime_Date() {
 
 		long now = System.currentTimeMillis();
 
@@ -156,7 +192,7 @@ public class DatesTest {
 
 		assertEquals(now, time.getTime());
 
-		assertNull(Dates.toSqlTime(null));
+		assertNull(Dates.toSqlTime((Date) null));
 
 		assertSame(time, Dates.toSqlTime(time));
 

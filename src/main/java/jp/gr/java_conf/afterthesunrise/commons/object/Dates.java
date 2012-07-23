@@ -20,9 +20,9 @@ public class Dates {
 		}
 	};
 
-	public static Long adjustStartOfDay(long timestamp, TimeZone timeZone) {
+	public static Long adjustStartOfDay(Long timestamp, TimeZone timeZone) {
 
-		if (timeZone == null) {
+		if (timestamp == null || timeZone == null) {
 			return null;
 		}
 
@@ -40,7 +40,7 @@ public class Dates {
 
 	}
 
-	public static Long adjustEndOfDay(long timestamp, TimeZone timeZone) {
+	public static Long adjustEndOfDay(Long timestamp, TimeZone timeZone) {
 
 		Long sod = adjustStartOfDay(timestamp, timeZone);
 
@@ -58,9 +58,9 @@ public class Dates {
 
 	}
 
-	public static Long swapTimeZone(long timestamp, TimeZone from, TimeZone to) {
+	public static Long swapTimeZone(Long timestamp, TimeZone from, TimeZone to) {
 
-		if (from == null || to == null) {
+		if (timestamp == null || from == null || to == null) {
 			return null;
 		}
 
@@ -82,6 +82,16 @@ public class Dates {
 
 	}
 
+	public static java.sql.Date toSqlDate(Long date) {
+
+		if (date == null) {
+			return null;
+		}
+
+		return new java.sql.Date(date.longValue());
+
+	}
+
 	public static java.sql.Date toSqlDate(Date date) {
 
 		if (date == null) {
@@ -93,6 +103,16 @@ public class Dates {
 		}
 
 		return new java.sql.Date(date.getTime());
+
+	}
+
+	public static java.sql.Timestamp toSqlTime(Long date) {
+
+		if (date == null) {
+			return null;
+		}
+
+		return new java.sql.Timestamp(date.longValue());
 
 	}
 
