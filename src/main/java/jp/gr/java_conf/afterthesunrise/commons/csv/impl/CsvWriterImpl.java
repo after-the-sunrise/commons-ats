@@ -23,6 +23,7 @@ import jp.gr.java_conf.afterthesunrise.commons.csv.CsvWriter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.output.CloseShieldOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
@@ -81,21 +82,7 @@ public class CsvWriterImpl implements CsvWriter {
 		OutputStream out = generateOutputStream(file);
 
 		try {
-
-			CSVWriter writer = createWriter(out);
-
-			try {
-
-				String[] line = headers.toArray(new String[headers.size()]);
-
-				writer.writeNext(line);
-
-				writeValues(writer, line.length, iterable);
-
-			} finally {
-				Closeables.closeQuietly(writer);
-			}
-
+			write(out, headers, iterable);
 		} finally {
 			Closeables.closeQuietly(out);
 		}
@@ -109,21 +96,7 @@ public class CsvWriterImpl implements CsvWriter {
 		OutputStream out = generateOutputStream(file);
 
 		try {
-
-			CSVWriter writer = createWriter(out);
-
-			try {
-
-				String[] line = headers.toArray(new String[headers.size()]);
-
-				writer.writeNext(line);
-
-				writeValues(writer, line, iterable);
-
-			} finally {
-				Closeables.closeQuietly(writer);
-			}
-
+			writeMap(out, headers, iterable);
 		} finally {
 			Closeables.closeQuietly(out);
 		}
@@ -133,6 +106,60 @@ public class CsvWriterImpl implements CsvWriter {
 	@Override
 	public void writeMap(File file, Iterable<Map<String, String>> iterable)
 			throws IOException {
+
+		OutputStream out = generateOutputStream(file);
+
+		try {
+			writeMap(out, iterable);
+		} finally {
+			Closeables.closeQuietly(out);
+		}
+
+	}
+
+	@Override
+	public void write(OutputStream out, Collection<String> headers,
+			Iterable<Collection<String>> iterable) throws IOException {
+
+		CSVWriter writer = createWriter(new CloseShieldOutputStream(out));
+
+		try {
+
+			String[] line = headers.toArray(new String[headers.size()]);
+
+			writer.writeNext(line);
+
+			writeValues(writer, line.length, iterable);
+
+		} finally {
+			Closeables.closeQuietly(writer);
+		}
+
+	}
+
+	@Override
+	public void writeMap(OutputStream out, Collection<String> headers,
+			Iterable<Map<String, String>> iterable) throws IOException {
+
+		CSVWriter writer = createWriter(new CloseShieldOutputStream(out));
+
+		try {
+
+			String[] line = headers.toArray(new String[headers.size()]);
+
+			writer.writeNext(line);
+
+			writeValues(writer, line, iterable);
+
+		} finally {
+			Closeables.closeQuietly(writer);
+		}
+
+	}
+
+	@Override
+	public void writeMap(OutputStream out,
+			Iterable<Map<String, String>> iterable) throws IOException {
 
 		Set<String> headers = new TreeSet<>(NullSafeComparator.get());
 
@@ -146,7 +173,7 @@ public class CsvWriterImpl implements CsvWriter {
 
 		}
 
-		writeMap(file, headers, iterable);
+		writeMap(out, headers, iterable);
 
 	}
 

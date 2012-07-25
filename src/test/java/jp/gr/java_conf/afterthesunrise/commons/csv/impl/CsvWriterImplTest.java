@@ -84,7 +84,7 @@ public class CsvWriterImplTest {
 		values.add(null);
 		values.add(Arrays.asList("r5c1", "r5c2"));
 
-		target.write(null, headers, values);
+		target.write((File) null, headers, values);
 
 		String result = new String(out.toByteArray(), Charsets.UTF_8);
 
@@ -135,7 +135,7 @@ public class CsvWriterImplTest {
 		values.add(map4);
 		values.add(map5);
 
-		target.writeMap(null, headers, values);
+		target.writeMap((File) null, headers, values);
 
 		String result = new String(out.toByteArray(), Charsets.UTF_8);
 
@@ -182,7 +182,7 @@ public class CsvWriterImplTest {
 		values.add(map4);
 		values.add(map5);
 
-		target.writeMap(null, values);
+		target.writeMap((File) null, values);
 
 		String result = new String(out.toByteArray(), Charsets.UTF_8);
 

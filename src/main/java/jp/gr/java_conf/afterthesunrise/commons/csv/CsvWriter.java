@@ -2,6 +2,7 @@ package jp.gr.java_conf.afterthesunrise.commons.csv;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 
@@ -17,6 +18,15 @@ public interface CsvWriter {
 			Iterable<Map<String, String>> iterable) throws IOException;
 
 	void writeMap(File file, Iterable<Map<String, String>> iterable)
+			throws IOException;
+
+	void write(OutputStream out, Collection<String> headers,
+			Iterable<Collection<String>> iterable) throws IOException;
+
+	void writeMap(OutputStream out, Collection<String> headers,
+			Iterable<Map<String, String>> iterable) throws IOException;
+
+	void writeMap(OutputStream out, Iterable<Map<String, String>> iterable)
 			throws IOException;
 
 }
