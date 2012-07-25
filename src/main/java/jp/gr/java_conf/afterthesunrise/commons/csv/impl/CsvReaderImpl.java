@@ -149,6 +149,32 @@ public class CsvReaderImpl implements CsvReader {
 	}
 
 	@Override
+	public List<String> readHeader(File file) throws IOException {
+
+		InputStream in = new FileInputStream(file);
+
+		try {
+			return readHeader(in);
+		} finally {
+			Closeables.closeQuietly(in);
+		}
+
+	}
+
+	@Override
+	public List<String> readHeader(URL url) throws IOException {
+
+		InputStream in = url.openStream();
+
+		try {
+			return readHeader(in);
+		} finally {
+			Closeables.closeQuietly(in);
+		}
+
+	}
+
+	@Override
 	public List<Map<String, String>> read(InputStream in) throws IOException {
 
 		final List<Map<String, String>> lines = new ArrayList<>();
@@ -174,6 +200,23 @@ public class CsvReaderImpl implements CsvReader {
 			String[] headers = reader.readNext();
 
 			return readValues(headers, reader, handler);
+
+		} finally {
+			Closeables.closeQuietly(reader);
+		}
+
+	}
+
+	@Override
+	public List<String> readHeader(InputStream in) throws IOException {
+
+		CSVReader reader = createReader(new CloseShieldInputStream(in));
+
+		try {
+
+			String[] headers = reader.readNext();
+
+			return Arrays.asList(headers);
 
 		} finally {
 			Closeables.closeQuietly(reader);

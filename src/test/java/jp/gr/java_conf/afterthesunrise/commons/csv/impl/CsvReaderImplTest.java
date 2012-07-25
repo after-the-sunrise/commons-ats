@@ -151,4 +151,44 @@ public class CsvReaderImplTest {
 
 	}
 
+	private void checkHeader(List<String> result) {
+		assertEquals(3, result.size());
+		assertEquals("col1", result.get(0));
+		assertEquals("col2", result.get(1));
+		assertEquals("col3", result.get(2));
+	}
+
+	@Test
+	public void testReadHeader_File() throws IOException {
+
+		File file = new File("src/test/resources/CsvReaderImplTest.csv");
+
+		checkHeader(target.readHeader(file));
+
+	}
+
+	@Test
+	public void testReadHeader_URL() throws IOException {
+
+		URL url = Resources.getResource("CsvReaderImplTest.csv");
+
+		checkHeader(target.readHeader(url));
+
+	}
+
+	@Test
+	public void testReadHeader_Stream() throws IOException {
+
+		URL url = Resources.getResource("CsvReaderImplTest.csv");
+
+		InputStream in = url.openStream();
+
+		try {
+			checkHeader(target.readHeader(in));
+		} finally {
+			Closeables.closeQuietly(in);
+		}
+
+	}
+
 }

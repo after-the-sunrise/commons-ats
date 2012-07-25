@@ -13,11 +13,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import jp.gr.java_conf.afterthesunrise.commons.comparator.NullSafeComparator;
 import jp.gr.java_conf.afterthesunrise.commons.csv.CsvWriter;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
@@ -70,8 +75,8 @@ public class CsvWriterImpl implements CsvWriter {
 	}
 
 	@Override
-	public void write(File file, List<String> headers,
-			Iterable<List<String>> iterable) throws IOException {
+	public void write(File file, Collection<String> headers,
+			Iterable<Collection<String>> iterable) throws IOException {
 
 		OutputStream out = generateOutputStream(file);
 
@@ -97,28 +102,58 @@ public class CsvWriterImpl implements CsvWriter {
 
 	}
 
-	@VisibleForTesting
-	OutputStream generateOutputStream(File file) throws FileNotFoundException {
-		return new FileOutputStream(file, false);
+	@Override
+	public void writeMap(File file, Collection<String> headers,
+			Iterable<Map<String, String>> iterable) throws IOException {
+
+		OutputStream out = generateOutputStream(file);
+
+		try {
+
+			CSVWriter writer = createWriter(out);
+
+			try {
+
+				String[] line = headers.toArray(new String[headers.size()]);
+
+				writer.writeNext(line);
+
+				writeValues(writer, line, iterable);
+
+			} finally {
+				Closeables.closeQuietly(writer);
+			}
+
+		} finally {
+			Closeables.closeQuietly(out);
+		}
+
 	}
 
-	@VisibleForTesting
-	CSVWriter createWriter(OutputStream out) throws IOException {
+	@Override
+	public void writeMap(File file, Iterable<Map<String, String>> iterable)
+			throws IOException {
 
-		OutputStreamWriter writer = new OutputStreamWriter(out, charset);
+		Set<String> headers = new TreeSet<>(NullSafeComparator.get());
 
-		return new CSVWriter(writer, separator, quote, escape, lineEnd);
+		for (Map<String, String> value : iterable) {
+
+			if (MapUtils.isEmpty(value)) {
+				continue;
+			}
+
+			headers.addAll(value.keySet());
+
+		}
+
+		writeMap(file, headers, iterable);
 
 	}
 
 	private void writeValues(CSVWriter writer, int columns,
-			Iterable<List<String>> itr) {
+			Iterable<Collection<String>> itr) {
 
-		long row = 0L;
-
-		for (List<String> value : itr) {
-
-			row++;
+		for (Collection<String> value : itr) {
 
 			String[] arr = new String[columns];
 
@@ -130,19 +165,62 @@ public class CsvWriterImpl implements CsvWriter {
 
 			}
 
+			if (columns != value.size()) {
+				logWarn(log, "Column mismatch : %s", value);
+			}
+
 			arr = value.toArray(arr);
 
-			if (arr.length != columns) {
+			writer.writeNext(arr);
 
-				String msg = "Column mismtach at row [%s] expected [%s] actual[%s] : %s";
+		}
 
-				logWarn(log, msg, row, columns, arr.length, value);
+	}
+
+	private void writeValues(CSVWriter writer, String[] headers,
+			Iterable<Map<String, String>> iterable) {
+
+		for (Map<String, String> value : iterable) {
+
+			String[] arr = new String[headers.length];
+
+			if (MapUtils.isEmpty(value)) {
+
+				writer.writeNext(arr);
+
+				continue;
+
+			}
+
+			if (headers.length != value.size()) {
+				logWarn(log, "Column mismatch : %s", value);
+			}
+
+			for (int i = 0; i < headers.length; i++) {
+
+				String key = headers[i];
+
+				arr[i] = value.get(key);
 
 			}
 
 			writer.writeNext(arr);
 
 		}
+
+	}
+
+	@VisibleForTesting
+	OutputStream generateOutputStream(File file) throws FileNotFoundException {
+		return new FileOutputStream(file, false);
+	}
+
+	@VisibleForTesting
+	CSVWriter createWriter(OutputStream out) throws IOException {
+
+		OutputStreamWriter writer = new OutputStreamWriter(out, charset);
+
+		return new CSVWriter(writer, separator, quote, escape, lineEnd);
 
 	}
 

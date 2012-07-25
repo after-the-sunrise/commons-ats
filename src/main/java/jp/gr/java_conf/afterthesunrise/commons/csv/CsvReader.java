@@ -24,4 +24,10 @@ public interface CsvReader {
 
 	List<Map<String, String>> read(InputStream in) throws IOException;
 
+	List<String> readHeader(URL url) throws IOException;
+
+	List<String> readHeader(File file) throws IOException;
+
+	List<String> readHeader(InputStream in) throws IOException;
+
 }
