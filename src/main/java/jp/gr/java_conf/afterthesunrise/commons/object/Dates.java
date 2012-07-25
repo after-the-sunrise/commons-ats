@@ -1,5 +1,8 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -12,6 +15,10 @@ public class Dates {
 	private Dates() {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
+
+	public static final long MILLIS_IN_DAY = MILLISECONDS.convert(1L, DAYS);
+
+	public static final long MILLIS_IN_EOD = MILLIS_IN_DAY - 1L;
 
 	private static final ThreadLocal<Calendar> CALS = new ThreadLocal<Calendar>() {
 		@Override
