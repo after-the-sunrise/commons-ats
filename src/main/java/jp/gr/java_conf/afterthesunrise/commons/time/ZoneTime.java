@@ -3,6 +3,8 @@ package jp.gr.java_conf.afterthesunrise.commons.time;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
 import static java.util.Objects.hash;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -14,6 +16,8 @@ import java.util.TimeZone;
 public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 
 	private static final long serialVersionUID = -4126226706081459619L;
+
+	private static final long EOD = MILLISECONDS.convert(1L, DAYS) - 1L;
 
 	private static final ThreadLocal<Calendar> CAL = new ThreadLocal<Calendar>() {
 		@Override
@@ -52,7 +56,7 @@ public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 	@Override
 	public int compareTo(ZoneTime o) {
 
-		long now = System.currentTimeMillis();
+		long now = EOD;
 
 		long l1 = adjust(now);
 
