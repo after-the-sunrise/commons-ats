@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author takanori.takase
  */
-public class AbstractKey implements Serializable {
+public abstract class AbstractKey implements Serializable {
 
 	private static final long serialVersionUID = -9156653380875289363L;
 
@@ -23,7 +23,7 @@ public class AbstractKey implements Serializable {
 
 	@Override
 	public String toString() {
-		return Arrays.toString(keys);
+		return "Key" + Arrays.toString(keys);
 	}
 
 	@Override
