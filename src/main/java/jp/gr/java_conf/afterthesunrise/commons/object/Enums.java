@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -44,6 +46,40 @@ public final class Enums {
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+
+	}
+
+	public static <E extends Enum<E>> Set<E> findSet(Class<E> clazz,
+			Collection<String> values) {
+
+		if (clazz == null || values == null) {
+			return null;
+		}
+
+		Set<E> result = new HashSet<>();
+
+		for (String value : values) {
+			result.add(find(clazz, value));
+		}
+
+		return Collections.unmodifiableSet(result);
+
+	}
+
+	public static <E extends Enum<E>> List<E> findList(Class<E> clazz,
+			Collection<String> values) {
+
+		if (clazz == null || values == null) {
+			return null;
+		}
+
+		List<E> result = new ArrayList<>(values.size());
+
+		for (String value : values) {
+			result.add(find(clazz, value));
+		}
+
+		return Collections.unmodifiableList(result);
 
 	}
 

@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * @author takanori.takase
  */
@@ -26,6 +28,22 @@ public class Dates {
 			return Calendar.getInstance();
 		}
 	};
+
+	public static TimeZone getTimeZone(String id) {
+
+		if (StringUtils.isBlank(id)) {
+			return null;
+		}
+
+		TimeZone timeZone = TimeZone.getTimeZone(id);
+
+		if (!StringUtils.equals(id, timeZone.getID())) {
+			return null;
+		}
+
+		return timeZone;
+
+	}
 
 	public static Long adjustStartOfDay(Long timestamp, TimeZone timeZone) {
 

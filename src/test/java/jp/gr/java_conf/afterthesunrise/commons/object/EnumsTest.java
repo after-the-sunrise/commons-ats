@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -66,6 +67,44 @@ public class EnumsTest {
 		assertNull(Enums.find(RoundingMode.class, null));
 
 		assertNull(Enums.find(null, "foo"));
+
+	}
+
+	@Test
+	public void testFindList() {
+
+		Collection<String> values = new ArrayList<>();
+
+		for (RoundingMode type : RoundingMode.values()) {
+			values.add(type.name());
+		}
+
+		List<RoundingMode> result = Enums.findList(RoundingMode.class, values);
+
+		assertEquals(values.size(), result.size());
+
+		for (RoundingMode type : result) {
+			assertTrue(values.contains(type.name()));
+		}
+
+	}
+
+	@Test
+	public void testFindSet() {
+
+		Collection<String> values = new ArrayList<>();
+
+		for (RoundingMode type : RoundingMode.values()) {
+			values.add(type.name());
+		}
+
+		Set<RoundingMode> result = Enums.findSet(RoundingMode.class, values);
+
+		assertEquals(values.size(), result.size());
+
+		for (RoundingMode type : result) {
+			assertTrue(values.contains(type.name()));
+		}
 
 	}
 

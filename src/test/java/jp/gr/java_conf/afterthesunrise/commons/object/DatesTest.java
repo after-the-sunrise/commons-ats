@@ -61,6 +61,23 @@ public class DatesTest {
 	}
 
 	@Test
+	public void testGetTimeZone() throws ParseException {
+
+		TimeZone timeZone = Dates.getTimeZone("GMT");
+
+		assertEquals("GMT", timeZone.getID());
+
+		timeZone = Dates.getTimeZone("Asia/Tokyo");
+
+		assertEquals("Asia/Tokyo", timeZone.getID());
+
+		timeZone = Dates.getTimeZone("foo");
+
+		assertNull(timeZone);
+
+	}
+
+	@Test
 	public void testAdjustStartOfDay() throws ParseException {
 
 		Date date = df.parse("2010-01-08 12:34:56.789");
