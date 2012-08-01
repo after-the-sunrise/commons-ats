@@ -71,6 +71,7 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 	@Override
 	public void close() {
 		try {
+
 			lock.writeLock().lock();
 
 			if (target == null) {
@@ -88,6 +89,7 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 
 	protected boolean closeIfStale() {
 		try {
+
 			lock.writeLock().lock();
 
 			if (target == null) {
@@ -114,6 +116,7 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 	@Override
 	public Object invoke(Object p, Method m, Object[] v) throws Throwable {
 		try {
+
 			lock.readLock().lock();
 
 			try {
