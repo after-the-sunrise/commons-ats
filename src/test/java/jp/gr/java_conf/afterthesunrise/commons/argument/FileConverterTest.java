@@ -25,6 +25,11 @@ public class FileConverterTest {
 	}
 
 	@Test(expected = ParameterException.class)
+	public void testValidate_Empty() {
+		target.validate(null, "");
+	}
+
+	@Test(expected = ParameterException.class)
 	public void testValidate_Invalid() {
 		target.validate(null, null);
 	}
@@ -32,6 +37,11 @@ public class FileConverterTest {
 	@Test
 	public void testConvert() {
 		assertEquals("pom.xml", target.convert("pom.xml").getName());
+	}
+
+	@Test(expected = ParameterException.class)
+	public void testConvert_Empty() {
+		target.convert("").getName();
 	}
 
 }
