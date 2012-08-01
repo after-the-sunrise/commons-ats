@@ -96,8 +96,6 @@ public class TimedInvocationHandlerTest {
 			}
 		};
 
-		target.setTimeoutInMillis(5L);
-
 	}
 
 	@After
@@ -124,9 +122,11 @@ public class TimedInvocationHandlerTest {
 				while (!executorService.isShutdown()) {
 					try {
 
-						long i = ThreadLocalRandom.current().nextInt();
+						int i = ThreadLocalRandom.current().nextInt();
 
-						switch ((int) i % 8) {
+						target.setTimeoutInMillis(i);
+
+						switch (i % 8) {
 						case 0:
 							target.load();
 							break;
@@ -173,6 +173,20 @@ public class TimedInvocationHandlerTest {
 		assertTrue(concurrency * 8 <= closeCount.get());
 		assertTrue(concurrency * 0 == errorCount.get());
 		assertTrue(concurrency * 8 <= actionCount.get());
+
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testLoad_Exception() throws Exception {
+
+		target = new TimedInvocationHandler<Closeable>() {
+			@Override
+			protected Closeable generateTarget() {
+				return null;
+			}
+		};
+
+		target.load();
 
 	}
 

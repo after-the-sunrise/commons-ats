@@ -87,6 +87,10 @@ public class EnumsTest {
 			assertTrue(values.contains(type.name()));
 		}
 
+		assertNull(Enums.findList(null, values));
+
+		assertNull(Enums.findList(RoundingMode.class, null));
+
 	}
 
 	@Test
@@ -105,6 +109,10 @@ public class EnumsTest {
 		for (RoundingMode type : result) {
 			assertTrue(values.contains(type.name()));
 		}
+
+		assertNull(Enums.findSet(null, values));
+
+		assertNull(Enums.findSet(RoundingMode.class, null));
 
 	}
 

@@ -9,6 +9,8 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.annotations.VisibleForTesting;
+
 /**
  * @author takanori.takase
  */
@@ -28,6 +30,36 @@ public class Dates {
 			return Calendar.getInstance();
 		}
 	};
+
+	private static final String DEBUG = "jp.gr.java_conf.afterthesunrise.commons.debug";
+
+	@VisibleForTesting
+	@Deprecated
+	public static final void enableDebug(long timestamp) {
+		System.setProperty(DEBUG, String.valueOf(timestamp));
+	}
+
+	@VisibleForTesting
+	@Deprecated
+	public static final void disableDebug() {
+		System.clearProperty(DEBUG);
+	}
+
+	public static long getCurrentTime() {
+
+		String value = System.getProperty(DEBUG);
+
+		if (value != null) {
+			return Long.parseLong(value);
+		}
+
+		return System.currentTimeMillis();
+
+	}
+
+	public static Date getCurrentDate() {
+		return new Date(getCurrentTime());
+	}
 
 	public static TimeZone getTimeZone(String id) {
 
@@ -65,6 +97,16 @@ public class Dates {
 
 	}
 
+	public static Long adjustStartOfDay(Date timestamp, TimeZone timeZone) {
+
+		if (timestamp == null) {
+			return null;
+		}
+
+		return adjustStartOfDay(timestamp.getTime(), timeZone);
+
+	}
+
 	public static Long adjustEndOfDay(Long timestamp, TimeZone timeZone) {
 
 		Long sod = adjustStartOfDay(timestamp, timeZone);
@@ -80,6 +122,16 @@ public class Dates {
 		cal.add(Calendar.DATE, 1);
 
 		return cal.getTimeInMillis() - 1L;
+
+	}
+
+	public static Long adjustEndOfDay(Date timestamp, TimeZone timeZone) {
+
+		if (timestamp == null) {
+			return null;
+		}
+
+		return adjustEndOfDay(timestamp.getTime(), timeZone);
 
 	}
 

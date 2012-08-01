@@ -12,8 +12,6 @@ import jp.gr.java_conf.afterthesunrise.commons.executor.SingleExecutor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.common.util.concurrent.Futures;
-
 /**
  * @author takanori.takase
  */
@@ -64,7 +62,7 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 	public <V> Future<V> execute(Callable<V> callable) {
 
 		if (callable == null) {
-			return Futures.immediateFuture(null);
+			return null;
 		}
 
 		synchronized (this) {

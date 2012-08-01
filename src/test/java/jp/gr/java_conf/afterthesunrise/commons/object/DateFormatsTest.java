@@ -112,6 +112,8 @@ public class DateFormatsTest {
 
 		assertNull(DateFormats.parse(null, pattern));
 
+		assertNull(DateFormats.parse(value, null));
+
 		assertNull(DateFormats.parse(value, "foo"));
 
 	}
@@ -126,6 +128,10 @@ public class DateFormatsTest {
 		assertEquals(date, DateFormats.parse(value, pattern, timeZone));
 
 		assertNull(DateFormats.parse(null, pattern, timeZone));
+
+		assertNull(DateFormats.parse(value, null, timeZone));
+
+		assertNull(DateFormats.parse(value, pattern, null));
 
 		assertNull(DateFormats.parse(value, "foo", timeZone));
 
@@ -157,7 +163,23 @@ public class DateFormatsTest {
 
 		assertNull(DateFormats.format((Date) null, pattern));
 
+		assertNull(DateFormats.format(date, (String) null));
+
 		assertNull(DateFormats.format(date, "foo"));
+
+	}
+
+	@Test
+	public void testFormat_WithZone() {
+
+		Date date = new Date(0L);
+
+		assertEquals("1969-12-31 16:00:00.000 PST",
+				DateFormats.format(date, timeZone));
+
+		assertNull(DateFormats.format((Date) null, timeZone));
+
+		assertNull(DateFormats.format(date, (TimeZone) null));
 
 	}
 
@@ -170,6 +192,10 @@ public class DateFormatsTest {
 				DateFormats.format(date, pattern, timeZone));
 
 		assertNull(DateFormats.format((Date) null, pattern, timeZone));
+
+		assertNull(DateFormats.format(date, null, timeZone));
+
+		assertNull(DateFormats.format(date, pattern, null));
 
 		assertNull(DateFormats.format(date, "foo", timeZone));
 
@@ -201,7 +227,21 @@ public class DateFormatsTest {
 
 		assertNull(DateFormats.format((Long) null, pattern));
 
+		assertNull(DateFormats.format(0L, (String) null));
+
 		assertNull(DateFormats.format(0L, "foo"));
+
+	}
+
+	@Test
+	public void testFormatLong_WithZone() {
+
+		assertEquals("1969-12-31 16:00:00.000 PST",
+				DateFormats.format(0L, timeZone));
+
+		assertNull(DateFormats.format((Long) null, timeZone));
+
+		assertNull(DateFormats.format(0L, (TimeZone) null));
 
 	}
 
@@ -214,6 +254,10 @@ public class DateFormatsTest {
 				DateFormats.format(0L, pattern, timeZone));
 
 		assertNull(DateFormats.format((Long) null, pattern, timeZone));
+
+		assertNull(DateFormats.format(0L, null, timeZone));
+
+		assertNull(DateFormats.format(0L, pattern, null));
 
 		assertNull(DateFormats.format(0L, "foo", timeZone));
 
@@ -245,6 +289,8 @@ public class DateFormatsTest {
 
 		assertNull(DateFormats.formatGMT((Long) null, pattern));
 
+		assertNull(DateFormats.formatGMT(0L, null));
+
 		assertNull(DateFormats.formatGMT(0L, "foo"));
 
 	}
@@ -274,6 +320,8 @@ public class DateFormatsTest {
 				DateFormats.formatGMT(date, pattern));
 
 		assertNull(DateFormats.formatGMT((Date) null, pattern));
+
+		assertNull(DateFormats.formatGMT(date, null));
 
 		assertNull(DateFormats.formatGMT((Date) date, "foo"));
 

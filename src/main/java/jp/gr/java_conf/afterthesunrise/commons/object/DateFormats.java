@@ -93,16 +93,16 @@ public final class DateFormats {
 	}
 
 	public static Date parse(String value) {
-		return parse(value, DEFAULT_FORMAT, null);
+		return parse(value, DEFAULT_FORMAT, DEFAULT_TIMEZONE);
 	}
 
 	public static Date parse(String value, String format) {
-		return parse(value, format, null);
+		return parse(value, format, DEFAULT_TIMEZONE);
 	}
 
 	public static Date parse(String value, String format, TimeZone timeZone) {
 
-		if (StringUtils.isBlank(value)) {
+		if (StringUtils.isBlank(value) || timeZone == null) {
 			return null;
 		}
 
@@ -112,11 +112,7 @@ public final class DateFormats {
 			return null;
 		}
 
-		if (timeZone == null) {
-			dateFormat.setTimeZone(DEFAULT_TIMEZONE);
-		} else {
-			dateFormat.setTimeZone(timeZone);
-		}
+		dateFormat.setTimeZone(timeZone);
 
 		try {
 			return dateFormat.parse(value);
@@ -127,11 +123,15 @@ public final class DateFormats {
 	}
 
 	public static String format(Long value) {
-		return format(value, DEFAULT_FORMAT);
+		return format(value, DEFAULT_FORMAT, DEFAULT_TIMEZONE);
 	}
 
 	public static String format(Long value, String format) {
-		return format(value, format, null);
+		return format(value, format, DEFAULT_TIMEZONE);
+	}
+
+	public static String format(Long value, TimeZone timeZone) {
+		return format(value, DEFAULT_FORMAT, timeZone);
 	}
 
 	public static String format(Long value, String format, TimeZone timeZone) {
@@ -139,16 +139,20 @@ public final class DateFormats {
 	}
 
 	public static String format(Date value) {
-		return format(value, DEFAULT_FORMAT);
+		return format(value, DEFAULT_FORMAT, DEFAULT_TIMEZONE);
 	}
 
 	public static String format(Date value, String format) {
-		return format(value, format, null);
+		return format(value, format, DEFAULT_TIMEZONE);
+	}
+
+	public static String format(Date value, TimeZone timeZone) {
+		return format(value, DEFAULT_FORMAT, timeZone);
 	}
 
 	public static String format(Date value, String format, TimeZone timeZone) {
 
-		if (value == null) {
+		if (value == null || timeZone == null) {
 			return null;
 		}
 
@@ -158,11 +162,7 @@ public final class DateFormats {
 			return null;
 		}
 
-		if (timeZone == null) {
-			dateFormat.setTimeZone(DEFAULT_TIMEZONE);
-		} else {
-			dateFormat.setTimeZone(timeZone);
-		}
+		dateFormat.setTimeZone(timeZone);
 
 		return dateFormat.format(value);
 

@@ -50,7 +50,7 @@ public abstract class AbstractExecutor implements ThreadFactory,
 		String prefix = namePrefix;
 
 		if (StringUtils.isNotBlank(prefix)) {
-			t.setName(format("%s-%,3d", prefix, i));
+			t.setName(format("%s-%03d", prefix, i));
 		}
 
 		return t;

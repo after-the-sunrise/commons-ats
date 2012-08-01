@@ -61,6 +61,64 @@ public class DatesTest {
 	}
 
 	@Test
+	public void testGetCurrentTime() throws ParseException {
+
+		long timestamp = Dates.getCurrentTime();
+
+		assertTrue(System.currentTimeMillis() - 1000L <= timestamp);
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testGetCurrentTime_Debug() throws ParseException {
+
+		try {
+
+			Dates.enableDebug(12345L);
+
+			long timestamp = Dates.getCurrentTime();
+
+			assertEquals(12345L, timestamp);
+
+		} finally {
+
+			Dates.disableDebug();
+
+		}
+
+	}
+
+	@Test
+	public void testGetCurrentDate() throws ParseException {
+
+		Date timestamp = Dates.getCurrentDate();
+
+		assertTrue(System.currentTimeMillis() - 1000L <= timestamp.getTime());
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testGetCurrentDate_Debug() throws ParseException {
+
+		try {
+
+			Dates.enableDebug(12345L);
+
+			Date timestamp = Dates.getCurrentDate();
+
+			assertEquals(12345L, timestamp.getTime());
+
+		} finally {
+
+			Dates.disableDebug();
+
+		}
+
+	}
+
+	@Test
 	public void testGetTimeZone() throws ParseException {
 
 		TimeZone timeZone = Dates.getTimeZone("GMT");
@@ -71,9 +129,11 @@ public class DatesTest {
 
 		assertEquals("Asia/Tokyo", timeZone.getID());
 
-		timeZone = Dates.getTimeZone("foo");
+		assertNull(Dates.getTimeZone("foo"));
 
-		assertNull(timeZone);
+		assertNull(Dates.getTimeZone(""));
+
+		assertNull(Dates.getTimeZone(null));
 
 	}
 
@@ -88,9 +148,26 @@ public class DatesTest {
 
 		assertEquals(Long.valueOf(expect.getTime()), result);
 
-		assertNull(Dates.adjustStartOfDay(null, tz));
+		assertNull(Dates.adjustStartOfDay((Long) null, tz));
 
 		assertNull(Dates.adjustStartOfDay(date.getTime(), null));
+
+	}
+
+	@Test
+	public void testAdjustStartOfDay_Date() throws ParseException {
+
+		Date date = df.parse("2010-01-08 12:34:56.789");
+
+		Date expect = df.parse("2010-01-08 00:00:00.000");
+
+		Long result = Dates.adjustStartOfDay(date, tz);
+
+		assertEquals(Long.valueOf(expect.getTime()), result);
+
+		assertNull(Dates.adjustStartOfDay((Date) null, tz));
+
+		assertNull(Dates.adjustStartOfDay(date, null));
 
 	}
 
@@ -105,9 +182,26 @@ public class DatesTest {
 
 		assertEquals(Long.valueOf(expect.getTime()), result);
 
-		assertNull(Dates.adjustEndOfDay(null, tz));
+		assertNull(Dates.adjustEndOfDay((Long) null, tz));
 
 		assertNull(Dates.adjustEndOfDay(date.getTime(), null));
+
+	}
+
+	@Test
+	public void testAdjustEndOfDay_Date() throws ParseException {
+
+		Date date = df.parse("2010-01-08 12:34:56.789");
+
+		Date expect = df.parse("2010-01-08 23:59:59.999");
+
+		Long result = Dates.adjustEndOfDay(date, tz);
+
+		assertEquals(Long.valueOf(expect.getTime()), result);
+
+		assertNull(Dates.adjustEndOfDay((Date) null, tz));
+
+		assertNull(Dates.adjustEndOfDay(date, null));
 
 	}
 
@@ -160,7 +254,7 @@ public class DatesTest {
 
 		long now = System.currentTimeMillis();
 
-		java.sql.Date date = Dates.toSqlDate(new Date(now));
+		java.sql.Date date = Dates.toSqlDate(now);
 
 		assertEquals(now, date.getTime());
 
