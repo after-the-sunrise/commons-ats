@@ -3,8 +3,6 @@ package jp.gr.java_conf.afterthesunrise.commons.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.commons.lang.builder.CompareToBuilder;
-
 /**
  * @author takanori.takase
  */
@@ -12,8 +10,6 @@ public final class NullSafeComparator<T extends Comparable<T>> implements
 		Comparator<T>, Serializable {
 
 	private static final long serialVersionUID = 4580718469939176830L;
-
-	private static final int EQUALS = 0;
 
 	@SuppressWarnings("rawtypes")
 	private static final NullSafeComparator INSTANCE = new NullSafeComparator();
@@ -23,21 +19,29 @@ public final class NullSafeComparator<T extends Comparable<T>> implements
 		return INSTANCE;
 	}
 
+	public static final <T> int toComparison(T o1, T o2) {
+		return get().compare(o1, o2);
+	}
+
 	private NullSafeComparator() {
 	}
 
 	@Override
-	public int compare(T o1, T o2) {
+	public final int compare(T o1, T o2) {
 
 		if (o1 == o2) {
-			return EQUALS;
+			return 0;
 		}
 
-		if (o1 != null && o2 != null) {
-			return o1.compareTo(o2);
+		if (o1 == null) {
+			return -1;
 		}
 
-		return new CompareToBuilder().append(o1, o2).toComparison();
+		if (o2 == null) {
+			return +1;
+		}
+
+		return o1.compareTo(o2);
 
 	}
 
