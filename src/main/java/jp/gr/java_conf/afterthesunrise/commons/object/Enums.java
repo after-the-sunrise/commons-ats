@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,21 @@ public final class Enums {
 
 		for (E e : clazz.getEnumConstants()) {
 			map.put(e.name(), e);
+		}
+
+		return Collections.unmodifiableMap(map);
+
+	}
+
+	public static <K extends Enum<K>, V extends Enum<V>> Map<K, V> map(
+			Class<K> keyClass, Class<V> valClass) {
+
+		Map<K, V> map = new EnumMap<K, V>(keyClass);
+
+		for (K key : keyClass.getEnumConstants()) {
+
+			map.put(key, Enum.valueOf(valClass, key.name()));
+
 		}
 
 		return Collections.unmodifiableMap(map);

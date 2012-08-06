@@ -23,6 +23,14 @@ import org.junit.Test;
  */
 public class EnumsTest {
 
+	private static enum Test1 {
+		FOO, BAR
+	}
+
+	private static enum Test2 {
+		FOO, BAR, HOGE
+	}
+
 	@Test(expected = IllegalAccessError.class)
 	public void testConstructor() throws Throwable {
 
@@ -53,6 +61,19 @@ public class EnumsTest {
 
 		assertEquals(RoundingMode.values().length, map.size());
 
+	}
+
+	@Test
+	public void testMap_Enums() {
+		Map<Test1, Test2> map = Enums.map(Test1.class, Test2.class);
+		assertEquals(Test1.values().length, map.size());
+		assertSame(Test2.FOO, map.get(Test1.FOO));
+		assertSame(Test2.BAR, map.get(Test1.BAR));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testMap_Enums_Mismatch() {
+		Enums.map(Test2.class, Test1.class);
 	}
 
 	@Test
