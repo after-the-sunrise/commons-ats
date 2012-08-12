@@ -208,13 +208,36 @@ public class DatesTest {
 	@Test
 	public void testSwapTimeZone() throws ParseException {
 
-		// LosAngeles -> NewYork
+		// Los Angeles = Tokyo - 17h
 		Date date = df.parse("2010-01-08 12:34:56.789");
 
-		// 12 o'clock NewYork == 09 o'clock LosAngeles
-		Date expect = df.parse("2010-01-08 09:34:56.789");
+		// Tokyo 12 o'clock -> Los Angeles 19 o'clock
+		Date expect = df.parse("2010-01-07 19:34:56.789");
 
-		TimeZone toTz = TimeZone.getTimeZone("America/New_York");
+		TimeZone toTz = TimeZone.getTimeZone("Asia/Tokyo");
+
+		Long result = Dates.swapTimeZone(date.getTime(), tz, toTz);
+
+		assertEquals(Long.valueOf(expect.getTime()), result);
+
+		assertNull(Dates.swapTimeZone(null, tz, toTz));
+
+		assertNull(Dates.swapTimeZone(date.getTime(), tz, null));
+
+		assertNull(Dates.swapTimeZone(date.getTime(), null, toTz));
+
+	}
+
+	@Test
+	public void testSwapTimeZone_SummerTime() throws ParseException {
+
+		// Los Angeles = Tokyo - 16h
+		Date date = df.parse("2010-10-08 12:34:56.789");
+
+		// Tokyo 12 o'clock -> Los Angeles 20 o'clock
+		Date expect = df.parse("2010-10-07 20:34:56.789");
+
+		TimeZone toTz = TimeZone.getTimeZone("Asia/Tokyo");
 
 		Long result = Dates.swapTimeZone(date.getTime(), tz, toTz);
 
