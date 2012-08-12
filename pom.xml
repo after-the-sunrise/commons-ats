@@ -93,7 +93,8 @@
 		<dependency.commons-io.version>2.3</dependency.commons-io.version>
 		<dependency.commons-lang.version>2.6</dependency.commons-lang.version>
 		<dependency.commons-log.version>1.1.1</dependency.commons-log.version>
-		<dependency.guava.version>12.0.1</dependency.guava.version>
+		<dependency.findbugs.version>2.0.0</dependency.findbugs.version>
+		<dependency.guava.version>13.0</dependency.guava.version>
 		<dependency.jcommander.version>1.27</dependency.jcommander.version>
 		<dependency.junit.version>4.10</dependency.junit.version>
 		<dependency.log4j.version>1.2.17</dependency.log4j.version>
@@ -236,6 +237,12 @@
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>${dependency.commons-log.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>annotations</artifactId>
+			<version>${dependency.findbugs.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>

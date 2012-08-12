@@ -14,8 +14,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 import org.junit.Test;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 /**
  * @author takanori.takase
@@ -111,6 +115,42 @@ public class ConversionsTest {
 
 	}
 
+	@SuppressWarnings(value = "NP_NONNULL_PARAM_VIOLATION")
+	@Test
+	public void testConvertSorted_Set() {
+
+		Set<String> keys = new HashSet<>(Arrays.asList("foo", "bar", null));
+		Map<String, BigDecimal> mapping = new HashMap<>();
+		mapping.put("foo", BigDecimal.valueOf(1L));
+		mapping.put("bar", BigDecimal.valueOf(2L));
+
+		SortedSet<BigDecimal> result = Conversions.convertSorted(keys, mapping);
+
+		assertEquals(3, result.size());
+		assertTrue(result.contains(BigDecimal.valueOf(1L)));
+		assertTrue(result.contains(BigDecimal.valueOf(2L)));
+		assertTrue(result.contains(null));
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertSorted_Set_NullKeys() {
+
+		Map<String, BigDecimal> mapping = new HashMap<>();
+
+		Conversions.convertSorted((Set<String>) null, mapping);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertSorted_Set_NullMapping() {
+
+		Set<String> keys = new HashSet<>(Arrays.asList("hoge"));
+
+		Conversions.convertSorted(keys, null);
+
+	}
+
 	@Test
 	public void testConvertKey() {
 
@@ -147,6 +187,47 @@ public class ConversionsTest {
 		Map<String, BigDecimal> source = new HashMap<>();
 
 		Conversions.convertKey(source, null);
+
+	}
+
+	@SuppressWarnings(value = "NP_NONNULL_PARAM_VIOLATION")
+	@Test
+	public void testConvertKeySorted() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+		source.put("foo", BigDecimal.valueOf(1L));
+		source.put("bar", BigDecimal.valueOf(2L));
+		source.put("hoge", BigDecimal.valueOf(3L));
+
+		Map<String, Integer> mapping = new HashMap<>();
+		mapping.put("foo", 100);
+		mapping.put("bar", 200);
+
+		SortedMap<Integer, BigDecimal> map = Conversions.convertKeySorted(
+				source, mapping);
+
+		assertEquals(3, map.size());
+		assertEquals(BigDecimal.valueOf(1L), map.get(100));
+		assertEquals(BigDecimal.valueOf(2L), map.get(200));
+		assertEquals(BigDecimal.valueOf(3L), map.get(null));
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertKeySorted_NullSource() {
+
+		Map<String, Integer> mapping = new HashMap<>();
+
+		Conversions.convertKeySorted(null, mapping);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertKeySorted_NullMapping() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+
+		Conversions.convertKeySorted(source, null);
 
 	}
 
