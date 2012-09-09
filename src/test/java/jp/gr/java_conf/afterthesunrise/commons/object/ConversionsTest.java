@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
+import jp.gr.java_conf.afterthesunrise.commons.object.Conversions.Identifiable;
+
 import org.junit.Test;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
@@ -25,6 +27,21 @@ import edu.umd.cs.findbugs.annotations.SuppressWarnings;
  * @author takanori.takase
  */
 public class ConversionsTest {
+
+	private static class TestIdentifiable implements Identifiable<String> {
+
+		private final String id;
+
+		private TestIdentifiable(String id) {
+			this.id = id;
+		}
+
+		@Override
+		public String getId() {
+			return id;
+		}
+
+	}
 
 	@Test(expected = IllegalAccessError.class)
 	public void testConstructor() throws Throwable {
@@ -42,6 +59,41 @@ public class ConversionsTest {
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
+
+	}
+
+	@Test
+	public void testMap() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable("bar");
+		TestIdentifiable id3 = new TestIdentifiable(null);
+
+		Map<String, TestIdentifiable> map = Conversions.map(id1, id2, id3);
+
+		assertEquals(3, map.size());
+		assertEquals(id1, map.get(id1.getId()));
+		assertEquals(id2, map.get(id2.getId()));
+		assertEquals(id3, map.get(id3.getId()));
+
+	}
+
+	@Test
+	public void testMap_Empty() {
+
+		Identifiable<String>[] args = null;
+
+		assertTrue(Conversions.map(args).isEmpty());
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testMap_DuplicateId() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable("foo");
+
+		Conversions.map(id1, id2);
 
 	}
 

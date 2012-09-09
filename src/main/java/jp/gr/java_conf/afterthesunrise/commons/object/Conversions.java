@@ -3,6 +3,7 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.TreeSet;
 
 import jp.gr.java_conf.afterthesunrise.commons.comparator.NullSafeComparator;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * @author takanori.takase
  */
@@ -23,6 +26,37 @@ public final class Conversions {
 
 	private Conversions() {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
+	}
+
+	public static interface Identifiable<T> {
+		T getId();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V extends Identifiable<K>> Map<K, V> map(V... values) {
+
+		if (ArrayUtils.isEmpty(values)) {
+			return Collections.emptyMap();
+		}
+
+		Map<K, V> map = new HashMap<>();
+
+		for (V value : values) {
+
+			V prev = map.put(value.getId(), value);
+
+			if (prev != null) {
+
+				String msg = "Duplicate : " + value.getId();
+
+				throw new IllegalArgumentException(msg);
+
+			}
+
+		}
+
+		return Collections.unmodifiableMap(map);
+
 	}
 
 	public static <K, V> List<V> convert(List<K> keys, Map<K, V> mapping) {
