@@ -24,6 +24,14 @@ public final class Enums {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
+	public static String toName(Enum<?> value) {
+		return toName(value, null);
+	}
+
+	public static String toName(Enum<?> value, String nullvalue) {
+		return value == null ? nullvalue : value.name();
+	}
+
 	public static <E extends Enum<E>> Map<String, E> map(Class<E> clazz) {
 
 		Map<String, E> map = new HashMap<String, E>();

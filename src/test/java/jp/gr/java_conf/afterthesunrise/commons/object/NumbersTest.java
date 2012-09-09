@@ -40,6 +40,20 @@ public class NumbersTest {
 	}
 
 	@Test
+	public void testToPlainString() {
+		assertEquals("0.0000000001234",
+				Numbers.toPlainString(new BigDecimal("1.234E-10")));
+		assertNull(Numbers.toPlainString(null));
+	}
+
+	@Test
+	public void testToPlainString_WithDefault() {
+		assertEquals("0.0000000001234",
+				Numbers.toPlainString(new BigDecimal("1.234E-10"), "foo"));
+		assertEquals("foo", Numbers.toPlainString(null, "foo"));
+	}
+
+	@Test
 	public void testConvert() {
 
 		assertEquals("1.23", Numbers.convert("1.23").toPlainString());

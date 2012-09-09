@@ -84,4 +84,12 @@ public final class Numbers {
 
 	}
 
+	public static String toPlainString(BigDecimal value) {
+		return toPlainString(value, null);
+	}
+
+	public static String toPlainString(BigDecimal value, String nullvalue) {
+		return value == null ? nullvalue : value.toPlainString();
+	}
+
 }

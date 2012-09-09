@@ -51,6 +51,18 @@ public class EnumsTest {
 	}
 
 	@Test
+	public void testToName() {
+		assertEquals(Test1.BAR.name(), Enums.toName(Test1.BAR));
+		assertNull(Enums.toName(null));
+	}
+
+	@Test
+	public void testToName_WithDefault() {
+		assertEquals(Test1.BAR.name(), Enums.toName(Test1.BAR, "bar"));
+		assertEquals("bar", Enums.toName(null, "bar"));
+	}
+
+	@Test
 	public void testMap() {
 
 		Map<String, RoundingMode> map = Enums.map(RoundingMode.class);
