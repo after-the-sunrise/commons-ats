@@ -43,11 +43,13 @@ public final class Conversions {
 
 		for (V value : values) {
 
-			V prev = map.put(value.getId(), value);
+			K key = value.getId();
+
+			V prev = map.put(key, value);
 
 			if (prev != null) {
 
-				String msg = "Duplicate : " + value.getId();
+				String msg = "Duplicate : " + key;
 
 				throw new IllegalArgumentException(msg);
 
@@ -56,6 +58,27 @@ public final class Conversions {
 		}
 
 		return Collections.unmodifiableMap(map);
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V extends Identifiable<K>> List<K> list(V... values) {
+
+		if (ArrayUtils.isEmpty(values)) {
+			return Collections.emptyList();
+		}
+
+		List<K> list = new ArrayList<>(values.length);
+
+		for (int i = 0; i < values.length; i++) {
+
+			K id = values[i].getId();
+
+			list.add(id);
+
+		}
+
+		return Collections.unmodifiableList(list);
 
 	}
 

@@ -98,6 +98,31 @@ public class ConversionsTest {
 	}
 
 	@Test
+	public void testList() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable("bar");
+		TestIdentifiable id3 = new TestIdentifiable(null);
+
+		List<String> list = Conversions.list(id1, id2, id3);
+
+		assertEquals(3, list.size());
+		assertEquals("foo", list.get(0));
+		assertEquals("bar", list.get(1));
+		assertEquals(null, list.get(2));
+
+	}
+
+	@Test
+	public void testList_Empty() {
+
+		Identifiable<String>[] args = null;
+
+		assertTrue(Conversions.list(args).isEmpty());
+
+	}
+
+	@Test
 	public void testConvert_List() {
 
 		List<String> keys = Arrays.asList("foo", "bar", null);
