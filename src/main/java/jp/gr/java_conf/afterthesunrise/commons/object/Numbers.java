@@ -25,41 +25,110 @@ public final class Numbers {
 
 	private static final long DURATION = 1L;
 
-	private static final LoadingCache<String, BigDecimal> CACHE;
+	private static final LoadingCache<String, Long> CACHE_LONG;
 
-	private static final BigDecimal NULL = new BigDecimal("0.0");
+	private static final Long NULL_LONG = new Long("0");
+
+	private static final LoadingCache<String, Double> CACHE_DOUBLE;
+
+	private static final Double NULL_DOUBLE = new Double("0.0");
+
+	private static final LoadingCache<String, BigDecimal> CACHE_DECIMAL;
+
+	private static final BigDecimal NULL_DECIMAL = new BigDecimal("0.0");
 
 	static {
 
-		CacheLoader<String, BigDecimal> loader = new CacheLoader<String, BigDecimal>() {
-			@Override
-			public BigDecimal load(String key) throws Exception {
-				try {
-					return new BigDecimal(key);
-				} catch (Exception e) {
-					return NULL;
-				}
-			}
-		};
+		CACHE_LONG = CacheBuilder.newBuilder()
+				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
+				.build(new CacheLoader<String, Long>() {
+					@Override
+					public Long load(String key) throws Exception {
+						try {
+							return Long.valueOf(key);
+						} catch (Exception e) {
+							return NULL_LONG;
+						}
+					}
+				});
 
-		CACHE = CacheBuilder.newBuilder().expireAfterAccess(DURATION, MINUTES)
-				.maximumSize(MAX).build(loader);
+		CACHE_DOUBLE = CacheBuilder.newBuilder()
+				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
+				.build(new CacheLoader<String, Double>() {
+					@Override
+					public Double load(String key) throws Exception {
+						try {
+							return Double.valueOf(key);
+						} catch (Exception e) {
+							return NULL_DOUBLE;
+						}
+					}
+				});
+
+		CACHE_DECIMAL = CacheBuilder.newBuilder()
+				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
+				.build(new CacheLoader<String, BigDecimal>() {
+					@Override
+					public BigDecimal load(String key) throws Exception {
+						try {
+							return new BigDecimal(key);
+						} catch (Exception e) {
+							return NULL_DECIMAL;
+						}
+					}
+				});
 
 	}
 
-	public static final BigDecimal convert(String value) {
-		return convert(value, null);
+	private static <T> T getValue(T val, T nullVal, T defaultValue) {
+		return val != nullVal ? val : defaultValue;
 	}
 
-	public static final BigDecimal convert(String value, BigDecimal defaultValue) {
+	public static Long convertLong(String value) {
+		return convertLong(value, null);
+	}
+
+	public static Long convertLong(String value, Long defaultValue) {
 
 		if (StringUtils.isBlank(value)) {
 			return defaultValue;
 		}
 
-		BigDecimal cached = CACHE.getUnchecked(value.intern());
+		Long cached = CACHE_LONG.getUnchecked(value.intern());
 
-		return cached != NULL ? cached : defaultValue;
+		return getValue(cached, NULL_LONG, defaultValue);
+
+	}
+
+	public static Double convertDouble(String value) {
+		return convertDouble(value, null);
+	}
+
+	public static Double convertDouble(String value, Double defaultValue) {
+
+		if (StringUtils.isBlank(value)) {
+			return defaultValue;
+		}
+
+		Double cached = CACHE_DOUBLE.getUnchecked(value.intern());
+
+		return getValue(cached, NULL_DOUBLE, defaultValue);
+
+	}
+
+	public static BigDecimal convert(String value) {
+		return convert(value, null);
+	}
+
+	public static BigDecimal convert(String value, BigDecimal defaultValue) {
+
+		if (StringUtils.isBlank(value)) {
+			return defaultValue;
+		}
+
+		BigDecimal cached = CACHE_DECIMAL.getUnchecked(value.intern());
+
+		return getValue(cached, NULL_DECIMAL, defaultValue);
 
 	}
 

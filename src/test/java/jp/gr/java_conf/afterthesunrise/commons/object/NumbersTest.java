@@ -54,6 +54,66 @@ public class NumbersTest {
 	}
 
 	@Test
+	public void testConvertLong() {
+
+		assertEquals((Long) 1L, Numbers.convertLong("1"));
+
+		assertNull(Numbers.convertLong("foo"));
+
+		assertNull(Numbers.convertLong(""));
+
+		assertNull(Numbers.convertLong(null));
+
+	}
+
+	@Test
+	public void testConvertLong_WithDefault() {
+
+		assertEquals((Long) 1L, Numbers.convertLong("1", 10L));
+
+		assertEquals((Long) 10L, Numbers.convertLong("foo", 10L));
+
+		assertEquals((Long) 10L, Numbers.convertLong("", 10L));
+
+		assertEquals((Long) 10L, Numbers.convertLong(null, 10L));
+
+		assertNull(Numbers.convertLong(null, null));
+
+	}
+
+	@Test
+	public strictfp void testConvertDouble() {
+
+		assertEquals((Double) 1.23, Numbers.convertDouble("1.23"));
+
+		assertEquals((Double) 1.0, Numbers.convertDouble("1.00"));
+
+		assertNull(Numbers.convertDouble("foo"));
+
+		assertNull(Numbers.convertDouble(""));
+
+		assertNull(Numbers.convertDouble(null));
+
+	}
+
+	@Test
+	public strictfp void testConvertDouble_WithDefault() {
+
+		assertEquals((Double) 1.23, Numbers.convertDouble("1.23", 1.1));
+
+		assertEquals((Double) 1.0, Numbers.convertDouble("1.00", 1.1));
+
+		assertEquals((Double) 1.1, Numbers.convertDouble("foo", 1.1));
+
+		assertEquals((Double) 1.1, Numbers.convertDouble("", 1.1));
+
+		assertEquals((Double) 1.1, Numbers.convertDouble(null, 1.1));
+
+		assertNull(Numbers.convertDouble(null, null));
+
+	}
+
+	@Test
 	public void testConvert() {
 
 		assertEquals("1.23", Numbers.convert("1.23").toPlainString());
@@ -80,6 +140,8 @@ public class NumbersTest {
 		assertSame(TEN, Numbers.convert("", TEN));
 
 		assertSame(TEN, Numbers.convert(null, TEN));
+
+		assertNull(Numbers.convert(null, null));
 
 	}
 
