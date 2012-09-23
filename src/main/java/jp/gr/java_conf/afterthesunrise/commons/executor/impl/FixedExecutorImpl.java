@@ -6,6 +6,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReentrantLock;
 
 import jp.gr.java_conf.afterthesunrise.commons.executor.FixedExecutor;
 
@@ -24,6 +25,8 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 
 	private static final int THREADS_MIN = 1;
 
+	private final ReentrantLock lock = new ReentrantLock();
+
 	private int threads = THREADS_DEFAULT;
 
 	private volatile ExecutorService executorService;
@@ -35,16 +38,20 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 	@Override
 	public void close() throws Exception {
 
-		synchronized (this) {
+		try {
 
-			if (executorService == null) {
-				return;
+			lock.lock();
+
+			if (executorService != null) {
+
+				executorService.shutdown();
+
+				executorService = null;
+
 			}
 
-			executorService.shutdown();
-
-			executorService = null;
-
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -56,7 +63,9 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (executorService == null) {
 				executorService = newFixedThreadPool(threads, this);
@@ -64,6 +73,8 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 
 			executorService.execute(runnable);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -75,7 +86,9 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 			return null;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (executorService == null) {
 				executorService = newFixedThreadPool(threads, this);
@@ -83,6 +96,8 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 
 			return executorService.submit(callable);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}

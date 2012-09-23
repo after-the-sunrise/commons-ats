@@ -176,7 +176,7 @@ public class Dates {
 		}
 
 		if (date.getClass() == java.sql.Date.class) {
-			return (java.sql.Date) date;
+			return java.sql.Date.class.cast(date);
 		}
 
 		return new java.sql.Date(date.getTime());
@@ -200,7 +200,7 @@ public class Dates {
 		}
 
 		if (date.getClass() == java.sql.Timestamp.class) {
-			return (java.sql.Timestamp) date;
+			return java.sql.Timestamp.class.cast(date);
 		}
 
 		return new java.sql.Timestamp(date.getTime());

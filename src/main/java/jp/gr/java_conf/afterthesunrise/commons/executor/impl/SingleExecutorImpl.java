@@ -6,6 +6,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReentrantLock;
 
 import jp.gr.java_conf.afterthesunrise.commons.executor.SingleExecutor;
 
@@ -20,21 +21,27 @@ import org.springframework.stereotype.Component;
 public class SingleExecutorImpl extends AbstractExecutor implements
 		SingleExecutor {
 
+	private final ReentrantLock lock = new ReentrantLock();
+
 	private volatile ExecutorService executorService;
 
 	@Override
 	public void close() throws Exception {
 
-		synchronized (this) {
+		try {
 
-			if (executorService == null) {
-				return;
+			lock.lock();
+
+			if (executorService != null) {
+
+				executorService.shutdown();
+
+				executorService = null;
+
 			}
 
-			executorService.shutdown();
-
-			executorService = null;
-
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -46,7 +53,9 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (executorService == null) {
 				executorService = newSingleThreadExecutor(this);
@@ -54,6 +63,8 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 
 			executorService.execute(runnable);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -65,7 +76,9 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 			return null;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (executorService == null) {
 				executorService = newSingleThreadExecutor(this);
@@ -73,6 +86,8 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 
 			return executorService.submit(callable);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}

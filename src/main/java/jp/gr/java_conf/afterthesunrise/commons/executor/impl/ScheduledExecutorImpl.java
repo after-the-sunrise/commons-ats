@@ -5,6 +5,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.locks.ReentrantLock;
 
 import jp.gr.java_conf.afterthesunrise.commons.executor.ScheduledExecutor;
 
@@ -23,6 +24,8 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 
 	private static final int THREADS_MIN = 1;
 
+	private final ReentrantLock lock = new ReentrantLock();
+
 	private int threads = THREADS_DEFAULT;
 
 	private volatile ScheduledExecutorService service;
@@ -34,16 +37,20 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 	@Override
 	public void close() throws Exception {
 
-		synchronized (this) {
+		try {
 
-			if (service == null) {
-				return;
+			lock.lock();
+
+			if (service != null) {
+
+				service.shutdown();
+
+				service = null;
+
 			}
 
-			service.shutdown();
-
-			service = null;
-
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -55,7 +62,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (service == null) {
 				service = newScheduledThreadPool(threads, this);
@@ -63,6 +72,8 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 
 			service.schedule(runnable, delay, MILLISECONDS);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -74,7 +85,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (service == null) {
 				service = newScheduledThreadPool(threads, this);
@@ -82,6 +95,8 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 
 			service.scheduleAtFixedRate(runnable, delay, delay, MILLISECONDS);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}
@@ -93,7 +108,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		synchronized (this) {
+		try {
+
+			lock.lock();
 
 			if (service == null) {
 				service = newScheduledThreadPool(threads, this);
@@ -101,8 +118,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 
 			service.scheduleWithFixedDelay(runnable, delay, delay, MILLISECONDS);
 
+		} finally {
+			lock.unlock();
 		}
 
 	}
-
 }
