@@ -63,6 +63,18 @@ public class ConversionsTest {
 	}
 
 	@Test
+	public void testtoIdString() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable(null);
+
+		assertEquals("foo", Conversions.toIdString(id1));
+		assertNull(Conversions.toIdString(id2));
+		assertNull(Conversions.toIdString(null));
+
+	}
+
+	@Test
 	public void testMap() {
 
 		TestIdentifiable id1 = new TestIdentifiable("foo");
@@ -94,6 +106,41 @@ public class ConversionsTest {
 		TestIdentifiable id2 = new TestIdentifiable("foo");
 
 		Conversions.map(id1, id2);
+
+	}
+
+	@Test
+	public void testSet() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable("bar");
+		TestIdentifiable id3 = new TestIdentifiable(null);
+
+		Set<String> set = Conversions.set(id1, id2, id3);
+
+		assertEquals(3, set.size());
+		assertTrue(set.contains(id1.getId()));
+		assertTrue(set.contains(id2.getId()));
+		assertTrue(set.contains(id3.getId()));
+
+	}
+
+	@Test
+	public void testSet_Empty() {
+
+		Identifiable<String>[] args = null;
+
+		assertTrue(Conversions.set(args).isEmpty());
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSet_DuplicateId() {
+
+		TestIdentifiable id1 = new TestIdentifiable("foo");
+		TestIdentifiable id2 = new TestIdentifiable("foo");
+
+		Conversions.set(id1, id2);
 
 	}
 

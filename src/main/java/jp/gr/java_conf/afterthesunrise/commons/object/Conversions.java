@@ -32,6 +32,18 @@ public final class Conversions {
 		T getId();
 	}
 
+	public static String toIdString(Identifiable<?> identifiable) {
+
+		if (identifiable == null) {
+			return null;
+		}
+
+		Object id = identifiable.getId();
+
+		return id == null ? null : id.toString();
+
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <K, V extends Identifiable<K>> Map<K, V> map(V... values) {
 
@@ -59,6 +71,11 @@ public final class Conversions {
 
 		return Collections.unmodifiableMap(map);
 
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V extends Identifiable<K>> Set<K> set(V... values) {
+		return map(values).keySet();
 	}
 
 	@SuppressWarnings("unchecked")
