@@ -57,6 +57,16 @@ public final class Validations {
 
 	}
 
+	public static int checkPort(int port) {
+
+		if (port < 0 || 0xFFFF < port) {
+			throw make("Invalid port : %s", port);
+		}
+
+		return port;
+
+	}
+
 	public static long checkNotNegative(long value) {
 
 		if (value >= 0L) {

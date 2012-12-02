@@ -2,6 +2,7 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkDates;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkNotNegative;
+import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkPort;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkPositive;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkRange;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkTimestamps;
@@ -71,6 +72,23 @@ public class ValidationsTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCheckDates_Date_Invalid() {
 		checkDates(new Date(2L), new Date(1L));
+	}
+
+	@Test
+	public void testCheckPort() {
+		checkPort(0);
+		checkPort(12345);
+		checkPort(65535);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCheckPort_TooSmall() {
+		checkPort(-1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCheckPort_TooBig() {
+		checkPort(65536);
 	}
 
 	@Test
