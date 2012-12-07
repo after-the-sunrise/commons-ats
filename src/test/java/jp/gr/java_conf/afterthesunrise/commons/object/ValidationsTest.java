@@ -6,7 +6,7 @@ import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkPo
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkPositive;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkRange;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Validations.checkTimestamps;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;

@@ -1,7 +1,7 @@
 package jp.gr.java_conf.afterthesunrise.commons.bean;
 
 import static java.lang.Thread.State.WAITING;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;

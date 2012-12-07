@@ -1,8 +1,8 @@
 package jp.gr.java_conf.afterthesunrise.commons.key;
 
-import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;

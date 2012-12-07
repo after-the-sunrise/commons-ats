@@ -8,8 +8,8 @@ import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Re
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Stream;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openGzipReader;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openGzipStream;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
