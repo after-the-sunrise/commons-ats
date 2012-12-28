@@ -4,9 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.Sets;
 
 /**
  * @author takanori.takase
@@ -49,11 +50,11 @@ public abstract class AbstractKey implements Serializable {
 	}
 
 	public List<?> getKeyList() {
-		return Arrays.asList(getKeys());
+		return Arrays.asList(keys);
 	}
 
 	public Set<?> getKeySet() {
-		return new HashSet<Object>(getKeyList());
+		return Sets.newHashSet(keys);
 	}
 
 }
