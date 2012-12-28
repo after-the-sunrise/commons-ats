@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -133,12 +135,17 @@ public final class Conversions {
 
 	public static <K extends Comparable<K>, V> SortedSet<V> convertSorted(
 			Set<K> keys, Map<K, V> mapping) {
+		return convertNavigable(keys, mapping);
+	}
+
+	public static <K extends Comparable<K>, V> NavigableSet<V> convertNavigable(
+			Set<K> keys, Map<K, V> mapping) {
 
 		checkNotNull(keys, "keys cannot be null.");
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		SortedSet<V> values = new TreeSet<>(NullSafeComparator.get());
+		NavigableSet<V> values = new TreeSet<>(NullSafeComparator.get());
 
 		for (K key : keys) {
 			values.add(mapping.get(key));
@@ -173,12 +180,17 @@ public final class Conversions {
 
 	public static <K1, K2 extends Comparable<K2>, V> SortedMap<K2, V> convertKeySorted(
 			Map<K1, V> source, Map<K1, K2> mapping) {
+		return convertKeyNavigable(source, mapping);
+	}
+
+	public static <K1, K2 extends Comparable<K2>, V> NavigableMap<K2, V> convertKeyNavigable(
+			Map<K1, V> source, Map<K1, K2> mapping) {
 
 		checkNotNull(source, "source cannot be null.");
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		SortedMap<K2, V> values = new TreeMap<>(NullSafeComparator.get());
+		NavigableMap<K2, V> values = new TreeMap<>(NullSafeComparator.get());
 
 		for (Entry<K1, V> entry : source.entrySet()) {
 
@@ -187,6 +199,57 @@ public final class Conversions {
 			K2 newKey = mapping.get(oldKey);
 
 			values.put(newKey, entry.getValue());
+
+		}
+
+		return values;
+
+	}
+
+	public static <K, V1, V2> Map<K, V2> convertValue(Map<K, V1> source,
+			Map<V1, V2> mapping) {
+
+		checkNotNull(source, "source cannot be null.");
+
+		checkNotNull(mapping, "mapping cannot be null.");
+
+		Map<K, V2> values = new HashMap<>();
+
+		for (Entry<K, V1> entry : source.entrySet()) {
+
+			V1 oldVal = entry.getValue();
+
+			V2 newVal = mapping.get(oldVal);
+
+			values.put(entry.getKey(), newVal);
+
+		}
+
+		return values;
+
+	}
+
+	public static <K extends Comparable<K>, V1, V2> SortedMap<K, V2> convertValueSorted(
+			Map<K, V1> source, Map<V1, V2> mapping) {
+		return convertValueNavigable(source, mapping);
+	}
+
+	public static <K extends Comparable<K>, V1, V2> NavigableMap<K, V2> convertValueNavigable(
+			Map<K, V1> source, Map<V1, V2> mapping) {
+
+		checkNotNull(source, "source cannot be null.");
+
+		checkNotNull(mapping, "mapping cannot be null.");
+
+		NavigableMap<K, V2> values = new TreeMap<>(NullSafeComparator.get());
+
+		for (Entry<K, V1> entry : source.entrySet()) {
+
+			V1 oldVal = entry.getValue();
+
+			V2 newVal = mapping.get(oldVal);
+
+			values.put(entry.getKey(), newVal);
 
 		}
 

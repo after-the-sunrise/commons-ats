@@ -355,4 +355,84 @@ public class ConversionsTest {
 
 	}
 
+	@Test
+	public void testConvertValue() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+		source.put("foo", BigDecimal.valueOf(1L));
+		source.put("bar", BigDecimal.valueOf(2L));
+		source.put("hoge", BigDecimal.valueOf(3L));
+
+		Map<BigDecimal, Integer> mapping = new HashMap<>();
+		mapping.put(BigDecimal.valueOf(1L), 100);
+		mapping.put(BigDecimal.valueOf(2L), 200);
+
+		Map<String, Integer> map = Conversions.convertValue(source, mapping);
+
+		assertEquals(3, map.size());
+		assertEquals(100, map.get("foo").intValue());
+		assertEquals(200, map.get("bar").intValue());
+		assertEquals(null, map.get("hoge"));
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertValue_NullSource() {
+
+		Map<String, Integer> mapping = new HashMap<>();
+
+		Conversions.convertValue(null, mapping);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertValue_NullMapping() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+
+		Conversions.convertValue(source, null);
+
+	}
+
+	@SuppressWarnings(value = "NP_NONNULL_PARAM_VIOLATION")
+	@Test
+	public void testConvertValueSorted() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+		source.put("foo", BigDecimal.valueOf(1L));
+		source.put("bar", BigDecimal.valueOf(2L));
+		source.put("hoge", BigDecimal.valueOf(3L));
+
+		Map<BigDecimal, Integer> mapping = new HashMap<>();
+		mapping.put(BigDecimal.valueOf(1L), 100);
+		mapping.put(BigDecimal.valueOf(2L), 200);
+
+		SortedMap<String, Integer> map = Conversions.convertValueSorted(source,
+				mapping);
+
+		assertEquals(3, map.size());
+		assertEquals(100, map.get("foo").intValue());
+		assertEquals(200, map.get("bar").intValue());
+		assertEquals(null, map.get("hoge"));
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertValueSorted_NullSource() {
+
+		Map<String, Integer> mapping = new HashMap<>();
+
+		Conversions.convertValueSorted(null, mapping);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testConvertValueSorted_NullMapping() {
+
+		Map<String, BigDecimal> source = new HashMap<>();
+
+		Conversions.convertValueSorted(source, null);
+
+	}
+
 }
