@@ -25,8 +25,6 @@ public class CharsetEditorTest {
 	@Test
 	public void testSetAsText() {
 
-		System.out.println(Charset.availableCharsets());
-
 		target.setAsText("UTF-8");
 
 		assertSame(Charsets.UTF_8, target.getValue());
