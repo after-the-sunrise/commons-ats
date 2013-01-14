@@ -67,6 +67,16 @@ public final class Validations {
 
 	}
 
+	public static int checkNotNegative(int value) {
+
+		if (value >= 0) {
+			return value;
+		}
+
+		throw make("Value cannot be negative : %s", value);
+
+	}
+
 	public static long checkNotNegative(long value) {
 
 		if (value >= 0L) {
@@ -96,6 +106,16 @@ public final class Validations {
 		}
 
 		return value; // Return same instance
+
+	}
+
+	public static int checkPositive(int value) {
+
+		if (value > 0L) {
+			return value;
+		}
+
+		throw make("Value must be positive : %s", value);
 
 	}
 

@@ -92,6 +92,17 @@ public class ValidationsTest {
 	}
 
 	@Test
+	public void testCheckNotNegative_PrimitiveInt() {
+		assertEquals(1L, checkNotNegative(1));
+		assertEquals(0L, checkNotNegative(0));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCheckNotNegative_PrimitiveInt_Invalid() {
+		checkNotNegative(-1);
+	}
+
+	@Test
 	public void testCheckNotNegative_PrimitiveLong() {
 		assertEquals(1L, checkNotNegative(1L));
 		assertEquals(0L, checkNotNegative(0L));
@@ -122,6 +133,16 @@ public class ValidationsTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testCheckNotNegative_BigDecimal_Invalid() {
 		checkNotNegative(BigDecimal.valueOf(-1L));
+	}
+
+	@Test
+	public void testCheckPositive_PrimitiveInt() {
+		assertEquals(1L, checkPositive(1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCheckPositive_PrimitiveInt_Invalid() {
+		checkPositive(0);
 	}
 
 	@Test
