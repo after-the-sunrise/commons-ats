@@ -2,7 +2,7 @@ package jp.gr.java_conf.afterthesunrise.commons.executor.impl;
 
 import static java.lang.String.format;
 import static java.util.concurrent.Executors.defaultThreadFactory;
-import static jp.gr.java_conf.afterthesunrise.commons.log.Logs.logErrors;
+import static jp.gr.java_conf.afterthesunrise.commons.object.Logs.logErrors;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;

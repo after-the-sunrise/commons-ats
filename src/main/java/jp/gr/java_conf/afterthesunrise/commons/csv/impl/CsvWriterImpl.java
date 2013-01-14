@@ -4,7 +4,7 @@ import static au.com.bytecode.opencsv.CSVWriter.DEFAULT_ESCAPE_CHARACTER;
 import static au.com.bytecode.opencsv.CSVWriter.DEFAULT_LINE_END;
 import static au.com.bytecode.opencsv.CSVWriter.DEFAULT_QUOTE_CHARACTER;
 import static au.com.bytecode.opencsv.CSVWriter.DEFAULT_SEPARATOR;
-import static jp.gr.java_conf.afterthesunrise.commons.log.Logs.logWarn;
+import static jp.gr.java_conf.afterthesunrise.commons.object.Logs.logWarn;
 
 import java.io.File;
 import java.io.FileNotFoundException;

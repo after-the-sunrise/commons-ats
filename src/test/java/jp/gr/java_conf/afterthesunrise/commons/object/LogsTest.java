@@ -1,4 +1,4 @@
-package jp.gr.java_conf.afterthesunrise.commons.log;
+package jp.gr.java_conf.afterthesunrise.commons.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
