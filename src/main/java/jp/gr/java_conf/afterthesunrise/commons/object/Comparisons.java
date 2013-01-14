@@ -1,6 +1,5 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -73,7 +72,7 @@ public final class Comparisons {
 
 	}
 
-	public static BigDecimal getMin(BigDecimal n1, BigDecimal n2) {
+	public static <T extends Comparable<T>> T getMin(T n1, T n2) {
 
 		if (n1 == n2) {
 			return n1;
@@ -87,11 +86,11 @@ public final class Comparisons {
 			return n1;
 		}
 
-		return n1.min(n2);
+		return n1.compareTo(n2) <= 0 ? n1 : n2;
 
 	}
 
-	public static BigDecimal getMax(BigDecimal n1, BigDecimal n2) {
+	public static <T extends Comparable<T>> T getMax(T n1, T n2) {
 
 		if (n1 == n2) {
 			return n1;
@@ -105,7 +104,7 @@ public final class Comparisons {
 			return n1;
 		}
 
-		return n1.max(n2);
+		return n1.compareTo(n2) >= 0 ? n1 : n2;
 
 	}
 
