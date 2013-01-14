@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 public class MessageConverterImpl implements MessageConverter,
 		MessageSourceAware {
 
-	@Autowired
 	private LocaleManager localeManager;
 
 	private MessageSource messageSource;
