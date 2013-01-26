@@ -56,7 +56,7 @@ public final class Immutables {
 			return emptyList();
 		}
 
-		return unmodifiableList(new ArrayList<>(col));
+		return unmodifiableList(new ArrayList<T>(col));
 
 	}
 
@@ -66,7 +66,7 @@ public final class Immutables {
 			return emptyList();
 		}
 
-		return unmodifiableList(new LinkedList<>(col));
+		return unmodifiableList(new LinkedList<T>(col));
 
 	}
 
@@ -76,7 +76,7 @@ public final class Immutables {
 			return emptySet();
 		}
 
-		return unmodifiableSet(new HashSet<>(col));
+		return unmodifiableSet(new HashSet<T>(col));
 
 	}
 
@@ -86,7 +86,7 @@ public final class Immutables {
 			return emptySortedSet();
 		}
 
-		return unmodifiableSortedSet(new TreeSet<>(col));
+		return unmodifiableSortedSet(new TreeSet<T>(col));
 
 	}
 
@@ -96,7 +96,7 @@ public final class Immutables {
 			return emptyMap();
 		}
 
-		return unmodifiableMap(new HashMap<>(map));
+		return unmodifiableMap(new HashMap<K, V>(map));
 
 	}
 
@@ -106,7 +106,7 @@ public final class Immutables {
 			return emptySortedMap();
 		}
 
-		return unmodifiableSortedMap(new TreeMap<>(map));
+		return unmodifiableSortedMap(new TreeMap<K, V>(map));
 
 	}
 

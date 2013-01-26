@@ -161,7 +161,7 @@ public class CsvWriterImpl implements CsvWriter {
 	public void writeMap(OutputStream out,
 			Iterable<Map<String, String>> iterable) throws IOException {
 
-		Set<String> headers = new TreeSet<>(NullSafeComparator.get());
+		Set<String> headers = new TreeSet<String>(NullSafeComparator.get());
 
 		for (Map<String, String> value : iterable) {
 

@@ -1,16 +1,14 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
-import static java.nio.file.StandardOpenOption.READ;
-
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -48,13 +46,13 @@ public class Streams {
 
 	}
 
-	public static InputStream openBufferedStream(Path path) throws IOException {
+	public static InputStream openBufferedStream(File file) throws IOException {
 
 		InputStream in = null;
 
 		try {
 
-			in = Files.newInputStream(path, READ);
+			in = new FileInputStream(file);
 
 			in = new BufferedInputStream(in);
 
@@ -88,9 +86,9 @@ public class Streams {
 
 	}
 
-	public static InputStream openGzipStream(Path path) throws IOException {
+	public static InputStream openGzipStream(File file) throws IOException {
 
-		InputStream in = openBufferedStream(path);
+		InputStream in = openBufferedStream(file);
 
 		try {
 
@@ -124,9 +122,9 @@ public class Streams {
 
 	}
 
-	public static InputStream openBzip2Stream(Path path) throws IOException {
+	public static InputStream openBzip2Stream(File file) throws IOException {
 
-		InputStream in = openBufferedStream(path);
+		InputStream in = openBufferedStream(file);
 
 		try {
 
@@ -161,10 +159,10 @@ public class Streams {
 
 	}
 
-	public static Reader openGzipReader(Path path, Charset charset)
+	public static Reader openGzipReader(File file, Charset charset)
 			throws IOException {
 
-		InputStream in = openGzipStream(path);
+		InputStream in = openGzipStream(file);
 
 		try {
 
@@ -199,10 +197,10 @@ public class Streams {
 
 	}
 
-	public static Reader openBzip2Reader(Path path, Charset charset)
+	public static Reader openBzip2Reader(File file, Charset charset)
 			throws IOException {
 
-		InputStream in = openBzip2Stream(path);
+		InputStream in = openBzip2Stream(file);
 
 		try {
 

@@ -110,7 +110,7 @@ public class DelegatingFutureTest {
 		target = spy(target);
 
 		// Source future takes 100 nanoseconds to execute.
-		final Queue<Long> queue = new LinkedList<>();
+		final Queue<Long> queue = new LinkedList<Long>();
 		queue.add(-500L);
 		queue.add(-400L);
 
@@ -121,10 +121,10 @@ public class DelegatingFutureTest {
 			}
 		}).when(target).nanoTime();
 
-		when(sourceFuture.get(200_000_000, NANOSECONDS)).thenReturn("123");
+		when(sourceFuture.get(200000000, NANOSECONDS)).thenReturn("123");
 
 		// Target future is invoked with timeout minus 100 nanoseconds.
-		when(targetFuture.get(199_999_900, NANOSECONDS)).thenReturn(123);
+		when(targetFuture.get(199999900, NANOSECONDS)).thenReturn(123);
 
 		assertEquals(Integer.valueOf(123), target.get(200, MILLISECONDS));
 
@@ -137,9 +137,9 @@ public class DelegatingFutureTest {
 
 		target = spy(target);
 
-		final Queue<Long> queue = new LinkedList<>();
-		queue.add(-800_000_000L);
-		queue.add(-200_000_000L);
+		final Queue<Long> queue = new LinkedList<Long>();
+		queue.add(-800000000L);
+		queue.add(-200000000L);
 
 		doAnswer(new Answer<Long>() {
 			@Override
@@ -148,7 +148,7 @@ public class DelegatingFutureTest {
 			}
 		}).when(target).nanoTime();
 
-		when(sourceFuture.get(200_000_000, NANOSECONDS)).thenReturn("123");
+		when(sourceFuture.get(200000000, NANOSECONDS)).thenReturn("123");
 
 		when(targetFuture.get(0, NANOSECONDS)).thenReturn(123);
 

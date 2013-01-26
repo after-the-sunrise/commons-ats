@@ -10,12 +10,13 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.Test;
+
+import com.beust.jcommander.internal.Maps;
 
 public class SelectionsTest {
 
@@ -71,7 +72,7 @@ public class SelectionsTest {
 	@Test
 	public void testSelectFirstKey() {
 
-		Map<String, String> m = new TreeMap<>();
+		Map<String, String> m = new TreeMap<String, String>();
 		m.put("foo", "val1");
 		m.put("bar", "val2");
 
@@ -79,7 +80,7 @@ public class SelectionsTest {
 
 		assertEquals("bar", Selections.selectFirstKey(m, "hoge"));
 
-		assertNull(Selections.selectFirstKey(new HashMap<>(), "bar"));
+		assertNull(Selections.selectFirstKey(Maps.newHashMap(), "bar"));
 
 		assertNull(Selections.selectFirstKey(null, "bar"));
 
@@ -88,7 +89,7 @@ public class SelectionsTest {
 	@Test
 	public void testSelectFirstValue() {
 
-		Map<String, String> m = new TreeMap<>();
+		Map<String, String> m = new TreeMap<String, String>();
 		m.put("foo", "val1");
 		m.put("bar", "val2");
 
@@ -96,7 +97,7 @@ public class SelectionsTest {
 
 		assertEquals("val2", Selections.selectFirstValue(m, "hoge"));
 
-		assertNull(Selections.selectFirstValue(new HashMap<>(), "val2"));
+		assertNull(Selections.selectFirstValue(Maps.newHashMap(), "val2"));
 
 		assertNull(Selections.selectFirstValue(null, "val2"));
 

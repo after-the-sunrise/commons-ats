@@ -4,6 +4,7 @@ import static java.util.concurrent.Executors.newScheduledThreadPool;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -35,7 +36,7 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() throws IOException {
 
 		try {
 

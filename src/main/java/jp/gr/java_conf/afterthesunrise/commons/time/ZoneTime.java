@@ -2,12 +2,13 @@ package jp.gr.java_conf.afterthesunrise.commons.time;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
-import static java.util.Objects.hash;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Dates.MILLIS_IN_EOD;
 
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import jp.gr.java_conf.afterthesunrise.commons.object.Comparisons;
 
 /**
  * @author takanori.takase
@@ -39,7 +40,7 @@ public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 
 	@Override
 	public int hashCode() {
-		return hash(getTime(), getTimeZoneId());
+		return time.hashCode() * timeZone.hashCode();
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class ZoneTime implements Serializable, Comparable<ZoneTime> {
 
 		long l2 = o.adjust(now);
 
-		return Long.compare(l1, l2);
+		return Comparisons.compare(l1, l2);
 
 	}
 

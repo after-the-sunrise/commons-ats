@@ -154,7 +154,7 @@ public enum AdjustmentType {
 			return null;
 		}
 
-		Set<Integer> set = new HashSet<>();
+		Set<Integer> set = new HashSet<Integer>();
 
 		for (DayType type : days) {
 
@@ -180,7 +180,7 @@ public enum AdjustmentType {
 			return null;
 		}
 
-		Set<Long> set = new HashSet<>();
+		Set<Long> set = new HashSet<Long>();
 
 		for (Long holiday : dates) {
 

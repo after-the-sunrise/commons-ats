@@ -7,6 +7,10 @@ public final class BiKey<K1, K2> extends AbstractKey {
 
 	private static final long serialVersionUID = 1279141968039096818L;
 
+	public static <T1, T2> BiKey<T1, T2> create(T1 key1, T2 key2) {
+		return new BiKey<T1, T2>(key1, key2);
+	}
+
 	public BiKey(K1 key1, K2 key2) {
 		super(key1, key2);
 	}

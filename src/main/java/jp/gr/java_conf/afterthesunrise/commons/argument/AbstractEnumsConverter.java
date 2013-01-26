@@ -51,7 +51,7 @@ public abstract class AbstractEnumsConverter<E extends Enum<E>> implements
 
 		String[] enums = StringUtils.split(value, separator);
 
-		List<E> list = new ArrayList<>(enums.length);
+		List<E> list = new ArrayList<E>(enums.length);
 
 		for (String val : enums) {
 

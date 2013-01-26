@@ -108,4 +108,24 @@ public final class Comparisons {
 
 	}
 
+	public static int compare(int i1, int i2) {
+
+		if (i1 == i2) {
+			return 0;
+		}
+
+		return i1 < i2 ? -1 : 1;
+
+	}
+
+	public static int compare(long l1, long l2) {
+
+		if (l1 == l2) {
+			return 0;
+		}
+
+		return l1 < l2 ? -1 : 1;
+
+	}
+
 }

@@ -22,7 +22,7 @@ public class ArrayListenerManagerImplTest {
 	@Before
 	public void setUp() throws Exception {
 
-		target = new ArrayListenerManagerImpl<>();
+		target = new ArrayListenerManagerImpl<NotificationListener>();
 
 		predicate = new ListenerPredicate<NotificationListener>() {
 			@Override

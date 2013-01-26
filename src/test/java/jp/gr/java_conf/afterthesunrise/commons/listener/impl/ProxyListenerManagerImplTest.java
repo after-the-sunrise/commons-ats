@@ -19,7 +19,7 @@ public class ProxyListenerManagerImplTest {
 	@Before
 	public void setUp() throws Exception {
 
-		target = new ProxyListenerManagerImpl<>();
+		target = new ProxyListenerManagerImpl<NotificationListener>();
 
 		target.setDelegate(new ArrayListenerManagerImpl<NotificationListener>());
 
@@ -49,7 +49,7 @@ public class ProxyListenerManagerImplTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testInvoke_IllegalAccess() throws ReflectiveOperationException {
+	public void testInvoke_IllegalAccess() throws Exception {
 
 		NotificationListener l = mock(NotificationListener.class);
 
@@ -60,7 +60,7 @@ public class ProxyListenerManagerImplTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testInvoke_Failure() throws ReflectiveOperationException {
+	public void testInvoke_Failure() throws Exception {
 
 		NotificationListener l = mock(NotificationListener.class);
 

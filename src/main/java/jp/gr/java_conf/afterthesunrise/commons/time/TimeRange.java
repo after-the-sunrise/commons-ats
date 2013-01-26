@@ -1,7 +1,6 @@
 package jp.gr.java_conf.afterthesunrise.commons.time;
 
 import static java.lang.String.format;
-import static java.util.Objects.hash;
 
 import java.io.Serializable;
 import java.util.TimeZone;
@@ -32,7 +31,7 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 	@Override
 	public int hashCode() {
-		return hash(start, end);
+		return start.hashCode() * end.hashCode();
 	}
 
 	@Override

@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.junit.Test;
 
 /**
@@ -17,26 +14,32 @@ public class UniKeyTest {
 	@Test
 	public void testUniKey() {
 
-		UniKey<String> target = new UniKey<>("foo");
+		UniKey<String> target = new UniKey<String>("foo");
 
 		assertEquals("foo", target.getKey());
 
-		assertEquals(target, target);
+		assertTrue(target.equals(target));
+		assertEquals(target.hashCode(), target.hashCode());
 
-		assertTrue(new HashSet<>(Arrays.asList(target)).contains(target));
+		UniKey<String> other = UniKey.create("foo");
+		assertTrue(target.equals(other));
+		assertEquals(target.hashCode(), other.hashCode());
 
 	}
 
 	@Test
 	public void testUniKey_Null() {
 
-		UniKey<String> target = new UniKey<>(null);
+		UniKey<String> target = new UniKey<String>(null);
 
 		assertNull(target.getKey());
 
-		assertEquals(target, target);
+		assertTrue(target.equals(target));
+		assertEquals(target.hashCode(), target.hashCode());
 
-		assertTrue(new HashSet<>(Arrays.asList(target)).contains(target));
+		UniKey<String> other = UniKey.create(null);
+		assertTrue(target.equals(other));
+		assertEquals(target.hashCode(), other.hashCode());
 
 	}
 

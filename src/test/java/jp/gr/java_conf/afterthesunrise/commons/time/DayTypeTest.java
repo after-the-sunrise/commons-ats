@@ -15,9 +15,9 @@ import org.junit.Test;
  */
 public class DayTypeTest {
 
-	private static final byte ALL = (byte) 0b01111111;
+	private static final byte ALL = Byte.MAX_VALUE;
 
-	private static final byte NONE = (byte) 0b00000000;
+	private static final byte NONE = (byte) 0;
 
 	@Test
 	public void testGetCalendarField() {

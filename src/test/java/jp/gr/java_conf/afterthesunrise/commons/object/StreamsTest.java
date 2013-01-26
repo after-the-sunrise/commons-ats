@@ -1,8 +1,7 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
+import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.Resources.getResource;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.Paths.get;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBufferedStream;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Reader;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Stream;
@@ -12,12 +11,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.After;
@@ -35,9 +34,11 @@ public class StreamsTest {
 
 	private static final URL URL_BZIP = getResource("sample.txt.bz2");
 
-	private static final Path PATH_GZIP = get("src/test/resources/sample.txt.gz");
+	private static final File PATH_GZIP = new File(
+			"src/test/resources/sample.txt.gz");
 
-	private static final Path PATH_BZIP = get("src/test/resources/sample.txt.bz2");
+	private static final File PATH_BZIP = new File(
+			"src/test/resources/sample.txt.bz2");
 
 	private InputStream in;
 

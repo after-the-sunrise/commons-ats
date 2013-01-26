@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class PatternEditor extends PropertyEditorSupport {
 
-	private static final Map<String, Pattern> PATTERNS = new ConcurrentHashMap<>();
+	private static final Map<String, Pattern> PATTERNS = new ConcurrentHashMap<String, Pattern>();
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {

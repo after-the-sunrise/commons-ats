@@ -1,9 +1,10 @@
 package jp.gr.java_conf.afterthesunrise.commons.time;
 
 import static java.lang.String.format;
-import static java.util.Objects.hash;
 
 import java.io.Serializable;
+
+import jp.gr.java_conf.afterthesunrise.commons.object.Comparisons;
 
 /**
  * @author takanori.takase
@@ -52,7 +53,7 @@ public class Time implements Serializable, Comparable<Time> {
 
 	@Override
 	public int hashCode() {
-		return hash(hour, minute, second, millisecond);
+		return hour + minute + second + millisecond;
 	}
 
 	@Override
@@ -66,22 +67,22 @@ public class Time implements Serializable, Comparable<Time> {
 	@Override
 	public int compareTo(Time o) {
 
-		int comparison = Integer.compare(hour, o.hour);
+		int comparison = Comparisons.compare(hour, o.hour);
 		if (comparison != 0) {
 			return comparison;
 		}
 
-		comparison = Integer.compare(minute, o.minute);
+		comparison = Comparisons.compare(minute, o.minute);
 		if (comparison != 0) {
 			return comparison;
 		}
 
-		comparison = Integer.compare(second, o.second);
+		comparison = Comparisons.compare(second, o.second);
 		if (comparison != 0) {
 			return comparison;
 		}
 
-		return Integer.compare(millisecond, o.millisecond);
+		return Comparisons.compare(millisecond, o.millisecond);
 
 	}
 

@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import jp.gr.java_conf.afterthesunrise.commons.object.Proxies;
@@ -114,7 +114,7 @@ public class TimedInvocationHandlerTest {
 
 		final Object[] v = new Object[0];
 
-		final AtomicLong actionCount = new AtomicLong();
+		final AtomicInteger actionCount = new AtomicInteger();
 
 		Runnable runnable = new Runnable() {
 			@Override
@@ -122,7 +122,7 @@ public class TimedInvocationHandlerTest {
 				while (!executorService.isShutdown()) {
 					try {
 
-						int i = ThreadLocalRandom.current().nextInt();
+						int i = actionCount.incrementAndGet();
 
 						target.setTimeoutInMillis(i);
 
@@ -151,8 +151,6 @@ public class TimedInvocationHandlerTest {
 
 					} catch (Throwable e) {
 						errorCount.incrementAndGet();
-					} finally {
-						actionCount.incrementAndGet();
 					}
 				}
 			}

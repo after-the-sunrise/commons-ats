@@ -2,11 +2,9 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 
 import static java.lang.String.format;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.concurrent.ThreadLocalRandom;
 
 import com.google.common.io.Closeables;
 import com.google.common.io.Resources;
@@ -46,7 +44,7 @@ public final class Configurations {
 				if (classPath) {
 					in = Resources.getResource(path).openStream();
 				} else {
-					in = Files.newInputStream(Paths.get(path));
+					in = new FileInputStream(path);
 				}
 
 				prop.load(in);
@@ -91,7 +89,7 @@ public final class Configurations {
 
 		int range = uBound - lBound + 1;
 
-		int random = ThreadLocalRandom.current().nextInt() % range;
+		int random = (int) (System.nanoTime() % range);
 
 		return lBound + Math.abs(random);
 

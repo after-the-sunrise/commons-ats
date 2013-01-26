@@ -10,7 +10,6 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +19,8 @@ import java.util.SortedSet;
 import jp.gr.java_conf.afterthesunrise.commons.object.Conversions.Identifiable;
 
 import org.junit.Test;
+
+import com.google.common.collect.Sets;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
@@ -173,7 +174,7 @@ public class ConversionsTest {
 	public void testConvert_List() {
 
 		List<String> keys = Arrays.asList("foo", "bar", null);
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 		mapping.put("foo", BigDecimal.valueOf(1L));
 		mapping.put("bar", BigDecimal.valueOf(2L));
 
@@ -189,7 +190,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvert_List_NullKeys() {
 
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 
 		Conversions.convert((List<String>) null, mapping);
 
@@ -207,8 +208,8 @@ public class ConversionsTest {
 	@Test
 	public void testConvert_Set() {
 
-		Set<String> keys = new HashSet<>(Arrays.asList("foo", "bar", null));
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Set<String> keys = Sets.newHashSet("foo", "bar", null);
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 		mapping.put("foo", BigDecimal.valueOf(1L));
 		mapping.put("bar", BigDecimal.valueOf(2L));
 
@@ -224,7 +225,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvert_Set_NullKeys() {
 
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 
 		Conversions.convert((Set<String>) null, mapping);
 
@@ -233,7 +234,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvert_Set_NullMapping() {
 
-		Set<String> keys = new HashSet<>(Arrays.asList("hoge"));
+		Set<String> keys = Sets.newHashSet("hoge");
 
 		Conversions.convert(keys, null);
 
@@ -243,8 +244,8 @@ public class ConversionsTest {
 	@Test
 	public void testConvertSorted_Set() {
 
-		Set<String> keys = new HashSet<>(Arrays.asList("foo", "bar", null));
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Set<String> keys = Sets.newHashSet("foo", "bar", null);
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 		mapping.put("foo", BigDecimal.valueOf(1L));
 		mapping.put("bar", BigDecimal.valueOf(2L));
 
@@ -260,7 +261,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertSorted_Set_NullKeys() {
 
-		Map<String, BigDecimal> mapping = new HashMap<>();
+		Map<String, BigDecimal> mapping = new HashMap<String, BigDecimal>();
 
 		Conversions.convertSorted((Set<String>) null, mapping);
 
@@ -269,7 +270,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertSorted_Set_NullMapping() {
 
-		Set<String> keys = new HashSet<>(Arrays.asList("hoge"));
+		Set<String> keys = Sets.newHashSet("hoge");
 
 		Conversions.convertSorted(keys, null);
 
@@ -278,12 +279,12 @@ public class ConversionsTest {
 	@Test
 	public void testConvertKey() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 		source.put("foo", BigDecimal.valueOf(1L));
 		source.put("bar", BigDecimal.valueOf(2L));
 		source.put("hoge", BigDecimal.valueOf(3L));
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 		mapping.put("foo", 100);
 		mapping.put("bar", 200);
 
@@ -299,7 +300,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertKey_NullSource() {
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 
 		Conversions.convertKey(null, mapping);
 
@@ -308,7 +309,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertKey_NullMapping() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
 		Conversions.convertKey(source, null);
 
@@ -318,12 +319,12 @@ public class ConversionsTest {
 	@Test
 	public void testConvertKeySorted() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 		source.put("foo", BigDecimal.valueOf(1L));
 		source.put("bar", BigDecimal.valueOf(2L));
 		source.put("hoge", BigDecimal.valueOf(3L));
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 		mapping.put("foo", 100);
 		mapping.put("bar", 200);
 
@@ -340,7 +341,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertKeySorted_NullSource() {
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 
 		Conversions.convertKeySorted(null, mapping);
 
@@ -349,7 +350,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertKeySorted_NullMapping() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
 		Conversions.convertKeySorted(source, null);
 
@@ -358,12 +359,12 @@ public class ConversionsTest {
 	@Test
 	public void testConvertValue() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 		source.put("foo", BigDecimal.valueOf(1L));
 		source.put("bar", BigDecimal.valueOf(2L));
 		source.put("hoge", BigDecimal.valueOf(3L));
 
-		Map<BigDecimal, Integer> mapping = new HashMap<>();
+		Map<BigDecimal, Integer> mapping = new HashMap<BigDecimal, Integer>();
 		mapping.put(BigDecimal.valueOf(1L), 100);
 		mapping.put(BigDecimal.valueOf(2L), 200);
 
@@ -379,7 +380,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertValue_NullSource() {
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 
 		Conversions.convertValue(null, mapping);
 
@@ -388,7 +389,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertValue_NullMapping() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
 		Conversions.convertValue(source, null);
 
@@ -398,12 +399,12 @@ public class ConversionsTest {
 	@Test
 	public void testConvertValueSorted() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 		source.put("foo", BigDecimal.valueOf(1L));
 		source.put("bar", BigDecimal.valueOf(2L));
 		source.put("hoge", BigDecimal.valueOf(3L));
 
-		Map<BigDecimal, Integer> mapping = new HashMap<>();
+		Map<BigDecimal, Integer> mapping = new HashMap<BigDecimal, Integer>();
 		mapping.put(BigDecimal.valueOf(1L), 100);
 		mapping.put(BigDecimal.valueOf(2L), 200);
 
@@ -420,7 +421,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertValueSorted_NullSource() {
 
-		Map<String, Integer> mapping = new HashMap<>();
+		Map<String, Integer> mapping = new HashMap<String, Integer>();
 
 		Conversions.convertValueSorted(null, mapping);
 
@@ -429,7 +430,7 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertValueSorted_NullMapping() {
 
-		Map<String, BigDecimal> source = new HashMap<>();
+		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
 		Conversions.convertValueSorted(source, null);
 

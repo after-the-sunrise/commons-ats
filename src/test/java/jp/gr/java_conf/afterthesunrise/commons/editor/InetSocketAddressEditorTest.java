@@ -26,7 +26,7 @@ public class InetSocketAddressEditorTest {
 
 		InetSocketAddress address = (InetSocketAddress) target.getValue();
 
-		assertEquals("localhost", address.getHostString());
+		assertEquals("localhost", address.getHostName());
 
 		assertEquals(80, address.getPort());
 
@@ -39,7 +39,7 @@ public class InetSocketAddressEditorTest {
 
 		InetSocketAddress address = (InetSocketAddress) target.getValue();
 
-		assertEquals("0.0.0.0", address.getHostString());
+		assertEquals("0.0.0.0", address.getHostName());
 
 		assertEquals(80, address.getPort());
 

@@ -87,7 +87,7 @@ public class ConfigurationsTest {
 
 		int loop = 1000;
 
-		Set<Integer> vals = new HashSet<>();
+		Set<Integer> vals = new HashSet<Integer>();
 
 		for (int i = 0; i < loop; i++) {
 
@@ -111,7 +111,7 @@ public class ConfigurationsTest {
 
 		int loop = 1000;
 
-		Set<Integer> vals = new HashSet<>();
+		Set<Integer> vals = new HashSet<Integer>();
 
 		for (int i = 0; i < loop; i++) {
 

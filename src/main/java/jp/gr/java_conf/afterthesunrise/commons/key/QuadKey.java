@@ -7,6 +7,11 @@ public final class QuadKey<K1, K2, K3, K4> extends AbstractKey {
 
 	private static final long serialVersionUID = 2946457726260527074L;
 
+	public static <T1, T2, T3, T4> QuadKey<T1, T2, T3, T4> create(T1 key1,
+			T2 key2, T3 key3, T4 key4) {
+		return new QuadKey<T1, T2, T3, T4>(key1, key2, key3, key4);
+	}
+
 	public QuadKey(K1 key1, K2 key2, K3 key3, K4 key4) {
 		super(key1, key2, key3, key4);
 	}

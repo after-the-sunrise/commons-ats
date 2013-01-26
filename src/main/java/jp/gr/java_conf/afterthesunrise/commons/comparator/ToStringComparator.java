@@ -2,7 +2,6 @@ package jp.gr.java_conf.afterthesunrise.commons.comparator;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -44,9 +43,9 @@ public class ToStringComparator implements Comparator<Object>, Serializable {
 			return EQUALS;
 		}
 
-		String s1 = Objects.toString(o1, null);
+		String s1 = o1 == null ? null : o1.toString();
 
-		String s2 = Objects.toString(o2, null);
+		String s2 = o2 == null ? null : o2.toString();
 
 		if (ignoreCase) {
 

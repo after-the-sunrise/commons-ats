@@ -106,7 +106,7 @@ public class EnumsTest {
 	@Test
 	public void testFindList() {
 
-		Collection<String> values = new ArrayList<>();
+		Collection<String> values = new ArrayList<String>();
 
 		for (RoundingMode type : RoundingMode.values()) {
 			values.add(type.name());
@@ -129,7 +129,7 @@ public class EnumsTest {
 	@Test
 	public void testFindSet() {
 
-		Collection<String> values = new ArrayList<>();
+		Collection<String> values = new ArrayList<String>();
 
 		for (RoundingMode type : RoundingMode.values()) {
 			values.add(type.name());

@@ -1,7 +1,6 @@
 package jp.gr.java_conf.afterthesunrise.commons.editor;
 
 import java.beans.PropertyEditorSupport;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
@@ -31,7 +30,7 @@ public class PropertiesEditor extends PropertyEditorSupport {
 
 			setValue(prop);
 
-		} catch (IOException | RuntimeException e) {
+		} catch (Exception e) {
 			throw new IllegalArgumentException("Failed to load : " + text, e);
 		} finally {
 			Closeables.closeQuietly(in);

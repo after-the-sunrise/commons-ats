@@ -7,6 +7,11 @@ public final class TriKey<K1, K2, K3> extends AbstractKey {
 
 	private static final long serialVersionUID = -6533043020197748707L;
 
+	public static <T1, T2, T3> TriKey<T1, T2, T3> create(T1 key1, T2 key2,
+			T3 key3) {
+		return new TriKey<T1, T2, T3>(key1, key2, key3);
+	}
+
 	public TriKey(K1 key1, K2 key2, K3 key3) {
 		super(key1, key2, key3);
 	}

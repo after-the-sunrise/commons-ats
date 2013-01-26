@@ -1,9 +1,11 @@
 package jp.gr.java_conf.afterthesunrise.commons.executor;
 
+import java.io.Closeable;
+
 /**
  * @author takanori.takase
  */
-public interface ScheduledExecutor extends AutoCloseable {
+public interface ScheduledExecutor extends Closeable {
 
 	void scheduleOnce(Runnable runnable, long delay);
 

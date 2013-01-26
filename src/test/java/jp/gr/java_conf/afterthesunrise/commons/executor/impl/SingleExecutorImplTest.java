@@ -40,6 +40,10 @@ public class SingleExecutorImplTest {
 		target.close();
 	}
 
+	private Runnable getNull() {
+		return null;
+	}
+
 	@Test(timeout = 5000L)
 	public void testExecute_Runnable() throws Exception {
 
@@ -67,7 +71,7 @@ public class SingleExecutorImplTest {
 
 		target.execute(runnable1);
 		target.execute(runnable2);
-		target.execute((Runnable) null);
+		target.execute(getNull());
 
 		assertFalse(latch1.await(500L, TimeUnit.MILLISECONDS));
 

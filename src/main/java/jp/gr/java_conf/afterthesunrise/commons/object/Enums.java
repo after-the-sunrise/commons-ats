@@ -80,7 +80,7 @@ public final class Enums {
 			return null;
 		}
 
-		Set<E> result = new HashSet<>();
+		Set<E> result = new HashSet<E>();
 
 		for (String value : values) {
 			result.add(find(clazz, value));
@@ -97,7 +97,7 @@ public final class Enums {
 			return null;
 		}
 
-		List<E> result = new ArrayList<>(values.size());
+		List<E> result = new ArrayList<E>(values.size());
 
 		for (String value : values) {
 			result.add(find(clazz, value));
@@ -120,13 +120,13 @@ public final class Enums {
 
 		if (blank) {
 
-			list = new ArrayList<>(enums.length + 1);
+			list = new ArrayList<E>(enums.length + 1);
 
 			list.add(null);
 
 		} else {
 
-			list = new ArrayList<>(enums.length);
+			list = new ArrayList<E>(enums.length);
 
 		}
 

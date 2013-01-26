@@ -119,7 +119,7 @@ public class CsvReaderImpl implements CsvReader {
 	@Override
 	public List<Map<String, String>> read(File file) throws IOException {
 
-		final List<Map<String, String>> lines = new ArrayList<>();
+		final List<Map<String, String>> lines = new ArrayList<Map<String, String>>();
 
 		read(file, new CsvLineHandler() {
 			@Override
@@ -135,7 +135,7 @@ public class CsvReaderImpl implements CsvReader {
 	@Override
 	public List<Map<String, String>> read(URL url) throws IOException {
 
-		final List<Map<String, String>> lines = new ArrayList<>();
+		final List<Map<String, String>> lines = new ArrayList<Map<String, String>>();
 
 		read(url, new CsvLineHandler() {
 			@Override
@@ -177,7 +177,7 @@ public class CsvReaderImpl implements CsvReader {
 	@Override
 	public List<Map<String, String>> read(InputStream in) throws IOException {
 
-		final List<Map<String, String>> lines = new ArrayList<>();
+		final List<Map<String, String>> lines = new ArrayList<Map<String, String>>();
 
 		read(in, new CsvLineHandler() {
 			@Override
@@ -244,7 +244,7 @@ public class CsvReaderImpl implements CsvReader {
 
 			count++;
 
-			Map<String, String> line = new HashMap<>();
+			Map<String, String> line = new HashMap<String, String>();
 
 			if (headers.length != values.length) {
 

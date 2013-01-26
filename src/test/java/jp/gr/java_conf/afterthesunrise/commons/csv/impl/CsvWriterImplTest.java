@@ -73,11 +73,11 @@ public class CsvWriterImplTest {
 
 		doReturn(out).when(target).generateOutputStream(any(File.class));
 
-		List<String> headers = new ArrayList<>();
+		List<String> headers = new ArrayList<String>();
 		headers.add("col1");
 		headers.add("col2");
 
-		List<Collection<String>> values = new ArrayList<>();
+		List<Collection<String>> values = new ArrayList<Collection<String>>();
 		values.add(Arrays.asList("r1c1", "r1c2"));
 		values.add(Arrays.asList("r2c1", "r2c2", "r2c3"));
 		values.add(Arrays.asList("r3c1"));
@@ -110,25 +110,25 @@ public class CsvWriterImplTest {
 
 		doReturn(out).when(target).generateOutputStream(any(File.class));
 
-		List<String> headers = new ArrayList<>();
+		List<String> headers = new ArrayList<String>();
 		headers.add("col1");
 		headers.add("col2");
 
-		Map<String, String> map1 = new HashMap<>();
+		Map<String, String> map1 = new HashMap<String, String>();
 		map1.put("col1", "r1c1");
 		map1.put("col2", "r1c2");
-		Map<String, String> map2 = new HashMap<>();
+		Map<String, String> map2 = new HashMap<String, String>();
 		map2.put("col1", "r2c1");
 		map2.put("col2", "r2c2");
 		map2.put("col3", "r2c3");
-		Map<String, String> map3 = new HashMap<>();
+		Map<String, String> map3 = new HashMap<String, String>();
 		map3.put("col1", "r3c1");
 		Map<String, String> map4 = null;
-		Map<String, String> map5 = new HashMap<>();
+		Map<String, String> map5 = new HashMap<String, String>();
 		map5.put("col1", "r5c1");
 		map5.put("col2", "r5c2");
 
-		List<Map<String, String>> values = new ArrayList<>();
+		List<Map<String, String>> values = new ArrayList<Map<String, String>>();
 		values.add(map1);
 		values.add(map2);
 		values.add(map3);
@@ -161,21 +161,21 @@ public class CsvWriterImplTest {
 
 		doReturn(out).when(target).generateOutputStream(any(File.class));
 
-		Map<String, String> map1 = new HashMap<>();
+		Map<String, String> map1 = new HashMap<String, String>();
 		map1.put("col1", "r1c1");
 		map1.put("col2", "r1c2");
-		Map<String, String> map2 = new HashMap<>();
+		Map<String, String> map2 = new HashMap<String, String>();
 		map2.put("col1", "r2c1");
 		map2.put("col2", "r2c2");
 		map2.put("col3", "r2c3");
-		Map<String, String> map3 = new HashMap<>();
+		Map<String, String> map3 = new HashMap<String, String>();
 		map3.put("col1", "r3c1");
 		Map<String, String> map4 = null;
-		Map<String, String> map5 = new HashMap<>();
+		Map<String, String> map5 = new HashMap<String, String>();
 		map5.put("col1", "r5c1");
 		map5.put("col2", "r5c2");
 
-		List<Map<String, String>> values = new ArrayList<>();
+		List<Map<String, String>> values = new ArrayList<Map<String, String>>();
 		values.add(map1);
 		values.add(map2);
 		values.add(map3);
@@ -197,5 +197,4 @@ public class CsvWriterImplTest {
 		assertEquals("", arr[6]);
 
 	}
-
 }

@@ -24,19 +24,19 @@ import java.util.Calendar;
  */
 public enum DayType {
 
-	SUNDAY(0b01000000, Calendar.SUNDAY),
+	SUNDAY(64, Calendar.SUNDAY),
 
-	MONDAY(0b00100000, Calendar.MONDAY),
+	MONDAY(32, Calendar.MONDAY),
 
-	TUESDAY(0b00010000, Calendar.TUESDAY),
+	TUESDAY(16, Calendar.TUESDAY),
 
-	WEDNESDAY(0b00001000, Calendar.WEDNESDAY),
+	WEDNESDAY(8, Calendar.WEDNESDAY),
 
-	THURSDAY(0b0000100, Calendar.THURSDAY),
+	THURSDAY(4, Calendar.THURSDAY),
 
-	FRIDAY(0b00000010, Calendar.FRIDAY),
+	FRIDAY(2, Calendar.FRIDAY),
 
-	SATURDAY(0b00000001, Calendar.SATURDAY);
+	SATURDAY(1, Calendar.SATURDAY);
 
 	private final byte bits;
 

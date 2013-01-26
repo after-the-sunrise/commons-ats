@@ -14,12 +14,13 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import jp.gr.java_conf.afterthesunrise.commons.comparator.NullSafeComparator;
 
 import org.apache.commons.lang.ArrayUtils;
+
+import com.google.common.collect.Maps;
 
 /**
  * @author takanori.takase
@@ -46,14 +47,13 @@ public final class Conversions {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <K, V extends Identifiable<K>> Map<K, V> map(V... values) {
 
 		if (ArrayUtils.isEmpty(values)) {
 			return Collections.emptyMap();
 		}
 
-		Map<K, V> map = new HashMap<>();
+		Map<K, V> map = new HashMap<K, V>();
 
 		for (V value : values) {
 
@@ -75,19 +75,17 @@ public final class Conversions {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <K, V extends Identifiable<K>> Set<K> set(V... values) {
 		return map(values).keySet();
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <K, V extends Identifiable<K>> List<K> list(V... values) {
 
 		if (ArrayUtils.isEmpty(values)) {
 			return Collections.emptyList();
 		}
 
-		List<K> list = new ArrayList<>(values.length);
+		List<K> list = new ArrayList<K>(values.length);
 
 		for (int i = 0; i < values.length; i++) {
 
@@ -107,7 +105,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		List<V> values = new ArrayList<>(keys.size());
+		List<V> values = new ArrayList<V>(keys.size());
 
 		for (K key : keys) {
 			values.add(mapping.get(key));
@@ -123,7 +121,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		Set<V> values = new HashSet<>();
+		Set<V> values = new HashSet<V>();
 
 		for (K key : keys) {
 			values.add(mapping.get(key));
@@ -145,7 +143,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		NavigableSet<V> values = new TreeSet<>(NullSafeComparator.get());
+		NavigableSet<V> values = new TreeSet<V>(NullSafeComparator.get());
 
 		for (K key : keys) {
 			values.add(mapping.get(key));
@@ -162,7 +160,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		Map<K2, V> values = new HashMap<>();
+		Map<K2, V> values = new HashMap<K2, V>();
 
 		for (Entry<K1, V> entry : source.entrySet()) {
 
@@ -190,7 +188,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		NavigableMap<K2, V> values = new TreeMap<>(NullSafeComparator.get());
+		NavigableMap<K2, V> values = Maps.newTreeMap(NullSafeComparator.get());
 
 		for (Entry<K1, V> entry : source.entrySet()) {
 
@@ -213,7 +211,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		Map<K, V2> values = new HashMap<>();
+		Map<K, V2> values = new HashMap<K, V2>();
 
 		for (Entry<K, V1> entry : source.entrySet()) {
 
@@ -241,7 +239,7 @@ public final class Conversions {
 
 		checkNotNull(mapping, "mapping cannot be null.");
 
-		NavigableMap<K, V2> values = new TreeMap<>(NullSafeComparator.get());
+		NavigableMap<K, V2> values = Maps.newTreeMap(NullSafeComparator.get());
 
 		for (Entry<K, V1> entry : source.entrySet()) {
 

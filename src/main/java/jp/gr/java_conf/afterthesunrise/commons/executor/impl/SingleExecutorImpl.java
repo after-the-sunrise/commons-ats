@@ -3,6 +3,7 @@ package jp.gr.java_conf.afterthesunrise.commons.executor.impl;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -26,7 +27,7 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 	private volatile ExecutorService executorService;
 
 	@Override
-	public void close() throws Exception {
+	public void close() throws IOException {
 
 		try {
 

@@ -12,7 +12,7 @@ import com.google.common.base.Charsets;
  */
 public class CharsetEditor extends PropertyEditorSupport {
 
-	private static final Map<String, Charset> CHARSETS = new ConcurrentHashMap<>();
+	private static final Map<String, Charset> CHARSETS = new ConcurrentHashMap<String, Charset>();
 
 	private static final void add(Charset charset) {
 		CHARSETS.put(charset.name(), charset);

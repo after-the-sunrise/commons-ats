@@ -86,7 +86,7 @@ public class ComparisonsTest {
 	public void testEquals_Collection() {
 
 		Collection<String> c1 = Arrays.asList("foo");
-		Collection<String> c2 = new HashSet<>(c1);
+		Collection<String> c2 = new HashSet<String>(c1);
 		Collection<String> c3 = Arrays.asList("bar");
 		Collection<String> c4 = Arrays.asList("foo", "bar");
 		Collection<String> c5 = null;
@@ -110,7 +110,7 @@ public class ComparisonsTest {
 	public void testEquals_Map() {
 
 		Map<String, String> c1 = Collections.singletonMap("foo", "bar");
-		Map<String, String> c2 = new TreeMap<>(c1);
+		Map<String, String> c2 = new TreeMap<String, String>(c1);
 		Map<String, String> c3 = Collections.singletonMap("bar", "foo");
 		Map<String, String> c4 = Collections.emptyMap();
 		Map<String, String> c5 = null;
