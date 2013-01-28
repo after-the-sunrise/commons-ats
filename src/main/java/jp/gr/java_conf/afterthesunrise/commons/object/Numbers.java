@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -21,67 +22,60 @@ public final class Numbers {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
-	private static final int MAX = 1000;
+	private static final int CACHE_MAX = 1000;
 
-	private static final long DURATION = 1L;
+	private static final int CACHE_MINUTE = 3;
 
-	private static final LoadingCache<String, Long> CACHE_LONG;
+	private static final LoadingCache<String, Optional<Long>> CACHE_LONG;
 
-	private static final Long NULL_LONG = new Long("0");
+	private static final LoadingCache<String, Optional<Double>> CACHE_DOUBLE;
 
-	private static final LoadingCache<String, Double> CACHE_DOUBLE;
-
-	private static final Double NULL_DOUBLE = new Double("0.0");
-
-	private static final LoadingCache<String, BigDecimal> CACHE_DECIMAL;
-
-	private static final BigDecimal NULL_DECIMAL = new BigDecimal("0.0");
+	private static final LoadingCache<String, Optional<BigDecimal>> CACHE_DECIMAL;
 
 	static {
 
 		CACHE_LONG = CacheBuilder.newBuilder()
-				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
-				.build(new CacheLoader<String, Long>() {
+				.expireAfterAccess(CACHE_MINUTE, MINUTES)
+				.maximumSize(CACHE_MAX)
+				.build(new CacheLoader<String, Optional<Long>>() {
 					@Override
-					public Long load(String key) throws Exception {
+					public Optional<Long> load(String key) {
 						try {
-							return Long.valueOf(key);
-						} catch (Exception e) {
-							return NULL_LONG;
+							return Optional.of(Long.valueOf(key));
+						} catch (NumberFormatException e) {
+							return Optional.absent();
 						}
 					}
 				});
 
 		CACHE_DOUBLE = CacheBuilder.newBuilder()
-				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
-				.build(new CacheLoader<String, Double>() {
+				.expireAfterAccess(CACHE_MINUTE, MINUTES)
+				.maximumSize(CACHE_MAX)
+				.build(new CacheLoader<String, Optional<Double>>() {
 					@Override
-					public Double load(String key) throws Exception {
+					public Optional<Double> load(String key) {
 						try {
-							return Double.valueOf(key);
-						} catch (Exception e) {
-							return NULL_DOUBLE;
+							return Optional.of(Double.valueOf(key));
+						} catch (NumberFormatException e) {
+							return Optional.absent();
 						}
 					}
 				});
 
 		CACHE_DECIMAL = CacheBuilder.newBuilder()
-				.expireAfterAccess(DURATION, MINUTES).maximumSize(MAX)
-				.build(new CacheLoader<String, BigDecimal>() {
+				.expireAfterAccess(CACHE_MINUTE, MINUTES)
+				.maximumSize(CACHE_MAX)
+				.build(new CacheLoader<String, Optional<BigDecimal>>() {
 					@Override
-					public BigDecimal load(String key) throws Exception {
+					public Optional<BigDecimal> load(String key) {
 						try {
-							return new BigDecimal(key);
-						} catch (Exception e) {
-							return NULL_DECIMAL;
+							return Optional.of(new BigDecimal(key));
+						} catch (NumberFormatException e) {
+							return Optional.absent();
 						}
 					}
 				});
 
-	}
-
-	private static <T> T getValue(T val, T nullVal, T defaultValue) {
-		return val != nullVal ? val : defaultValue;
 	}
 
 	public static Long convertLong(String value) {
@@ -94,9 +88,9 @@ public final class Numbers {
 			return defaultValue;
 		}
 
-		Long cached = CACHE_LONG.getUnchecked(value.intern());
+		Optional<Long> cached = CACHE_LONG.getUnchecked(value);
 
-		return getValue(cached, NULL_LONG, defaultValue);
+		return cached.isPresent() ? cached.get() : defaultValue;
 
 	}
 
@@ -110,9 +104,9 @@ public final class Numbers {
 			return defaultValue;
 		}
 
-		Double cached = CACHE_DOUBLE.getUnchecked(value.intern());
+		Optional<Double> cached = CACHE_DOUBLE.getUnchecked(value);
 
-		return getValue(cached, NULL_DOUBLE, defaultValue);
+		return cached.isPresent() ? cached.get() : defaultValue;
 
 	}
 
@@ -126,9 +120,9 @@ public final class Numbers {
 			return defaultValue;
 		}
 
-		BigDecimal cached = CACHE_DECIMAL.getUnchecked(value.intern());
+		Optional<BigDecimal> cached = CACHE_DECIMAL.getUnchecked(value);
 
-		return getValue(cached, NULL_DECIMAL, defaultValue);
+		return cached.isPresent() ? cached.get() : defaultValue;
 
 	}
 

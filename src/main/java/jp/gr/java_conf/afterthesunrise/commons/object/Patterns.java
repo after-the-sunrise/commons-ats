@@ -1,11 +1,13 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
-import java.util.concurrent.TimeUnit;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -19,31 +21,26 @@ public final class Patterns {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
-	private static final int MAX = 100;
+	private static final int CACHE_MAX = 100;
 
-	private static final long DURATION = 1L;
+	private static final long CACHE_MINUTE = 3L;
 
-	private static final TimeUnit UNIT = TimeUnit.MINUTES;
-
-	private static final LoadingCache<String, Pattern> CACHE;
-
-	private static final Pattern NULL = Pattern.compile("^$");
+	private static final LoadingCache<String, Optional<Pattern>> CACHE;
 
 	static {
 
-		CacheLoader<String, Pattern> loader = new CacheLoader<String, Pattern>() {
-			@Override
-			public Pattern load(String key) throws Exception {
-				try {
-					return Pattern.compile(key);
-				} catch (Exception e) {
-					return NULL;
-				}
-			}
-		};
-
-		CACHE = CacheBuilder.newBuilder().expireAfterAccess(DURATION, UNIT)
-				.maximumSize(MAX).build(loader);
+		CACHE = CacheBuilder.newBuilder().maximumSize(CACHE_MAX)
+				.expireAfterAccess(CACHE_MINUTE, MINUTES)
+				.build(new CacheLoader<String, Optional<Pattern>>() {
+					@Override
+					public Optional<Pattern> load(String key) throws Exception {
+						try {
+							return Optional.of(Pattern.compile(key));
+						} catch (Exception e) {
+							return Optional.absent();
+						}
+					}
+				});
 
 	}
 
@@ -53,9 +50,7 @@ public final class Patterns {
 			return null;
 		}
 
-		Pattern p = CACHE.getUnchecked(pattern.intern());
-
-		return p == NULL ? null : p;
+		return CACHE.getUnchecked(pattern).orNull();
 
 	}
 

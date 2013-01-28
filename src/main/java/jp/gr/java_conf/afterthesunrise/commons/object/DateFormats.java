@@ -1,14 +1,16 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -26,39 +28,32 @@ public final class DateFormats {
 
 	private static final TimeZone DEFAULT_TIMEZONE = TimeZone.getDefault();
 
-	private static final DateFormat NULL = new SimpleDateFormat(DEFAULT_FORMAT);
-
 	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
-	private static final int MAX = 20;
+	private static final int CACHE_MAX = 20;
 
-	private static final long DURATION = 1L;
+	private static final long CACHE_MINUTE = 3L;
 
-	private static final TimeUnit UNIT = TimeUnit.MINUTES;
-
-	private static final ThreadLocal<LoadingCache<String, DateFormat>> LOCAL;
+	private static final ThreadLocal<LoadingCache<String, Optional<DateFormat>>> LOCAL;
 
 	static {
 
-		final CacheLoader<String, DateFormat> loader = new CacheLoader<String, DateFormat>() {
+		final CacheLoader<String, Optional<DateFormat>> loader = new CacheLoader<String, Optional<DateFormat>>() {
 			@Override
-			public DateFormat load(String key) throws Exception {
+			public Optional<DateFormat> load(String key) throws Exception {
 				try {
-					return new SimpleDateFormat(key);
+					return Optional.<DateFormat> of(new SimpleDateFormat(key));
 				} catch (Exception e) {
-					return NULL;
+					return Optional.absent();
 				}
 			}
 		};
 
-		LOCAL = new ThreadLocal<LoadingCache<String, DateFormat>>() {
+		LOCAL = new ThreadLocal<LoadingCache<String, Optional<DateFormat>>>() {
 			@Override
-			protected LoadingCache<String, DateFormat> initialValue() {
-
-				return CacheBuilder.newBuilder()
-						.expireAfterAccess(DURATION, UNIT).maximumSize(MAX)
-						.build(loader);
-
+			protected LoadingCache<String, Optional<DateFormat>> initialValue() {
+				return CacheBuilder.newBuilder().maximumSize(CACHE_MAX)
+						.expireAfterAccess(CACHE_MINUTE, MINUTES).build(loader);
 			}
 		};
 
@@ -86,9 +81,7 @@ public final class DateFormats {
 			return null;
 		}
 
-		DateFormat fmt = LOCAL.get().getUnchecked(format.intern());
-
-		return fmt == NULL ? null : fmt;
+		return LOCAL.get().getUnchecked(format).orNull();
 
 	}
 
