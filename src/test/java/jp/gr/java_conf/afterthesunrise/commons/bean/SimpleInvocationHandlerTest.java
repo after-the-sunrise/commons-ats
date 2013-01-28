@@ -30,7 +30,7 @@ public class SimpleInvocationHandlerTest {
 
 		target = new SimpleInvocationHandler(delegate);
 
-		proxy = Proxies.delegate(Closeable.class, delegate, target);
+		proxy = Proxies.delegate(Closeable.class, target);
 
 	}
 

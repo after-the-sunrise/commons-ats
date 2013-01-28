@@ -38,7 +38,7 @@ public class LockedInvocationHandlerTest {
 
 		target = new LockedInvocationHandler(delegate);
 
-		proxy = Proxies.delegate(Closeable.class, delegate, target);
+		proxy = Proxies.delegate(Closeable.class, target);
 
 	}
 

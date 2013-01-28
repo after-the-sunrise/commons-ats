@@ -202,7 +202,7 @@ public class TimedInvocationHandlerTest {
 			}
 		};
 
-		Closeable proxy = Proxies.delegate(Closeable.class, delegate, target);
+		Closeable proxy = Proxies.delegate(Closeable.class, target);
 
 		proxy.close();
 

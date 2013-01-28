@@ -15,10 +15,10 @@ public class Proxies {
 	}
 
 	public static <T> T delegate(Class<T> clazz, T delegate) {
-		return delegate(clazz, delegate, new SimpleInvocationHandler(delegate));
+		return delegate(clazz, new SimpleInvocationHandler(delegate));
 	}
 
-	public static <T> T delegate(Class<T> clazz, T delegate, InvocationHandler h) {
+	public static <T> T delegate(Class<T> clazz, InvocationHandler h) {
 
 		ClassLoader cl = clazz.getClassLoader();
 
