@@ -1,7 +1,6 @@
 package jp.gr.java_conf.afterthesunrise.commons.object;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -11,6 +10,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+
+import jp.gr.java_conf.afterthesunrise.commons.bean.SimpleInvocationHandler;
 
 import org.junit.Test;
 
@@ -43,28 +44,15 @@ public class ProxiesTest {
 
 		Closeable mock = mock(Closeable.class);
 
-		Closeable proxy = Proxies.delegate(Closeable.class, mock);
+		SimpleInvocationHandler handler = new SimpleInvocationHandler(mock);
+
+		Closeable proxy = Proxies.delegate(Closeable.class, handler);
 
 		assertTrue(Proxy.isProxyClass(proxy.getClass()));
 
 		proxy.close();
 
 		verify(mock).close();
-
-	}
-
-	@Test(expected = IOException.class)
-	public void testDelegate_Exception() throws IOException {
-
-		Closeable mock = mock(Closeable.class);
-
-		doThrow(new IOException("test")).when(mock).close();
-
-		Closeable proxy = Proxies.delegate(Closeable.class, mock);
-
-		assertTrue(Proxy.isProxyClass(proxy.getClass()));
-
-		proxy.close();
 
 	}
 
