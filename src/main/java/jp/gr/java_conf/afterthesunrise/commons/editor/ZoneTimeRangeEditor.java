@@ -4,14 +4,17 @@ import static org.apache.commons.lang.StringUtils.split;
 import static org.apache.commons.lang.StringUtils.splitPreserveAllTokens;
 
 import java.beans.PropertyEditorSupport;
+import java.util.TimeZone;
 
 import jp.gr.java_conf.afterthesunrise.commons.time.Time;
-import jp.gr.java_conf.afterthesunrise.commons.time.TimeRange;
+import jp.gr.java_conf.afterthesunrise.commons.time.ZoneTimeRange;
 
 /**
  * @author takanori.takase
  */
-public class TimeRangeEditor extends PropertyEditorSupport {
+public class ZoneTimeRangeEditor extends PropertyEditorSupport {
+
+	private static final char ZONE_DELIMITER = ' ';
 
 	private static final char RANGE_DELIMITER = '-';
 
@@ -22,9 +25,21 @@ public class TimeRangeEditor extends PropertyEditorSupport {
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 
-		// "HH:mm:ss:SSS-HH:mm:ss:SSS"
+		// "HH:mm:ss:SSS-HH:mm:ss:SSS Asia/Tokyo"
 
-		String[] times = split(text, RANGE_DELIMITER);
+		String[] fields = split(text, ZONE_DELIMITER);
+
+		if (fields.length != 2) {
+			throw new IllegalArgumentException(MSG + text);
+		}
+
+		TimeZone tz = TimeZone.getTimeZone(fields[1]);
+
+		if (!tz.getID().equals(fields[1])) {
+			throw new IllegalArgumentException(MSG + text);
+		}
+
+		String[] times = split(fields[0], RANGE_DELIMITER);
 
 		if (times.length != 2) {
 			throw new IllegalArgumentException(MSG + text);
@@ -36,7 +51,7 @@ public class TimeRangeEditor extends PropertyEditorSupport {
 
 			Time e = convert(times[1]);
 
-			setValue(new TimeRange(s, e));
+			setValue(new ZoneTimeRange(tz, s, e));
 
 		} catch (RuntimeException e) {
 			throw new IllegalArgumentException(MSG + text, e);

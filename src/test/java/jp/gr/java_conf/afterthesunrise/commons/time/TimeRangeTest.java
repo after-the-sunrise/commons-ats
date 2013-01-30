@@ -2,14 +2,8 @@ package jp.gr.java_conf.afterthesunrise.commons.time;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,46 +19,30 @@ public class TimeRangeTest {
 
 	private Time end;
 
-	private TimeZone timeZone;
-
-	private DateFormat df;
-
 	@Before
 	public void setUp() throws Exception {
-
-		timeZone = TimeZone.getTimeZone("Asia/Tokyo");
-
-		df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-		df.setTimeZone(timeZone);
 
 		start = new Time(9, 0, 0, 0);
 
 		end = new Time(15, 0, 0, 0);
 
-		target = new TimeRange(timeZone, start, end);
+		target = new TimeRange(start, end);
 
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testTimeRange_NullTimeZone() {
-		target = new TimeRange(null, start, end);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testTimeRange_NullStart() {
-		target = new TimeRange(timeZone, null, end);
+		target = new TimeRange(null, end);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testTimeRange_NullEnd() {
-		target = new TimeRange(timeZone, start, null);
+		target = new TimeRange(start, null);
 	}
 
 	@Test
 	public void testToString() {
-		assertEquals("09:00:00.000 Asia/Tokyo-15:00:00.000 Asia/Tokyo",
-				target.toString());
+		assertEquals("09:00:00.000-15:00:00.000", target.toString());
 	}
 
 	@Test
@@ -74,38 +52,20 @@ public class TimeRangeTest {
 
 	@Test
 	public void testEquals() {
-		TimeZone tz = TimeZone.getTimeZone("America/New_York");
 		assertTrue(target.equals(target));
-		assertTrue(target.equals(new TimeRange(timeZone, start, end)));
-		assertFalse(target.equals(new TimeRange(tz, start, end)));
-		assertFalse(target.equals(new TimeRange(timeZone, new Time(), end)));
-		assertFalse(target.equals(new TimeRange(timeZone, start, new Time())));
+		assertTrue(target.equals(new TimeRange(start, end)));
+		assertFalse(target.equals(new TimeRange(new Time(), end)));
+		assertFalse(target.equals(new TimeRange(start, new Time())));
 		assertFalse(target.equals(new Object()));
 		assertFalse(target.equals(null));
 	}
 
 	@Test
 	public void testCompareTo() {
-		TimeZone tz = TimeZone.getTimeZone("America/New_York");
 		assertEquals(+0, target.compareTo(target));
-		assertEquals(+0, target.compareTo(new TimeRange(timeZone, start, end)));
-		assertEquals(+1, target.compareTo(new TimeRange(tz, start, end)));
-		assertEquals(+1,
-				target.compareTo(new TimeRange(timeZone, new Time(), end)));
-		assertEquals(+1,
-				target.compareTo(new TimeRange(timeZone, start, new Time())));
-	}
-
-	@Test
-	public void testGetTimeZone() {
-		assertEquals(timeZone, target.getTimeZone());
-		assertNotSame(timeZone, target.getTimeZone());
-		assertNotSame(target.getTimeZone(), target.getTimeZone());
-	}
-
-	@Test
-	public void testGetTimeZoneId() {
-		assertEquals("Asia/Tokyo", target.getTimeZoneId());
+		assertEquals(+0, target.compareTo(new TimeRange(start, end)));
+		assertEquals(+1, target.compareTo(new TimeRange(new Time(), end)));
+		assertEquals(+1, target.compareTo(new TimeRange(start, new Time())));
 	}
 
 	@Test
@@ -118,127 +78,158 @@ public class TimeRangeTest {
 		assertSame(end, target.getEnd());
 	}
 
-	private long parse(String value) throws ParseException {
-		return df.parse(value).getTime();
-	}
-
 	@Test
 	public void testInRange_Default() throws Exception {
 
-		assertFalse(target.inRange(parse("2012-01-01 08:59")));
-		assertTrue(target.inRange(parse("2012-01-01 09:00")));
-		assertTrue(target.inRange(parse("2012-01-01 09:01")));
+		assertFalse(target.inRange(new Time(8, 59, 59, 999)));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000)));
+		assertTrue(target.inRange(new Time(9, 0, 0, 001)));
 
-		assertTrue(target.inRange(parse("2012-01-01 14:59")));
-		assertFalse(target.inRange(parse("2012-01-01 15:00")));
-		assertFalse(target.inRange(parse("2012-01-01 15:01")));
+		assertTrue(target.inRange(new Time(14, 59, 59, 999)));
+		assertFalse(target.inRange(new Time(15, 0, 0, 000)));
+		assertFalse(target.inRange(new Time(15, 0, 0, 001)));
 
-		// End time past midnight
-		target = new TimeRange(timeZone, new Time(16, 0), new Time(3, 0));
+		// End time past midnight (15 -> 09)
+		target = new TimeRange(end, start);
 
-		assertFalse(target.inRange(parse("2012-01-01 15:59")));
-		assertTrue(target.inRange(parse("2012-01-01 16:00")));
-		assertTrue(target.inRange(parse("2012-01-01 16:01")));
+		assertFalse(target.inRange(new Time(14, 59, 59, 999)));
+		assertTrue(target.inRange(new Time(15, 0, 0, 000)));
+		assertTrue(target.inRange(new Time(15, 0, 0, 001)));
 
-		assertTrue(target.inRange(parse("2012-01-01 02:59")));
-		assertFalse(target.inRange(parse("2012-01-01 03:00")));
-		assertFalse(target.inRange(parse("2012-01-01 03:01")));
+		assertTrue(target.inRange(new Time(8, 59, 59, 999)));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000)));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001)));
+
+		// Same (09 -> 09)
+		target = new TimeRange(start, start);
+
+		assertFalse(target.inRange(new Time(8, 59, 59, 999)));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000)));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001)));
 
 	}
 
 	@Test
 	public void testInRange_Include_Include() throws Exception {
 
-		assertFalse(target.inRange(parse("2012-01-01 08:59"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 09:00"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 09:01"), true, true));
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), true, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000), true, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 001), true, true));
 
-		assertTrue(target.inRange(parse("2012-01-01 14:59"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 15:00"), true, true));
-		assertFalse(target.inRange(parse("2012-01-01 15:01"), true, true));
+		assertTrue(target.inRange(new Time(14, 59, 59, 999), true, true));
+		assertTrue(target.inRange(new Time(15, 0, 0, 000), true, true));
+		assertFalse(target.inRange(new Time(15, 0, 0, 001), true, true));
 
-		// End time past midnight
-		target = new TimeRange(timeZone, new Time(16, 0), new Time(3, 0));
+		// End time past midnight (15 -> 09)
+		target = new TimeRange(end, start);
 
-		assertFalse(target.inRange(parse("2012-01-01 15:59"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 16:00"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 16:01"), true, true));
+		assertFalse(target.inRange(new Time(14, 59, 59, 999), true, true));
+		assertTrue(target.inRange(new Time(15, 0, 0, 000), true, true));
+		assertTrue(target.inRange(new Time(15, 0, 0, 001), true, true));
 
-		assertTrue(target.inRange(parse("2012-01-01 02:59"), true, true));
-		assertTrue(target.inRange(parse("2012-01-01 03:00"), true, true));
-		assertFalse(target.inRange(parse("2012-01-01 03:01"), true, true));
+		assertTrue(target.inRange(new Time(8, 59, 59, 999), true, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000), true, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), true, true));
+
+		// Same (09 -> 09)
+		target = new TimeRange(start, start);
+
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), true, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000), true, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), true, true));
 
 	}
 
 	@Test
 	public void testInRange_Include_Exclude() throws Exception {
 
-		assertFalse(target.inRange(parse("2012-01-01 08:59"), true, false));
-		assertTrue(target.inRange(parse("2012-01-01 09:00"), true, false));
-		assertTrue(target.inRange(parse("2012-01-01 09:01"), true, false));
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), true, false));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000), true, false));
+		assertTrue(target.inRange(new Time(9, 0, 0, 001), true, false));
 
-		assertTrue(target.inRange(parse("2012-01-01 14:59"), true, false));
-		assertFalse(target.inRange(parse("2012-01-01 15:00"), true, false));
-		assertFalse(target.inRange(parse("2012-01-01 15:01"), true, false));
+		assertTrue(target.inRange(new Time(14, 59, 59, 999), true, false));
+		assertFalse(target.inRange(new Time(15, 0, 0, 000), true, false));
+		assertFalse(target.inRange(new Time(15, 0, 0, 001), true, false));
 
-		// End time past midnight
-		target = new TimeRange(timeZone, new Time(16, 0), new Time(3, 0));
+		// End time past midnight (15 -> 09)
+		target = new TimeRange(end, start);
 
-		assertFalse(target.inRange(parse("2012-01-01 15:59"), true, false));
-		assertTrue(target.inRange(parse("2012-01-01 16:00"), true, false));
-		assertTrue(target.inRange(parse("2012-01-01 16:01"), true, false));
+		assertFalse(target.inRange(new Time(14, 59, 59, 999), true, false));
+		assertTrue(target.inRange(new Time(15, 0, 0, 000), true, false));
+		assertTrue(target.inRange(new Time(15, 0, 0, 001), true, false));
 
-		assertTrue(target.inRange(parse("2012-01-01 02:59"), true, false));
-		assertFalse(target.inRange(parse("2012-01-01 03:00"), true, false));
-		assertFalse(target.inRange(parse("2012-01-01 03:01"), true, false));
+		assertTrue(target.inRange(new Time(8, 59, 59, 999), true, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), true, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), true, false));
+
+		// Same (09 -> 09)
+		target = new TimeRange(start, start);
+
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), true, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), true, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), true, false));
 
 	}
 
 	@Test
 	public void testInRange_Exclude_Include() throws Exception {
 
-		assertFalse(target.inRange(parse("2012-01-01 08:59"), false, true));
-		assertFalse(target.inRange(parse("2012-01-01 09:00"), false, true));
-		assertTrue(target.inRange(parse("2012-01-01 09:01"), false, true));
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), false, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), false, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 001), false, true));
 
-		assertTrue(target.inRange(parse("2012-01-01 14:59"), false, true));
-		assertTrue(target.inRange(parse("2012-01-01 15:00"), false, true));
-		assertFalse(target.inRange(parse("2012-01-01 15:01"), false, true));
+		assertTrue(target.inRange(new Time(14, 59, 59, 999), false, true));
+		assertTrue(target.inRange(new Time(15, 0, 0, 000), false, true));
+		assertFalse(target.inRange(new Time(15, 0, 0, 001), false, true));
 
-		// End time past midnight
-		target = new TimeRange(timeZone, new Time(16, 0), new Time(3, 0));
+		// End time past midnight (15 -> 09)
+		target = new TimeRange(end, start);
 
-		assertFalse(target.inRange(parse("2012-01-01 15:59"), false, true));
-		assertFalse(target.inRange(parse("2012-01-01 16:00"), false, true));
-		assertTrue(target.inRange(parse("2012-01-01 16:01"), false, true));
+		assertFalse(target.inRange(new Time(14, 59, 59, 999), false, true));
+		assertFalse(target.inRange(new Time(15, 0, 0, 000), false, true));
+		assertTrue(target.inRange(new Time(15, 0, 0, 001), false, true));
 
-		assertTrue(target.inRange(parse("2012-01-01 02:59"), false, true));
-		assertTrue(target.inRange(parse("2012-01-01 03:00"), false, true));
-		assertFalse(target.inRange(parse("2012-01-01 03:01"), false, true));
+		assertTrue(target.inRange(new Time(8, 59, 59, 999), false, true));
+		assertTrue(target.inRange(new Time(9, 0, 0, 000), false, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), false, true));
+
+		// Same (09 -> 09)
+		target = new TimeRange(start, start);
+
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), false, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), false, true));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), false, true));
 
 	}
 
 	@Test
 	public void testInRange_Exclude_Exclude() throws Exception {
 
-		assertFalse(target.inRange(parse("2012-01-01 08:59"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 09:00"), false, false));
-		assertTrue(target.inRange(parse("2012-01-01 09:01"), false, false));
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), false, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), false, false));
+		assertTrue(target.inRange(new Time(9, 0, 0, 001), false, false));
 
-		assertTrue(target.inRange(parse("2012-01-01 14:59"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 15:00"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 15:01"), false, false));
+		assertTrue(target.inRange(new Time(14, 59, 59, 999), false, false));
+		assertFalse(target.inRange(new Time(15, 0, 0, 000), false, false));
+		assertFalse(target.inRange(new Time(15, 0, 0, 001), false, false));
 
-		// End time past midnight
-		target = new TimeRange(timeZone, new Time(16, 0), new Time(3, 0));
+		// End time past midnight (15 -> 09)
+		target = new TimeRange(end, start);
 
-		assertFalse(target.inRange(parse("2012-01-01 15:59"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 16:00"), false, false));
-		assertTrue(target.inRange(parse("2012-01-01 16:01"), false, false));
+		assertFalse(target.inRange(new Time(14, 59, 59, 999), false, false));
+		assertFalse(target.inRange(new Time(15, 0, 0, 000), false, false));
+		assertTrue(target.inRange(new Time(15, 0, 0, 001), false, false));
 
-		assertTrue(target.inRange(parse("2012-01-01 02:59"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 03:00"), false, false));
-		assertFalse(target.inRange(parse("2012-01-01 03:01"), false, false));
+		assertTrue(target.inRange(new Time(8, 59, 59, 999), false, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), false, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), false, false));
+
+		// Same (09 -> 09)
+		target = new TimeRange(start, start);
+
+		assertFalse(target.inRange(new Time(8, 59, 59, 999), false, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 000), false, false));
+		assertFalse(target.inRange(new Time(9, 0, 0, 001), false, false));
 
 	}
 

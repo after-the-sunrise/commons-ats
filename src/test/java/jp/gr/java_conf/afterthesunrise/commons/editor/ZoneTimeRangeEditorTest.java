@@ -1,8 +1,11 @@
 package jp.gr.java_conf.afterthesunrise.commons.editor;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.TimeZone;
+
 import jp.gr.java_conf.afterthesunrise.commons.time.Time;
-import jp.gr.java_conf.afterthesunrise.commons.time.TimeRange;
+import jp.gr.java_conf.afterthesunrise.commons.time.ZoneTimeRange;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,21 +13,24 @@ import org.junit.Test;
 /**
  * @author takanori.takase
  */
-public class TimeRangeEditorTest {
+public class ZoneTimeRangeEditorTest {
 
-	private TimeRangeEditor target;
+	private ZoneTimeRangeEditor target;
 
 	@Before
 	public void setUp() throws Exception {
-		target = new TimeRangeEditor();
+		target = new ZoneTimeRangeEditor();
 	}
 
 	@Test
 	public void testSetAsText() {
 
-		target.setAsText("01:23:45:678-12:34:56:789");
+		target.setAsText("01:23:45:678-12:34:56:789 Asia/Tokyo");
 
-		TimeRange result = (TimeRange) target.getValue();
+		ZoneTimeRange result = (ZoneTimeRange) target.getValue();
+
+		TimeZone tz = result.getTimeZone();
+		assertEquals("Asia/Tokyo", tz.getID());
 
 		Time start = result.getStart();
 		assertEquals(1, start.getHour());
@@ -43,9 +49,12 @@ public class TimeRangeEditorTest {
 	@Test
 	public void testSetAsText_ShortStyle() {
 
-		target.setAsText("01:23:45-12:34");
+		target.setAsText("01:23:45-12:34 Asia/Tokyo");
 
-		TimeRange result = (TimeRange) target.getValue();
+		ZoneTimeRange result = (ZoneTimeRange) target.getValue();
+
+		TimeZone tz = result.getTimeZone();
+		assertEquals("Asia/Tokyo", tz.getID());
 
 		Time start = result.getStart();
 		assertEquals(1, start.getHour());
@@ -62,23 +71,33 @@ public class TimeRangeEditorTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_NoTimeZone() {
+		target.setAsText("01:23:45:678-12:34:56:789");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_InvalidTimeZone() {
+		target.setAsText("01:23:45:678-12:34:56:789 Foo/Bar");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_InvalidTime() {
-		target.setAsText("-12:34:56:789");
+		target.setAsText("-12:34:56:789 Asia/Tokyo");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_ParseFailure() {
-		target.setAsText("HH:mm:ss:SSS-12:34:56:789");
+		target.setAsText("HH:mm:ss:SSS-12:34:56:789 Asia/Tokyo");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_TooManyStartArguments() {
-		target.setAsText("01:23:45:678:000-12:34:56:789");
+		target.setAsText("01:23:45:678:000-12:34:56:789 Asia/Tokyo");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_TooManyEndArguments() {
-		target.setAsText("01:23:45:678-12:34:56:789:000");
+		target.setAsText("01:23:45:678-12:34:56:789:000 Asia/Tokyo");
 	}
 
 }

@@ -1,9 +1,9 @@
 package jp.gr.java_conf.afterthesunrise.commons.time;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.String.format;
 
 import java.io.Serializable;
-import java.util.TimeZone;
 
 /**
  * @author takanori.takase
@@ -12,16 +12,13 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 	private static final long serialVersionUID = -7007270029824693640L;
 
-	private final TimeZone timeZone;
+	private final Time start;
 
-	private final ZoneTime start;
+	private final Time end;
 
-	private final ZoneTime end;
-
-	public TimeRange(TimeZone tz, Time start, Time end) {
-		this.timeZone = (TimeZone) tz.clone();
-		this.start = new ZoneTime(start, tz);
-		this.end = new ZoneTime(end, tz);
+	public TimeRange(Time start, Time end) {
+		this.start = checkNotNull(start);
+		this.end = checkNotNull(end);
 	}
 
 	@Override
@@ -47,59 +44,55 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 		int comparison = start.compareTo(o.start);
 
-		if (comparison != 0) {
-			return comparison;
+		if (comparison == 0) {
+			comparison = end.compareTo(o.end);
 		}
 
-		return end.compareTo(o.end);
+		return comparison;
 
-	}
-
-	public TimeZone getTimeZone() {
-		return (TimeZone) timeZone.clone();
-	}
-
-	public String getTimeZoneId() {
-		return timeZone.getID();
 	}
 
 	public Time getStart() {
-		return start.getTime();
+		return start;
 	}
 
 	public Time getEnd() {
-		return end.getTime();
+		return end;
 	}
 
-	public boolean inRange(long value) {
+	public boolean inRange(Time value) {
 		return inRange(value, true, false);
 	}
 
-	public boolean inRange(long value, boolean includeStart, boolean includeEnd) {
+	public boolean inRange(Time value, boolean includeStart, boolean includeEnd) {
 
-		long s = start.adjust(value);
-
-		long e = end.adjust(value);
+		if (value == null) {
+			return false;
+		}
 
 		// Handle overnight time (cf: 16:00 ~ 01:30)
-		if (e < s) {
+		if (start.compareTo(end) > 0) {
+
+			int s = start.compareTo(value);
 
 			if (includeStart) {
-				if (s <= value) {
+				if (0 >= s) {
 					return true;
 				}
 			} else {
-				if (s < value) {
+				if (0 > s) {
 					return true;
 				}
 			}
 
+			int e = value.compareTo(end);
+
 			if (includeEnd) {
-				if (value <= e) {
+				if (0 >= e) {
 					return true;
 				}
 			} else {
-				if (value < e) {
+				if (0 > e) {
 					return true;
 				}
 			}
@@ -108,17 +101,21 @@ public class TimeRange implements Serializable, Comparable<TimeRange> {
 
 		}
 
+		int s = start.compareTo(value);
+
+		int e = value.compareTo(end);
+
 		if (includeStart) {
 			if (includeEnd) {
-				return s <= value && value <= e;
+				return s <= 0 && e <= 0;
 			} else {
-				return s <= value && value < e;
+				return s <= 0 && e < 0;
 			}
 		} else {
 			if (includeEnd) {
-				return s < value && value <= e;
+				return s < 0 && e <= 0;
 			} else {
-				return s < value && value < e;
+				return s < 0 && e < 0;
 			}
 		}
 
