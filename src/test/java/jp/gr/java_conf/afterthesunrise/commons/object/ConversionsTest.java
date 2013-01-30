@@ -341,9 +341,11 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertKeySorted_NullSource() {
 
+		Map<String, BigDecimal> source = null;
+
 		Map<String, Integer> mapping = new HashMap<String, Integer>();
 
-		Conversions.convertKeySorted(null, mapping);
+		Conversions.convertKeySorted(source, mapping);
 
 	}
 
@@ -352,7 +354,9 @@ public class ConversionsTest {
 
 		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
-		Conversions.convertKeySorted(source, null);
+		Map<String, Integer> mapping = null;
+
+		Conversions.convertKeySorted(source, mapping);
 
 	}
 
@@ -421,9 +425,11 @@ public class ConversionsTest {
 	@Test(expected = NullPointerException.class)
 	public void testConvertValueSorted_NullSource() {
 
-		Map<String, Integer> mapping = new HashMap<String, Integer>();
+		Map<String, BigDecimal> source = null;
 
-		Conversions.convertValueSorted(null, mapping);
+		Map<BigDecimal, Integer> mapping = new HashMap<BigDecimal, Integer>();
+
+		Conversions.convertValueSorted(source, mapping);
 
 	}
 
@@ -432,7 +438,9 @@ public class ConversionsTest {
 
 		Map<String, BigDecimal> source = new HashMap<String, BigDecimal>();
 
-		Conversions.convertValueSorted(source, null);
+		Map<BigDecimal, Integer> mapping = null;
+
+		Conversions.convertValueSorted(source, mapping);
 
 	}
 

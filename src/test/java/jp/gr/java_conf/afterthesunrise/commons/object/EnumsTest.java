@@ -97,9 +97,9 @@ public class EnumsTest {
 
 		assertNull(Enums.find(RoundingMode.class, "foo"));
 
-		assertNull(Enums.find(RoundingMode.class, null));
+		assertNull(Enums.find(RoundingMode.class, (String) null));
 
-		assertNull(Enums.find(null, "foo"));
+		assertNull(Enums.find((Class<RoundingMode>) null, "foo"));
 
 	}
 
@@ -120,7 +120,7 @@ public class EnumsTest {
 			assertTrue(values.contains(type.name()));
 		}
 
-		assertNull(Enums.findList(null, values));
+		assertNull(Enums.findList((Class<RoundingMode>) null, values));
 
 		assertNull(Enums.findList(RoundingMode.class, null));
 
@@ -143,7 +143,7 @@ public class EnumsTest {
 			assertTrue(values.contains(type.name()));
 		}
 
-		assertNull(Enums.findSet(null, values));
+		assertNull(Enums.findSet((Class<RoundingMode>) null, values));
 
 		assertNull(Enums.findSet(RoundingMode.class, null));
 
