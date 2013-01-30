@@ -40,6 +40,21 @@ public class ProxiesTest {
 	}
 
 	@Test
+	public void testWrap() throws IOException {
+
+		Closeable mock = mock(Closeable.class);
+
+		Closeable proxy = Proxies.wrap(Closeable.class, mock);
+
+		assertTrue(Proxy.isProxyClass(proxy.getClass()));
+
+		proxy.close();
+
+		verify(mock).close();
+
+	}
+
+	@Test
 	public void testDelegate() throws IOException {
 
 		Closeable mock = mock(Closeable.class);
