@@ -62,7 +62,15 @@ public final class Sockets {
 
 		c.socket = socket;
 
-		Closeables.closeQuietly(c);
+		try {
+
+			Closeables.closeQuietly(c);
+
+		} finally {
+
+			c.socket = null;
+
+		}
 
 	}
 
@@ -72,7 +80,15 @@ public final class Sockets {
 
 		c.socket = socket;
 
-		Closeables.closeQuietly(c);
+		try {
+
+			Closeables.closeQuietly(c);
+
+		} finally {
+
+			c.socket = null;
+
+		}
 
 	}
 
