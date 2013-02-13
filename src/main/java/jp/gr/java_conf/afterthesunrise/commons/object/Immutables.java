@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public final class Immutables {
 		return MAP;
 	}
 
-	public static final <T> List<T> arrayList(Collection<T> col) {
+	public static final <T> List<T> arrayList(Collection<? extends T> col) {
 
 		if (CollectionUtils.isEmpty(col)) {
 			return emptyList();
@@ -60,7 +61,7 @@ public final class Immutables {
 
 	}
 
-	public static final <T> List<T> linkedList(Collection<T> col) {
+	public static final <T> List<T> linkedList(Collection<? extends T> col) {
 
 		if (CollectionUtils.isEmpty(col)) {
 			return emptyList();
@@ -70,7 +71,7 @@ public final class Immutables {
 
 	}
 
-	public static final <T> Set<T> hashSet(Collection<T> col) {
+	public static final <T> Set<T> hashSet(Collection<? extends T> col) {
 
 		if (CollectionUtils.isEmpty(col)) {
 			return emptySet();
@@ -80,7 +81,7 @@ public final class Immutables {
 
 	}
 
-	public static final <T> SortedSet<T> treeSet(Collection<T> col) {
+	public static final <T> SortedSet<T> treeSet(Collection<? extends T> col) {
 
 		if (CollectionUtils.isEmpty(col)) {
 			return emptySortedSet();
@@ -90,7 +91,8 @@ public final class Immutables {
 
 	}
 
-	public static final <K, V> Map<K, V> hashMap(Map<K, V> map) {
+	public static final <K, V> Map<K, V> hashMap(
+			Map<? extends K, ? extends V> map) {
 
 		if (MapUtils.isEmpty(map)) {
 			return emptyMap();
@@ -100,13 +102,25 @@ public final class Immutables {
 
 	}
 
-	public static final <K, V> SortedMap<K, V> treeMap(Map<K, V> map) {
+	public static final <K, V> SortedMap<K, V> treeMap(
+			Map<? extends K, ? extends V> map) {
 
 		if (MapUtils.isEmpty(map)) {
 			return emptySortedMap();
 		}
 
 		return unmodifiableSortedMap(new TreeMap<K, V>(map));
+
+	}
+
+	public static final <K, V> Map<K, V> identityHashMap(
+			Map<? extends K, ? extends V> map) {
+
+		if (MapUtils.isEmpty(map)) {
+			return emptyMap();
+		}
+
+		return unmodifiableMap(new IdentityHashMap<K, V>(map));
 
 	}
 
