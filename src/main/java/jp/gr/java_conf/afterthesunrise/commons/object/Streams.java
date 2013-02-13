@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.lang.StringUtils;
 
 import com.google.common.io.Closeables;
 
@@ -22,6 +23,25 @@ public class Streams {
 
 	private Streams() {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
+	}
+
+	public static InputStream openBufferedStream(String path)
+			throws IOException {
+
+		if (StringUtils.isBlank(path)) {
+			return null;
+		}
+
+		File file = new File(path);
+
+		if (file.exists()) {
+			return openBufferedStream(file);
+		}
+
+		URL url = path.getClass().getClassLoader().getResource(path);
+
+		return openBufferedStream(url);
+
 	}
 
 	public static InputStream openBufferedStream(URL url) throws IOException {
@@ -68,6 +88,24 @@ public class Streams {
 
 	}
 
+	public static InputStream openGzipStream(String path) throws IOException {
+
+		if (StringUtils.isBlank(path)) {
+			return null;
+		}
+
+		File file = new File(path);
+
+		if (file.exists()) {
+			return openGzipStream(file);
+		}
+
+		URL url = path.getClass().getClassLoader().getResource(path);
+
+		return openGzipStream(url);
+
+	}
+
 	public static InputStream openGzipStream(URL url) throws IOException {
 
 		InputStream in = openBufferedStream(url);
@@ -101,6 +139,24 @@ public class Streams {
 			throw e;
 
 		}
+
+	}
+
+	public static InputStream openBzip2Stream(String path) throws IOException {
+
+		if (StringUtils.isBlank(path)) {
+			return null;
+		}
+
+		File file = new File(path);
+
+		if (file.exists()) {
+			return openBzip2Stream(file);
+		}
+
+		URL url = path.getClass().getClassLoader().getResource(path);
+
+		return openBzip2Stream(url);
 
 	}
 
@@ -140,6 +196,25 @@ public class Streams {
 
 	}
 
+	public static Reader openGzipReader(String path, Charset charset)
+			throws IOException {
+
+		if (StringUtils.isBlank(path)) {
+			return null;
+		}
+
+		File file = new File(path);
+
+		if (file.exists()) {
+			return openGzipReader(file, charset);
+		}
+
+		URL url = path.getClass().getClassLoader().getResource(path);
+
+		return openGzipReader(url, charset);
+
+	}
+
 	public static Reader openGzipReader(URL url, Charset charset)
 			throws IOException {
 
@@ -175,6 +250,25 @@ public class Streams {
 			throw new IOException(e);
 
 		}
+
+	}
+
+	public static Reader openBzip2Reader(String path, Charset charset)
+			throws IOException {
+
+		if (StringUtils.isBlank(path)) {
+			return null;
+		}
+
+		File file = new File(path);
+
+		if (file.exists()) {
+			return openBzip2Reader(file, charset);
+		}
+
+		URL url = path.getClass().getClassLoader().getResource(path);
+
+		return openBzip2Reader(url, charset);
 
 	}
 
