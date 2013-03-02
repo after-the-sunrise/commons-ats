@@ -175,8 +175,8 @@ public class Dates {
 			return null;
 		}
 
-		if (date.getClass() == java.sql.Date.class) {
-			return java.sql.Date.class.cast(date);
+		if (date instanceof java.sql.Date) {
+			return (java.sql.Date) date;
 		}
 
 		return new java.sql.Date(date.getTime());
@@ -199,8 +199,8 @@ public class Dates {
 			return null;
 		}
 
-		if (date.getClass() == java.sql.Timestamp.class) {
-			return java.sql.Timestamp.class.cast(date);
+		if (date instanceof java.sql.Timestamp) {
+			return (java.sql.Timestamp) date;
 		}
 
 		return new java.sql.Timestamp(date.getTime());
