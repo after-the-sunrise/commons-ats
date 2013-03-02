@@ -11,6 +11,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,6 +107,8 @@ public class ImmutablesTest {
 
 		assertSame(Collections.emptyList(), Immutables.arrayList(null));
 
+		assertSame(Collections.emptyList(), Immutables.arrayList(in));
+
 	}
 
 	@Test
@@ -132,6 +135,8 @@ public class ImmutablesTest {
 		}
 
 		assertSame(Collections.emptyList(), Immutables.linkedList(null));
+
+		assertSame(Collections.emptyList(), Immutables.linkedList(in));
 
 	}
 
@@ -160,6 +165,8 @@ public class ImmutablesTest {
 
 		assertSame(Collections.emptySet(), Immutables.hashSet(null));
 
+		assertSame(Collections.emptySet(), Immutables.hashSet(in));
+
 	}
 
 	@Test
@@ -186,6 +193,8 @@ public class ImmutablesTest {
 		}
 
 		assertSame(Immutables.emptySortedSet(), Immutables.treeSet(null));
+
+		assertSame(Immutables.emptySortedSet(), Immutables.treeSet(in));
 
 	}
 
@@ -214,6 +223,8 @@ public class ImmutablesTest {
 
 		assertSame(Collections.emptyMap(), Immutables.hashMap(null));
 
+		assertSame(Collections.emptyMap(), Immutables.hashMap(in));
+
 	}
 
 	@Test
@@ -240,6 +251,42 @@ public class ImmutablesTest {
 		}
 
 		assertSame(Immutables.emptySortedMap(), Immutables.treeMap(null));
+
+		assertSame(Immutables.emptySortedMap(), Immutables.treeMap(in));
+
+	}
+
+	@Test
+	public void testIdentityHashMap() {
+
+		Integer i1 = new Integer(1);
+		Integer i2 = new Integer(1);
+
+		Map<Integer, String> in = new IdentityHashMap<Integer, String>();
+		in.put(i1, "1");
+		in.put(i2, "2");
+
+		Map<Integer, String> out = Immutables.identityHashMap(in);
+
+		in.clear();
+
+		assertEquals(2, out.size());
+		assertEquals("1", out.get(i1));
+		assertEquals("2", out.get(i2));
+
+		try {
+
+			out.clear();
+
+			fail();
+
+		} catch (UnsupportedOperationException e) {
+			// Success
+		}
+
+		assertSame(Collections.emptyMap(), Immutables.identityHashMap(null));
+
+		assertSame(Collections.emptyMap(), Immutables.identityHashMap(in));
 
 	}
 

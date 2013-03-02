@@ -13,6 +13,10 @@ import static org.apache.commons.lang.ArrayUtils.EMPTY_DOUBLE_ARRAY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +34,25 @@ public strictfp class StatisticsTest {
 	@Before
 	public void setUp() throws Exception {
 		values = new double[] { 0.1, 0.1, 0.2, 0.3, 0.5 };
+	}
+
+	@Test(expected = IllegalAccessError.class)
+	public void testConstructor() throws Throwable {
+
+		Class<?> clazz = Statistics.class;
+
+		Constructor<?> c = clazz.getDeclaredConstructor();
+
+		assertTrue(Modifier.isPrivate(c.getModifiers()));
+
+		c.setAccessible(true);
+
+		try {
+			c.newInstance();
+		} catch (InvocationTargetException e) {
+			throw e.getCause();
+		}
+
 	}
 
 	@Test
