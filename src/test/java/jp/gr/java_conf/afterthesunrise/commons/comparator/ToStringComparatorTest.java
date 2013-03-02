@@ -1,6 +1,9 @@
 package jp.gr.java_conf.afterthesunrise.commons.comparator;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Comparator;
 
 import org.junit.Test;
 
@@ -23,15 +26,29 @@ public class ToStringComparatorTest {
 			}
 		};
 
-		assertTrue(0 < ToStringComparator.get().compare(o1, o2));
-		assertTrue(0 == ToStringComparator.get().compare(o1, o1));
-		assertTrue(0 > ToStringComparator.get().compare(o2, o1));
-		assertTrue(0 == ToStringComparator.get().compare(null, null));
+		Object o3 = new Object() {
+			@Override
+			public String toString() {
+				return "A";
+			}
+		};
 
-		assertTrue(0 < ToStringComparator.get(false).compare(o1, o2));
-		assertTrue(0 == ToStringComparator.get(false).compare(o1, o1));
-		assertTrue(0 > ToStringComparator.get(false).compare(o2, o1));
-		assertTrue(0 == ToStringComparator.get(false).compare(null, null));
+		Comparator<Object> comparator = ToStringComparator.get();
+
+		assertTrue(0 == comparator.compare(o1, o1));
+		assertTrue(0 < comparator.compare(o1, o2));
+		assertTrue(0 < comparator.compare(o1, o3));
+		assertTrue(0 < comparator.compare(o1, null));
+		assertTrue(0 > comparator.compare(o2, o1));
+		assertTrue(0 == comparator.compare(o2, o2));
+		assertTrue(0 == comparator.compare(o2, o3));
+		assertTrue(0 < comparator.compare(o2, null));
+		assertTrue(0 > comparator.compare(null, o1));
+		assertTrue(0 > comparator.compare(null, o2));
+		assertTrue(0 > comparator.compare(null, o3));
+		assertTrue(0 == comparator.compare(null, null));
+
+		assertSame(comparator, ToStringComparator.get(false));
 
 	}
 
@@ -52,15 +69,29 @@ public class ToStringComparatorTest {
 			}
 		};
 
-		assertTrue(0 == ToStringComparator.getIgnoreCase().compare(o1, o2));
-		assertTrue(0 == ToStringComparator.getIgnoreCase().compare(o1, o1));
-		assertTrue(0 == ToStringComparator.getIgnoreCase().compare(o2, o1));
-		assertTrue(0 == ToStringComparator.getIgnoreCase().compare(null, null));
+		Object o3 = new Object() {
+			@Override
+			public String toString() {
+				return "A";
+			}
+		};
 
-		assertTrue(0 == ToStringComparator.get(true).compare(o1, o2));
-		assertTrue(0 == ToStringComparator.get(true).compare(o1, o1));
-		assertTrue(0 == ToStringComparator.get(true).compare(o2, o1));
-		assertTrue(0 == ToStringComparator.get(true).compare(null, null));
+		Comparator<Object> comparator = ToStringComparator.getIgnoreCase();
+
+		assertTrue(0 == comparator.compare(o1, o1));
+		assertTrue(0 == comparator.compare(o1, o2));
+		assertTrue(0 == comparator.compare(o1, o3));
+		assertTrue(0 < comparator.compare(o1, null));
+		assertTrue(0 == comparator.compare(o2, o1));
+		assertTrue(0 == comparator.compare(o2, o2));
+		assertTrue(0 == comparator.compare(o2, o3));
+		assertTrue(0 < comparator.compare(o2, null));
+		assertTrue(0 > comparator.compare(null, o1));
+		assertTrue(0 > comparator.compare(null, o2));
+		assertTrue(0 > comparator.compare(null, o3));
+		assertTrue(0 == comparator.compare(null, null));
+
+		assertSame(comparator, ToStringComparator.get(true));
 
 	}
 

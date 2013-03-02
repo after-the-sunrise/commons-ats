@@ -5,6 +5,8 @@ import java.util.Comparator;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Objects;
+
 /**
  * @author takanori.takase
  */
@@ -39,7 +41,7 @@ public class ToStringComparator implements Comparator<Object>, Serializable {
 	@Override
 	public final int compare(Object o1, Object o2) {
 
-		if (o1 == o2) {
+		if (Objects.equal(o1, o2)) {
 			return EQUALS;
 		}
 
@@ -47,15 +49,17 @@ public class ToStringComparator implements Comparator<Object>, Serializable {
 
 		String s2 = o2 == null ? null : o2.toString();
 
-		if (ignoreCase) {
+		int comparison = NullSafeComparator.get().compare(s1, s2);
 
-			s1 = StringUtils.lowerCase(s1);
-
-			s2 = StringUtils.lowerCase(s2);
-
+		if (comparison == 0 || !ignoreCase) {
+			return comparison;
 		}
 
-		return NullSafeComparator.get().compare(s1, s2);
+		String l1 = StringUtils.lowerCase(s1);
+
+		String l2 = StringUtils.lowerCase(s2);
+
+		return NullSafeComparator.get().compare(l1, l2);
 
 	}
 

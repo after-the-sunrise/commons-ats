@@ -28,16 +28,6 @@ public final class Sounds {
 			return null;
 		}
 
-		return getClip(bytes, 0, bytes.length);
-
-	}
-
-	public static Clip getClip(byte[] b, int off, int len) throws IOException {
-
-		if (ArrayUtils.isEmpty(b)) {
-			return null;
-		}
-
 		Clip clip = null;
 
 		InputStream is = null;
@@ -46,7 +36,7 @@ public final class Sounds {
 
 		try {
 
-			is = new ByteArrayInputStream(b);
+			is = new ByteArrayInputStream(bytes);
 
 			ais = AudioSystem.getAudioInputStream(is);
 
@@ -54,7 +44,7 @@ public final class Sounds {
 
 			clip = AudioSystem.getClip();
 
-			clip.open(format, b, off, len);
+			clip.open(format, bytes, 0, bytes.length);
 
 		} catch (Exception e) {
 

@@ -18,9 +18,7 @@ public class FileConverter implements IStringConverter<File>,
 	public void validate(String name, String value) throws ParameterException {
 		try {
 			convert(value);
-		} catch (ParameterException e) {
-			throw e;
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			throw new ParameterException(e);
 		}
 	}
@@ -28,12 +26,11 @@ public class FileConverter implements IStringConverter<File>,
 	@Override
 	public File convert(String value) throws ParameterException {
 
-		if (StringUtils.isEmpty(value)) {
-			throw new ParameterException("Invalid file : " + value);
+		if (StringUtils.isBlank(value)) {
+			throw new ParameterException("Invalid path : " + value);
 		}
 
 		return new File(value);
-
 	}
 
 }
