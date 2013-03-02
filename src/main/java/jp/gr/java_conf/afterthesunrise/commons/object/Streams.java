@@ -12,9 +12,9 @@ import java.nio.charset.Charset;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
-import org.apache.commons.lang.StringUtils;
 
 import com.google.common.io.Closeables;
+import com.google.common.io.Resources;
 
 /**
  * @author takanori.takase
@@ -28,19 +28,29 @@ public class Streams {
 	public static InputStream openBufferedStream(String path)
 			throws IOException {
 
-		if (StringUtils.isBlank(path)) {
-			return null;
+		InputStream in;
+
+		try {
+
+			File file = new File(path);
+
+			if (file.exists()) {
+
+				in = openBufferedStream(file);
+
+			} else {
+
+				URL url = Resources.getResource(path);
+
+				in = openBufferedStream(url);
+
+			}
+
+		} catch (RuntimeException e) {
+			throw new IOException(e);
 		}
 
-		File file = new File(path);
-
-		if (file.exists()) {
-			return openBufferedStream(file);
-		}
-
-		URL url = path.getClass().getClassLoader().getResource(path);
-
-		return openBufferedStream(url);
+		return in;
 
 	}
 
@@ -54,11 +64,11 @@ public class Streams {
 
 			in = new BufferedInputStream(in);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 
 			Closeables.closeQuietly(in);
 
-			throw e;
+			throw new IOException(e);
 
 		}
 
@@ -76,11 +86,11 @@ public class Streams {
 
 			in = new BufferedInputStream(in);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 
 			Closeables.closeQuietly(in);
 
-			throw e;
+			throw new IOException(e);
 
 		}
 
@@ -90,19 +100,19 @@ public class Streams {
 
 	public static InputStream openGzipStream(String path) throws IOException {
 
-		if (StringUtils.isBlank(path)) {
-			return null;
+		InputStream in = openBufferedStream(path);
+
+		try {
+
+			return new GZIPInputStream(in);
+
+		} catch (IOException e) {
+
+			Closeables.closeQuietly(in);
+
+			throw e;
+
 		}
-
-		File file = new File(path);
-
-		if (file.exists()) {
-			return openGzipStream(file);
-		}
-
-		URL url = path.getClass().getClassLoader().getResource(path);
-
-		return openGzipStream(url);
 
 	}
 
@@ -144,19 +154,19 @@ public class Streams {
 
 	public static InputStream openBzip2Stream(String path) throws IOException {
 
-		if (StringUtils.isBlank(path)) {
-			return null;
+		InputStream in = openBufferedStream(path);
+
+		try {
+
+			return new BZip2CompressorInputStream(in);
+
+		} catch (IOException e) {
+
+			Closeables.closeQuietly(in);
+
+			throw e;
+
 		}
-
-		File file = new File(path);
-
-		if (file.exists()) {
-			return openBzip2Stream(file);
-		}
-
-		URL url = path.getClass().getClassLoader().getResource(path);
-
-		return openBzip2Stream(url);
 
 	}
 
@@ -199,19 +209,19 @@ public class Streams {
 	public static Reader openGzipReader(String path, Charset charset)
 			throws IOException {
 
-		if (StringUtils.isBlank(path)) {
-			return null;
+		InputStream in = openGzipStream(path);
+
+		try {
+
+			return new InputStreamReader(in, charset);
+
+		} catch (RuntimeException e) {
+
+			Closeables.closeQuietly(in);
+
+			throw e;
+
 		}
-
-		File file = new File(path);
-
-		if (file.exists()) {
-			return openGzipReader(file, charset);
-		}
-
-		URL url = path.getClass().getClassLoader().getResource(path);
-
-		return openGzipReader(url, charset);
 
 	}
 
@@ -256,19 +266,19 @@ public class Streams {
 	public static Reader openBzip2Reader(String path, Charset charset)
 			throws IOException {
 
-		if (StringUtils.isBlank(path)) {
-			return null;
+		InputStream in = openBzip2Stream(path);
+
+		try {
+
+			return new InputStreamReader(in, charset);
+
+		} catch (RuntimeException e) {
+
+			Closeables.closeQuietly(in);
+
+			throw new IOException(e);
+
 		}
-
-		File file = new File(path);
-
-		if (file.exists()) {
-			return openBzip2Reader(file, charset);
-		}
-
-		URL url = path.getClass().getClassLoader().getResource(path);
-
-		return openBzip2Reader(url, charset);
 
 	}
 
