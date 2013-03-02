@@ -2,6 +2,7 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.io.Resources.getResource;
+import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.getBytes;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBufferedStream;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Reader;
 import static jp.gr.java_conf.afterthesunrise.commons.object.Streams.openBzip2Stream;
@@ -356,6 +357,21 @@ public class StreamsTest {
 	@Test(expected = IOException.class)
 	public void testOpenBzip2Reader_Path_Exception() throws IOException {
 		reader = openBzip2Reader(PATH_BZIP, null);
+	}
+
+	@Test
+	public void testGetBytes_String() throws IOException {
+		assertTrue(getBytes(STR_GZIP).length > 0);
+	}
+
+	@Test
+	public void testGetBytes_URL() throws IOException {
+		assertTrue(getBytes(URL_GZIP).length > 0);
+	}
+
+	@Test
+	public void testGetBytes_Path() throws IOException {
+		assertTrue(getBytes(PATH_GZIP).length > 0);
 	}
 
 }

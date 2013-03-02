@@ -13,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Resources;
 
@@ -317,6 +318,54 @@ public class Streams {
 			throw new IOException(e);
 
 		}
+
+	}
+
+	public static byte[] getBytes(String path) throws IOException {
+
+		InputStream in = openBufferedStream(path);
+
+		byte[] bytes;
+
+		try {
+			bytes = ByteStreams.toByteArray(in);
+		} finally {
+			in.close();
+		}
+
+		return bytes;
+
+	}
+
+	public static byte[] getBytes(URL url) throws IOException {
+
+		InputStream in = openBufferedStream(url);
+
+		byte[] bytes;
+
+		try {
+			bytes = ByteStreams.toByteArray(in);
+		} finally {
+			in.close();
+		}
+
+		return bytes;
+
+	}
+
+	public static byte[] getBytes(File file) throws IOException {
+
+		InputStream in = openBufferedStream(file);
+
+		byte[] bytes;
+
+		try {
+			bytes = ByteStreams.toByteArray(in);
+		} finally {
+			in.close();
+		}
+
+		return bytes;
 
 	}
 
