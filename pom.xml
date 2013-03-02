@@ -5,7 +5,7 @@
 
 	<groupId>jp.gr.java_conf.afterthesunrise</groupId>
 	<artifactId>commons-ats</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
+	<version>0.1.2</version>
 	<packaging>jar</packaging>
 
 	<name>Commons ATS</name>
