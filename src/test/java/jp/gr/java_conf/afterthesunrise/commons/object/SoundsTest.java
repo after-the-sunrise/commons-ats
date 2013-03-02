@@ -75,7 +75,7 @@ public class SoundsTest {
 				clip.close();
 			}
 
-		} catch (IllegalArgumentException e) {
+		} catch (IOException e) {
 			// Ignore as some platform may not like ".wav"
 		}
 
