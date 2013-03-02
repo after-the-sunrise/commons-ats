@@ -48,9 +48,7 @@ public final class Sounds {
 
 		} catch (Exception e) {
 
-			if (clip != null) {
-				clip.close();
-			}
+			closeQuietly(clip);
 
 			throw new IOException(e);
 
@@ -63,6 +61,16 @@ public final class Sounds {
 		}
 
 		return clip;
+
+	}
+
+	public static void closeQuietly(Clip clip) {
+
+		if (clip == null) {
+			return;
+		}
+
+		clip.close();
 
 	}
 

@@ -3,6 +3,8 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,6 +82,19 @@ public class SoundsTest {
 	@Test(expected = IOException.class)
 	public void testGetClip_Invalid() throws IOException {
 		Sounds.getClip(new byte[] { 0 });
+	}
+
+	@Test
+	public void testCloseQuietly() throws IOException {
+
+		Clip clip = mock(Clip.class);
+
+		Sounds.closeQuietly(clip);
+
+		verify(clip).close();
+
+		Sounds.closeQuietly(null);
+
 	}
 
 }
