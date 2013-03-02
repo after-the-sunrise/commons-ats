@@ -33,15 +33,19 @@ import com.google.common.io.Closeables;
  */
 public class StreamsTest {
 
-	private static final URL URL_GZIP = getResource("sample.txt.gz");
+	private static final String STR_GZIP = "sample.txt.gz";
 
-	private static final URL URL_BZIP = getResource("sample.txt.bz2");
+	private static final String STR_BZIP = "sample.txt.bz2";
 
-	private static final File PATH_GZIP = new File(
-			"src/test/resources/sample.txt.gz");
+	private static final URL URL_GZIP = getResource(STR_GZIP);
 
-	private static final File PATH_BZIP = new File(
-			"src/test/resources/sample.txt.bz2");
+	private static final URL URL_BZIP = getResource(STR_BZIP);
+
+	private static final File PATH_GZIP = new File("src/test/resources/"
+			+ STR_GZIP);
+
+	private static final File PATH_BZIP = new File("src/test/resources/"
+			+ STR_BZIP);
 
 	private InputStream in;
 
@@ -78,7 +82,7 @@ public class StreamsTest {
 	@Test
 	public void testOpenBufferedStream_String_Url() throws IOException {
 
-		in = openBufferedStream(URL_GZIP.getPath());
+		in = openBufferedStream(STR_GZIP);
 
 		assertTrue(in instanceof BufferedInputStream);
 
@@ -129,7 +133,7 @@ public class StreamsTest {
 	@Test
 	public void testOpenGzipStream_String() throws IOException {
 
-		in = openGzipStream(URL_GZIP.getPath());
+		in = openGzipStream(STR_GZIP);
 
 		reader = new InputStreamReader(in);
 
@@ -173,7 +177,7 @@ public class StreamsTest {
 
 	@Test(expected = IOException.class)
 	public void testOpenGzipStream_String_Exception() throws IOException {
-		in = openGzipStream(URL_BZIP.getPath());
+		in = openGzipStream(STR_BZIP);
 	}
 
 	@Test(expected = IOException.class)
@@ -189,7 +193,7 @@ public class StreamsTest {
 	@Test
 	public void testOpenBzip2Stream_String() throws IOException {
 
-		in = openBzip2Stream(URL_BZIP.getPath());
+		in = openBzip2Stream(STR_BZIP);
 
 		reader = new InputStreamReader(in);
 
@@ -233,7 +237,7 @@ public class StreamsTest {
 
 	@Test(expected = IOException.class)
 	public void testOpenBzip2Stream_String_Exception() throws IOException {
-		in = openBzip2Stream(URL_GZIP.getPath());
+		in = openBzip2Stream(STR_GZIP);
 	}
 
 	@Test(expected = IOException.class)
@@ -249,7 +253,7 @@ public class StreamsTest {
 	@Test
 	public void testOpenGzipReader_String() throws IOException {
 
-		reader = openGzipReader(URL_GZIP.getPath(), UTF_8);
+		reader = openGzipReader(STR_GZIP, UTF_8);
 
 		List<String> lines = CharStreams.readLines(reader);
 
@@ -287,23 +291,23 @@ public class StreamsTest {
 
 	@Test(expected = IOException.class)
 	public void testOpenGzipReader_String_Exception() throws IOException {
-		reader = openGzipReader(URL_BZIP.getPath(), null);
+		reader = openGzipReader(STR_GZIP, null);
 	}
 
 	@Test(expected = IOException.class)
 	public void testOpenGzipReader_URL_Exception() throws IOException {
-		reader = openGzipReader(URL_BZIP, null);
+		reader = openGzipReader(URL_GZIP, null);
 	}
 
 	@Test(expected = IOException.class)
 	public void testOpenGzipReader_Path_Exception() throws IOException {
-		reader = openGzipReader(PATH_BZIP, null);
+		reader = openGzipReader(PATH_GZIP, null);
 	}
 
 	@Test
 	public void testOpenBzip2Reader_String() throws IOException {
 
-		reader = openBzip2Reader(URL_BZIP.getPath(), UTF_8);
+		reader = openBzip2Reader(STR_BZIP, UTF_8);
 
 		List<String> lines = CharStreams.readLines(reader);
 
@@ -341,17 +345,17 @@ public class StreamsTest {
 
 	@Test(expected = IOException.class)
 	public void testOpenBzip2Reader_String_Exception() throws IOException {
-		reader = openBzip2Reader(URL_GZIP.getPath(), null);
+		reader = openBzip2Reader(STR_BZIP, null);
 	}
 
 	@Test(expected = IOException.class)
 	public void testOpenBzip2Reader_URL_Exception() throws IOException {
-		reader = openBzip2Reader(URL_GZIP, null);
+		reader = openBzip2Reader(URL_BZIP, null);
 	}
 
 	@Test(expected = IOException.class)
 	public void testOpenBzip2Reader_Path_Exception() throws IOException {
-		reader = openBzip2Reader(PATH_GZIP, null);
+		reader = openBzip2Reader(PATH_BZIP, null);
 	}
 
 }

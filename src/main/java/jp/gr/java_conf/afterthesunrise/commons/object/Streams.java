@@ -219,7 +219,7 @@ public class Streams {
 
 			Closeables.closeQuietly(in);
 
-			throw e;
+			throw new IOException(e);
 
 		}
 
