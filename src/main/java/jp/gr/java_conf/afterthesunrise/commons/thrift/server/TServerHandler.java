@@ -18,21 +18,26 @@ public class TServerHandler implements Initializable, Closeable {
 
 	private static final String CLS_NAME = TServerHandler.class.getSimpleName();
 
+	private static final long TIMEOUT = 5000L;
+
 	private static final AtomicLong COUNT = new AtomicLong();
 
 	private final TServer server;
 
 	private final boolean daemon;
 
+	private final long timeout;
+
 	private Thread thread;
 
 	public TServerHandler(TServer server) {
-		this(server, false);
+		this(server, true, TIMEOUT);
 	}
 
-	public TServerHandler(TServer server, boolean daemon) {
+	public TServerHandler(TServer server, boolean daemon, long timeout) {
 		this.server = checkNotNull(server);
 		this.daemon = daemon;
+		this.timeout = timeout;
 	}
 
 	@Override
@@ -64,10 +69,31 @@ public class TServerHandler implements Initializable, Closeable {
 			return;
 		}
 
-		server.stop();
+		try {
+
+			long timeLimit = System.currentTimeMillis() + timeout;
+
+			while (true) {
+
+				server.stop();
+
+				thread.join(100L);
+
+				if (!thread.isAlive()) {
+					break;
+				}
+
+				if (System.currentTimeMillis() > timeLimit) {
+					throw new IOException("timeout");
+				}
+
+			}
+
+		} catch (InterruptedException e) {
+			throw new IOException(e);
+		}
 
 		thread = null;
 
 	}
-
 }
