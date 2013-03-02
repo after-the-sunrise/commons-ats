@@ -81,6 +81,8 @@ public class TimeRangeTest {
 	@Test
 	public void testInRange_Default() throws Exception {
 
+		assertFalse(target.inRange(null));
+
 		assertFalse(target.inRange(new Time(8, 59, 59, 999)));
 		assertTrue(target.inRange(new Time(9, 0, 0, 000)));
 		assertTrue(target.inRange(new Time(9, 0, 0, 001)));
