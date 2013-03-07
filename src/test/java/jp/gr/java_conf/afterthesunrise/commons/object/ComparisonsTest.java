@@ -65,6 +65,24 @@ public class ComparisonsTest {
 	}
 
 	@Test
+	public void testEqualsNonNull() {
+
+		BigDecimal o1 = new BigDecimal("1");
+		BigDecimal o2 = new BigDecimal("2");
+
+		assertTrue(Comparisons.equalsNonNull(o1, o1));
+		assertFalse(Comparisons.equalsNonNull(o1, o2));
+		assertFalse(Comparisons.equalsNonNull(o1, null));
+
+		assertTrue(Comparisons.equalsNonNull(o2, o2));
+		assertFalse(Comparisons.equalsNonNull(o2, o1));
+		assertFalse(Comparisons.equalsNonNull(o2, null));
+
+		assertFalse(Comparisons.equalsNonNull(null, null));
+
+	}
+
+	@Test
 	public void testCompare() {
 
 		BigDecimal o1 = new BigDecimal("1");

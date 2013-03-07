@@ -22,6 +22,10 @@ public final class Comparisons {
 		return ObjectUtils.equals(o1, o2) && ObjectUtils.equals(o2, o3);
 	}
 
+	public static boolean equalsNonNull(Object o1, Object o2) {
+		return o1 != null && o1.equals(o2);
+	}
+
 	public static <T> int compare(Comparable<T> o1, Comparable<T> o2) {
 		return NullSafeComparator.get().compare(o1, o2);
 	}
