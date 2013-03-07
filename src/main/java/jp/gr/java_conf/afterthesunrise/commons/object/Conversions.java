@@ -3,6 +3,7 @@ package jp.gr.java_conf.afterthesunrise.commons.object;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import java.util.TreeSet;
 
 import jp.gr.java_conf.afterthesunrise.commons.comparator.NullSafeComparator;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import com.google.common.collect.Maps;
@@ -252,6 +254,56 @@ public final class Conversions {
 		}
 
 		return values;
+
+	}
+
+	public static <T> List<T> list(List<T> list1, List<T> list2) {
+
+		if (CollectionUtils.isEmpty(list1)) {
+			return list2;
+		}
+
+		if (CollectionUtils.isEmpty(list2)) {
+			return list1;
+		}
+
+		List<T> list = new ArrayList<T>(list1.size() + list2.size());
+
+		list.addAll(list1);
+
+		list.addAll(list2);
+
+		return list;
+
+	}
+
+	public static <T> List<T> list(List<T> list, T... args) {
+
+		if (ArrayUtils.isEmpty(args)) {
+			return list;
+		}
+
+		if (CollectionUtils.isEmpty(list)) {
+			return Arrays.asList(args);
+		}
+
+		List<T> result = new ArrayList<T>(list.size() + args.length);
+
+		result.addAll(list);
+
+		result.addAll(Arrays.asList(args));
+
+		return result;
+
+	}
+
+	public static <T> List<T> asList(T... args) {
+
+		if (ArrayUtils.isEmpty(args)) {
+			return null;
+		}
+
+		return Arrays.asList(args);
 
 	}
 

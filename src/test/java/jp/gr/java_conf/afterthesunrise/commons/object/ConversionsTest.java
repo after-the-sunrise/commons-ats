@@ -444,4 +444,97 @@ public class ConversionsTest {
 
 	}
 
+	@Test
+	public void testList_List_List() {
+
+		BigDecimal o1 = BigDecimal.ONE;
+		BigDecimal o2 = BigDecimal.TEN;
+
+		List<BigDecimal> list1 = Arrays.asList(o1);
+		List<BigDecimal> list2 = Arrays.asList(o2);
+
+		List<BigDecimal> result = Conversions.list(list1, list2);
+		assertEquals(2, result.size());
+		assertTrue(result.contains(o1));
+		assertTrue(result.contains(o2));
+
+		result = Conversions.list(list1, (List<BigDecimal>) null);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o1));
+
+		result = Conversions.list((List<BigDecimal>) null, list2);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o2));
+
+		list1 = null;
+		list2 = null;
+		result = Conversions.list(list1, list2);
+		assertNull(result);
+
+	}
+
+	@Test
+	public void testList_List_Array() {
+
+		BigDecimal o1 = BigDecimal.ONE;
+		BigDecimal o2 = BigDecimal.TEN;
+
+		List<BigDecimal> list = Arrays.asList(o1);
+		BigDecimal[] array = new BigDecimal[] { o2 };
+
+		List<BigDecimal> result = Conversions.list(list, array);
+		assertEquals(2, result.size());
+		assertTrue(result.contains(o1));
+		assertTrue(result.contains(o2));
+
+		result = Conversions.list(list, (BigDecimal[]) null);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o1));
+
+		result = Conversions.list(list, (new BigDecimal[0]));
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o1));
+
+		result = Conversions.list(list);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o1));
+
+		result = Conversions.list((List<BigDecimal>) null, array);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o2));
+
+		result = Conversions.list((List<BigDecimal>) null, (BigDecimal[]) null);
+		assertNull(result);
+
+		result = Conversions.list((List<BigDecimal>) null, new BigDecimal[0]);
+		assertNull(result);
+
+		result = Conversions.list((List<BigDecimal>) null);
+		assertNull(result);
+
+	}
+
+	@Test
+	public void testList_Array() {
+
+		BigDecimal c = BigDecimal.ONE;
+
+		List<BigDecimal> result = Conversions.asList(c);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(c));
+
+		result = Conversions.asList((BigDecimal) null);
+		assertEquals(1, result.size());
+
+		result = Conversions.asList((BigDecimal[]) null);
+		assertNull(result);
+
+		result = Conversions.asList(new BigDecimal[0]);
+		assertNull(result);
+
+		result = Conversions.asList();
+		assertNull(result);
+
+	}
+
 }
