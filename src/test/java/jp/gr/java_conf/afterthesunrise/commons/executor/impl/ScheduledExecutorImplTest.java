@@ -39,6 +39,13 @@ public class ScheduledExecutorImplTest {
 		target.close();
 	}
 
+	@Test
+	public void testClose() throws Exception {
+		target.close();
+		target.close();
+		target.close();
+	}
+
 	@Test(timeout = 5000L)
 	public void testScheduleOnce_Runnable() throws Exception {
 

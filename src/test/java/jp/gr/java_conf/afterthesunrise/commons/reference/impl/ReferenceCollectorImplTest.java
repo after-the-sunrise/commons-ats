@@ -29,8 +29,8 @@ public class ReferenceCollectorImplTest {
 		Runnable r3 = mock(Runnable.class);
 
 		Reference<?> soft = target.collectSoft(new Object(), r1);
-		Reference<?> weak = target.collectSoft(new Object(), r2);
-		Reference<?> phantom = target.collectSoft(new Object(), r3);
+		Reference<?> weak = target.collectWeak(new Object(), r2);
+		Reference<?> phantom = target.collectPhantom(new Object(), r3);
 
 		soft.enqueue();
 		target.run();

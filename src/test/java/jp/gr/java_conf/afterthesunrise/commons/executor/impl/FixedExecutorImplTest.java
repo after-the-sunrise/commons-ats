@@ -42,6 +42,13 @@ public class FixedExecutorImplTest {
 		target.close();
 	}
 
+	@Test
+	public void testClose() throws Exception {
+		target.close();
+		target.close();
+		target.close();
+	}
+
 	private Runnable getNull() {
 		return null;
 	}
