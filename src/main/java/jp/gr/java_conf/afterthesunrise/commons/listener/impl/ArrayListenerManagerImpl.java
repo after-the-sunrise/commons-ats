@@ -1,9 +1,9 @@
 package jp.gr.java_conf.afterthesunrise.commons.listener.impl;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import jp.gr.java_conf.afterthesunrise.commons.listener.ListenerPredicate;
 import jp.gr.java_conf.afterthesunrise.commons.listener.PredicateListenerManager;
@@ -19,15 +19,9 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ArrayListenerManagerImpl<L> implements PredicateListenerManager<L> {
 
-	private final List<L> listeners;
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-	public ArrayListenerManagerImpl() {
-		this(new CopyOnWriteArrayList<L>());
-	}
-
-	public ArrayListenerManagerImpl(List<L> listeners) {
-		this.listeners = checkNotNull(listeners);
-	}
+	private final List<L> listeners = new ArrayList<L>();
 
 	@Override
 	public void addListener(L listener) {
@@ -36,7 +30,15 @@ public class ArrayListenerManagerImpl<L> implements PredicateListenerManager<L> 
 			return;
 		}
 
-		listeners.add(listener);
+		try {
+
+			lock.writeLock().lock();
+
+			listeners.add(listener);
+
+		} finally {
+			lock.writeLock().unlock();
+		}
 
 	}
 
@@ -47,19 +49,38 @@ public class ArrayListenerManagerImpl<L> implements PredicateListenerManager<L> 
 			return;
 		}
 
-		listeners.remove(listener);
+		try {
+
+			lock.writeLock().lock();
+
+			listeners.remove(listener);
+
+		} finally {
+			lock.writeLock().unlock();
+		}
 
 	}
 
 	@Override
 	public void process(ListenerPredicate<L> predicate) {
 
-		@SuppressWarnings("unchecked")
-		L[] array = (L[]) listeners.toArray();
+		List<L> list;
 
-		for (int i = 0; i < array.length; i++) {
+		try {
 
-			predicate.process(array[i]);
+			lock.readLock().lock();
+
+			list = new ArrayList<L>(listeners);
+
+		} finally {
+			lock.readLock().unlock();
+		}
+
+		for (int i = 0; i < list.size(); i++) {
+
+			L listener = list.get(i);
+
+			predicate.process(listener);
 
 		}
 
