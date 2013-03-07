@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
  */
 public abstract class TransformingFuture<S, V> implements Future<V> {
 
-	protected final Future<S> delegate;
+	private final Future<S> delegate;
 
 	public TransformingFuture(Future<S> delegate) {
 		this.delegate = checkNotNull(delegate);

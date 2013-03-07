@@ -15,7 +15,7 @@ import com.google.common.annotations.VisibleForTesting;
  */
 public abstract class DelegatingFuture<S, T> implements Future<T> {
 
-	protected final Future<S> delegate;
+	private final Future<S> delegate;
 
 	public DelegatingFuture(Future<S> delegate) {
 		this.delegate = checkNotNull(delegate);
