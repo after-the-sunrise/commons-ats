@@ -1,12 +1,14 @@
 package jp.gr.java_conf.afterthesunrise.commons.executor.impl;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.junit.After;
@@ -116,7 +118,16 @@ public class FixedExecutorImplTest {
 
 		assertSame(answer, result1.get());
 		assertSame(answer, result2.get());
-		assertNull(result3);
+
+		try {
+
+			result3.get();
+
+			fail();
+
+		} catch (ExecutionException e) {
+			assertTrue(e.getCause() instanceof NullPointerException);
+		}
 
 		target.close();
 
