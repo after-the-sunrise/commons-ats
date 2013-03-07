@@ -46,8 +46,22 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 
 				service.shutdown();
 
-				service = null;
+			}
 
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	private void prepareService() {
+
+		try {
+
+			lock.lock();
+
+			if (service == null) {
+				service = newScheduledThreadPool(threads, this);
 			}
 
 		} finally {
@@ -63,19 +77,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (service == null) {
-				service = newScheduledThreadPool(threads, this);
-			}
-
-			service.schedule(runnable, delay, MILLISECONDS);
-
-		} finally {
-			lock.unlock();
-		}
+		service.schedule(runnable, delay, MILLISECONDS);
 
 	}
 
@@ -86,19 +90,9 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (service == null) {
-				service = newScheduledThreadPool(threads, this);
-			}
-
-			service.scheduleAtFixedRate(runnable, delay, delay, MILLISECONDS);
-
-		} finally {
-			lock.unlock();
-		}
+		service.scheduleAtFixedRate(runnable, delay, delay, MILLISECONDS);
 
 	}
 
@@ -109,19 +103,10 @@ public class ScheduledExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (service == null) {
-				service = newScheduledThreadPool(threads, this);
-			}
-
-			service.scheduleWithFixedDelay(runnable, delay, delay, MILLISECONDS);
-
-		} finally {
-			lock.unlock();
-		}
+		service.scheduleWithFixedDelay(runnable, delay, delay, MILLISECONDS);
 
 	}
+
 }

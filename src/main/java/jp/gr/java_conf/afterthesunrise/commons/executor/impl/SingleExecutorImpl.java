@@ -14,6 +14,8 @@ import jp.gr.java_conf.afterthesunrise.commons.executor.SingleExecutor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.util.concurrent.Futures;
+
 /**
  * @author takanori.takase
  */
@@ -24,7 +26,7 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 
 	private final ReentrantLock lock = new ReentrantLock();
 
-	private volatile ExecutorService executorService;
+	private volatile ExecutorService service;
 
 	@Override
 	public void close() throws IOException {
@@ -33,12 +35,26 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 
 			lock.lock();
 
-			if (executorService != null) {
+			if (service != null) {
 
-				executorService.shutdown();
+				service.shutdown();
 
-				executorService = null;
+			}
 
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	private void prepareService() {
+
+		try {
+
+			lock.lock();
+
+			if (service == null) {
+				service = newSingleThreadExecutor(this);
 			}
 
 		} finally {
@@ -54,19 +70,9 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (executorService == null) {
-				executorService = newSingleThreadExecutor(this);
-			}
-
-			executorService.execute(runnable);
-
-		} finally {
-			lock.unlock();
-		}
+		service.execute(runnable);
 
 	}
 
@@ -74,22 +80,16 @@ public class SingleExecutorImpl extends AbstractExecutor implements
 	public <V> Future<V> execute(Callable<V> callable) {
 
 		if (callable == null) {
-			return null;
+
+			Exception e = new NullPointerException("Null callable.");
+
+			return Futures.immediateFailedFuture(e);
+
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (executorService == null) {
-				executorService = newSingleThreadExecutor(this);
-			}
-
-			return executorService.submit(callable);
-
-		} finally {
-			lock.unlock();
-		}
+		return service.submit(callable);
 
 	}
 

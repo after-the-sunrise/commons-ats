@@ -14,6 +14,8 @@ import jp.gr.java_conf.afterthesunrise.commons.executor.FixedExecutor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.util.concurrent.Futures;
+
 /**
  * @author takanori.takase
  */
@@ -30,7 +32,7 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 
 	private int threads = THREADS_DEFAULT;
 
-	private volatile ExecutorService executorService;
+	private volatile ExecutorService service;
 
 	public void setThreads(int threads) {
 		this.threads = Math.max(THREADS_MIN, threads);
@@ -43,12 +45,26 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 
 			lock.lock();
 
-			if (executorService != null) {
+			if (service != null) {
 
-				executorService.shutdown();
+				service.shutdown();
 
-				executorService = null;
+			}
 
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	private void prepareService() {
+
+		try {
+
+			lock.lock();
+
+			if (service == null) {
+				service = newFixedThreadPool(threads, this);
 			}
 
 		} finally {
@@ -64,19 +80,9 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 			return;
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (executorService == null) {
-				executorService = newFixedThreadPool(threads, this);
-			}
-
-			executorService.execute(runnable);
-
-		} finally {
-			lock.unlock();
-		}
+		service.execute(runnable);
 
 	}
 
@@ -84,22 +90,16 @@ public class FixedExecutorImpl extends AbstractExecutor implements
 	public <V> Future<V> execute(Callable<V> callable) {
 
 		if (callable == null) {
-			return null;
+
+			Exception e = new NullPointerException("Null callable.");
+
+			return Futures.immediateFailedFuture(e);
+
 		}
 
-		try {
+		prepareService();
 
-			lock.lock();
-
-			if (executorService == null) {
-				executorService = newFixedThreadPool(threads, this);
-			}
-
-			return executorService.submit(callable);
-
-		} finally {
-			lock.unlock();
-		}
+		return service.submit(callable);
 
 	}
 
