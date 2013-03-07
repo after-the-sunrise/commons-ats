@@ -7,7 +7,7 @@ import java.lang.ref.WeakReference;
 /**
  * @author takanori.takase
  */
-public interface ReferenceCollector {
+public interface ReferenceCollector extends Runnable {
 
 	<T> SoftReference<T> collectSoft(T target, Runnable runnable);
 

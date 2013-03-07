@@ -22,7 +22,7 @@ import com.google.common.collect.Maps;
  * @author takanori.takase
  */
 @Component
-public class ReferenceCollectorImpl implements ReferenceCollector, Runnable {
+public class ReferenceCollectorImpl implements ReferenceCollector {
 
 	private final Map<Reference<?>, Runnable> refs = Maps.newConcurrentMap();
 
