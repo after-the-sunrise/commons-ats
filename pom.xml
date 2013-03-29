@@ -3,13 +3,13 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>jp.gr.java_conf.afterthesunrise</groupId>
-	<artifactId>commons-ats</artifactId>
-	<version>0.1.4-SNAPSHOT</version>
+	<groupId>info.after_sunrise.commons</groupId>
+	<artifactId>ats-commons</artifactId>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Commons ATS</name>
-	<description>Miscellaneous code snippets for common use.</description>
+	<name>ATS Commons</name>
+	<description>Miscellaneous code snippets for common usage.</description>
 	<url>https://github.com/after-the-sunrise/${project.artifactId}</url>
 	<inceptionYear>2012</inceptionYear>
 
@@ -18,8 +18,6 @@
 			<id>after-the-sunrise</id>
 			<name>Takanori Takase</name>
 			<timezone>+9</timezone>
-			<organization>individual</organization>
-			<organizationUrl>http://afterthesunrise.wordpress.com/</organizationUrl>
 		</developer>
 	</developers>
 
