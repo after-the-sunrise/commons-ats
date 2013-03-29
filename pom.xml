@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>info.after_sunrise.commons</groupId>
-	<artifactId>ats-commons</artifactId>
+	<artifactId>commons-ats</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
