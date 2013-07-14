@@ -1,8 +1,8 @@
 language: java
 
 jdk:
-	- openjdk6
+    - openjdk6
 
 notifications:
-	email:
-		- subac1008-ci@yahoo.co.jp
+    email:
+        - subac1008-ci@yahoo.co.jp
