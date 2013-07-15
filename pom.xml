@@ -26,7 +26,7 @@
 
 	<developers>
 		<developer>
-			<id>after-the-sunrise</id>
+			<id>takanori.takase</id>
 			<name>Takanori Takase</name>
 			<timezone>+9</timezone>
 		</developer>
@@ -63,20 +63,25 @@
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://ats.ci.cloudbees.com/job/${project.artifactId}/</url>
+		<url>http://after-sunrise.com/jenkins/job/${project.artifactId}/</url>
 	</ciManagement>
 
 	<distributionManagement>
 		<repository>
-			<id>ats-release</id>
-			<name>CloudBees ats-release</name>
-			<url>https://repository-ats.forge.cloudbees.com/release/</url>
+			<id>s3.after-sunrise</id>
+			<name>S3 after-sunrise Release</name>
+			<url>s3://after-sunrise/release/</url>
 		</repository>
 		<snapshotRepository>
-			<id>ats-snapshot</id>
-			<name>CloudBees ats-snapshot</name>
-			<url>https://repository-ats.forge.cloudbees.com/snapshot/</url>
+			<id>s3.after-sunrise</id>
+			<name>S3 after-sunrise Snapshot</name>
+			<url>s3://after-sunrise/snapshot/</url>
 		</snapshotRepository>
+		<site>
+			<id>s3.after-sunrise</id>
+			<name>S3 after-sunrise Site</name>
+			<url>s3://after-sunrise/site/</url>
+		</site>
 	</distributionManagement>
 
 	<prerequisites>
