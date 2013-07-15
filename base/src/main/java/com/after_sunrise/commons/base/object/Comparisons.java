@@ -32,6 +32,15 @@ public final class Comparisons {
 		return NullSafeComparator.get().compare(o1, o2);
 	}
 
+	public static <T> boolean compareEquals(Comparable<T> o1, Comparable<T> o2) {
+		return compare(o1, o2) == 0;
+	}
+
+	public static <T> boolean compareEquals(Comparable<T> o1, Comparable<T> o2,
+			Comparable<T> o3) {
+		return compareEquals(o1, o2) && compareEquals(o2, o3);
+	}
+
 	public static <T> boolean equals(Collection<T> c1, Collection<T> c2) {
 
 		if (c1 == c2) {
