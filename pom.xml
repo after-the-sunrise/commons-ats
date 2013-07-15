@@ -103,6 +103,7 @@
 		<build.plugin.javadoc.version>2.9</build.plugin.javadoc.version>
 		<build.plugin.jxr.version>2.3</build.plugin.jxr.version>
 		<build.plugin.javancss.version>2.0</build.plugin.javancss.version>
+		<build.plugin.aws.version>3.0.0.RELEASE</build.plugin.aws.version>
 
 		<dependency.findbugs.version>2.0.1</dependency.findbugs.version>
 		<dependency.junit.version>4.11</dependency.junit.version>
@@ -190,6 +191,13 @@
 				<version>${build.plugin.jxr.version}</version>
 			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build.aws</groupId>
+				<artifactId>org.springframework.build.aws.maven</artifactId>
+				<version>${build.plugin.aws.version}</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<reporting>
