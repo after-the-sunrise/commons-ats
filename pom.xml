@@ -63,7 +63,7 @@
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>http://after-sunrise.com/jenkins/job/${project.artifactId}/</url>
+		<url>http://after-sunrise.com/job/${project.artifactId}/</url>
 	</ciManagement>
 
 	<distributionManagement>
