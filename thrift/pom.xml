@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>info.after_sunrise.commons</groupId>
+		<groupId>com.after_sunrise.commons</groupId>
 		<artifactId>commons-ats</artifactId>
 		<version>0.2.0-SNAPSHOT</version>
 	</parent>
