@@ -23,9 +23,14 @@ import org.junit.Test;
  */
 public class AdjustmentTypeTest {
 
-	private static final List<DayType> EMPTY1 = Arrays.asList((DayType) null);
+	private static final List<DayType> EMPTY_DAY = Arrays.<DayType> asList();
 
-	private static final List<Long> EMPTY2 = Arrays.asList((Long) null);
+	private static final List<DayType> BLANK_DAY = Arrays
+			.asList((DayType) null);
+
+	private static final List<Long> EMPTY_TIME = Arrays.<Long> asList();
+
+	private static final List<Long> BLANK_TIME = Arrays.asList((Long) null);
 
 	private String pattern;
 
@@ -54,14 +59,21 @@ public class AdjustmentTypeTest {
 		assertNull(FOLLOWING.getNext(timestamp, null, null, null));
 		assertNull(FOLLOWING.getNext(null, tz, null, null));
 
-		// Same
-		Long next = FOLLOWING.getNext(timestamp, tz, null, null);
+		// Same (Empty)
+		Long next = FOLLOWING.getNext(timestamp, tz, EMPTY_DAY, null);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
-		next = FOLLOWING.getNext(timestamp, tz, EMPTY1, null);
+		// Same (Null)
+		next = FOLLOWING.getNext(timestamp, tz, null, null);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
-		next = FOLLOWING.getNext(timestamp, tz, null, EMPTY2);
+		next = FOLLOWING.getNext(timestamp, tz, BLANK_DAY, null);
+		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
+
+		next = FOLLOWING.getNext(timestamp, tz, null, EMPTY_TIME);
+		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
+
+		next = FOLLOWING.getNext(timestamp, tz, null, BLANK_TIME);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend
@@ -84,14 +96,21 @@ public class AdjustmentTypeTest {
 		assertNull(FOLLOWING.getNext(timestamp, null, null, null));
 		assertNull(FOLLOWING.getNext(null, tz, null, null));
 
-		// Same
-		Long next = PRECEDING.getNext(timestamp, tz, null, null);
+		// Same (Empty)
+		Long next = PRECEDING.getNext(timestamp, tz, EMPTY_DAY, null);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
-		next = PRECEDING.getNext(timestamp, tz, EMPTY1, null);
+		// Same (Null)
+		next = PRECEDING.getNext(timestamp, tz, null, null);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
-		next = PRECEDING.getNext(timestamp, tz, null, EMPTY2);
+		next = PRECEDING.getNext(timestamp, tz, BLANK_DAY, null);
+		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
+
+		next = PRECEDING.getNext(timestamp, tz, null, EMPTY_TIME);
+		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
+
+		next = PRECEDING.getNext(timestamp, tz, null, BLANK_TIME);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend
@@ -114,14 +133,21 @@ public class AdjustmentTypeTest {
 		assertNull(FOLLOWING.getNext(timestamp, null, null, null));
 		assertNull(FOLLOWING.getNext(null, tz, null, null));
 
-		// Same
-		Long next = MODIFIED_FOLLOWING.getNext(timestamp, tz, null, null);
+		// Same (Empty)
+		Long next = MODIFIED_FOLLOWING.getNext(timestamp, tz, EMPTY_DAY, null);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
-		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, EMPTY1, null);
+		// Same (Null)
+		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, null, null);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
-		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, null, EMPTY2);
+		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, BLANK_DAY, null);
+		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
+
+		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, null, EMPTY_TIME);
+		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
+
+		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, null, BLANK_TIME);
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend
@@ -144,14 +170,21 @@ public class AdjustmentTypeTest {
 		assertNull(FOLLOWING.getNext(timestamp, null, null, null));
 		assertNull(FOLLOWING.getNext(null, tz, null, null));
 
-		// Same
-		Long next = MODIFIED_PRECEDING.getNext(timestamp, tz, null, null);
+		// Same (Empty)
+		Long next = MODIFIED_PRECEDING.getNext(timestamp, tz, EMPTY_DAY, null);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
-		next = MODIFIED_PRECEDING.getNext(timestamp, tz, EMPTY1, null);
+		// Same (Null)
+		next = MODIFIED_PRECEDING.getNext(timestamp, tz, null, null);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
-		next = MODIFIED_PRECEDING.getNext(timestamp, tz, null, EMPTY2);
+		next = MODIFIED_PRECEDING.getNext(timestamp, tz, BLANK_DAY, null);
+		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
+
+		next = MODIFIED_PRECEDING.getNext(timestamp, tz, null, EMPTY_TIME);
+		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
+
+		next = MODIFIED_PRECEDING.getNext(timestamp, tz, null, BLANK_TIME);
 		assertEquals("2012-04-02 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend

@@ -2,6 +2,7 @@ package com.after_sunrise.commons.base.object;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
@@ -9,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -88,12 +90,13 @@ public class ConversionsTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testMap_Empty() {
 
-		Identifiable<String>[] args = null;
+		assertTrue(Conversions.map((Identifiable[]) null).isEmpty());
 
-		assertTrue(Conversions.map(args).isEmpty());
+		assertTrue(Conversions.map(new Identifiable[0]).isEmpty());
 
 	}
 
@@ -123,12 +126,13 @@ public class ConversionsTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSet_Empty() {
 
-		Identifiable<String>[] args = null;
+		assertTrue(Conversions.set((Identifiable[]) null).isEmpty());
 
-		assertTrue(Conversions.set(args).isEmpty());
+		assertTrue(Conversions.set(new Identifiable[0]).isEmpty());
 
 	}
 
@@ -158,12 +162,13 @@ public class ConversionsTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testList_Empty() {
 
-		Identifiable<String>[] args = null;
+		assertTrue(Conversions.list((Identifiable[]) null).isEmpty());
 
-		assertTrue(Conversions.list(args).isEmpty());
+		assertTrue(Conversions.list(new Identifiable[0]).isEmpty());
 
 	}
 
@@ -462,6 +467,18 @@ public class ConversionsTest {
 		assertEquals(1, result.size());
 		assertTrue(result.contains(o2));
 
+		result = Conversions.list(list1, (List<BigDecimal>) null);
+		assertSame(list1, result);
+
+		result = Conversions.list(list1, Collections.<BigDecimal> emptyList());
+		assertSame(list1, result);
+
+		result = Conversions.list((List<BigDecimal>) null, list2);
+		assertSame(list2, result);
+
+		result = Conversions.list(Collections.<BigDecimal> emptyList(), list2);
+		assertSame(list2, result);
+
 		list1 = null;
 		list2 = null;
 		result = Conversions.list(list1, list2);
@@ -494,6 +511,10 @@ public class ConversionsTest {
 		result = Conversions.list(list);
 		assertEquals(1, result.size());
 		assertTrue(result.contains(o1));
+
+		result = Conversions.list(Collections.<BigDecimal> emptyList(), array);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(o2));
 
 		result = Conversions.list((List<BigDecimal>) null, array);
 		assertEquals(1, result.size());

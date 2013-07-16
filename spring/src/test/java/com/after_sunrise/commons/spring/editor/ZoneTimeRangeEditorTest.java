@@ -82,6 +82,11 @@ public class ZoneTimeRangeEditorTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_InvalidTime() {
+		target.setAsText("12:34:56:789 Asia/Tokyo");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_PartialTime() {
 		target.setAsText("-12:34:56:789 Asia/Tokyo");
 	}
 

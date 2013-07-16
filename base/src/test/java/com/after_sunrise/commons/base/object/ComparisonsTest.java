@@ -101,6 +101,48 @@ public class ComparisonsTest {
 	}
 
 	@Test
+	public void testCompareEquals() {
+
+		BigDecimal o1 = new BigDecimal("1");
+		BigDecimal o2 = new BigDecimal("1.0");
+		BigDecimal o3 = new BigDecimal("1.1");
+
+		assertTrue(Comparisons.compareEquals(o1, o2));
+		assertTrue(Comparisons.compareEquals(o2, o1));
+		assertFalse(Comparisons.compareEquals(o1, o3));
+		assertFalse(Comparisons.compareEquals(o3, o1));
+
+		assertFalse(Comparisons.compareEquals(o1, null));
+		assertFalse(Comparisons.compareEquals(null, o1));
+		assertTrue(Comparisons.compareEquals(null, null));
+
+	}
+
+	@Test
+	public void testCompareEquals_Triple() {
+
+		BigDecimal o1 = new BigDecimal("1");
+		BigDecimal o2 = new BigDecimal("1.0");
+		BigDecimal o3 = new BigDecimal("1.1");
+
+		assertTrue(Comparisons.compareEquals(o1, o1, o1));
+		assertTrue(Comparisons.compareEquals(o2, o1, o1));
+		assertTrue(Comparisons.compareEquals(o1, o2, o1));
+		assertTrue(Comparisons.compareEquals(o1, o2, o2));
+
+		assertFalse(Comparisons.compareEquals(o3, o1, o1));
+		assertFalse(Comparisons.compareEquals(o1, o3, o1));
+		assertFalse(Comparisons.compareEquals(o1, o1, o3));
+
+		assertFalse(Comparisons.compareEquals(null, o1, o1));
+		assertFalse(Comparisons.compareEquals(o1, null, o1));
+		assertFalse(Comparisons.compareEquals(o1, o1, null));
+
+		assertTrue(Comparisons.compareEquals(null, null, null));
+
+	}
+
+	@Test
 	public void testEquals_Collection() {
 
 		Collection<String> c1 = Arrays.asList("foo");

@@ -92,6 +92,8 @@ public class DateFormatsTest {
 
 		assertNull(DateFormats.parse(value));
 
+		assertNull(DateFormats.parse(""));
+
 		assertNull(DateFormats.parse(null));
 
 	}

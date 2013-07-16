@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import com.after_sunrise.commons.base.object.IOs;
+
 /**
  * @author takanori.takase
  */
@@ -50,11 +52,7 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 
 	@Override
 	public void clear() {
-		try {
-			close();
-		} catch (IOException e) {
-			// Ignore
-		}
+		IOs.closeQuietly(this);
 	}
 
 	@Override

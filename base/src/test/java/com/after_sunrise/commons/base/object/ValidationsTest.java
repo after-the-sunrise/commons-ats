@@ -2,6 +2,7 @@ package com.after_sunrise.commons.base.object;
 
 import static com.after_sunrise.commons.base.object.Validations.checkDates;
 import static com.after_sunrise.commons.base.object.Validations.checkNotNegative;
+import static com.after_sunrise.commons.base.object.Validations.checkNotNull;
 import static com.after_sunrise.commons.base.object.Validations.checkPort;
 import static com.after_sunrise.commons.base.object.Validations.checkPositive;
 import static com.after_sunrise.commons.base.object.Validations.checkRange;
@@ -39,6 +40,20 @@ public class ValidationsTest {
 			throw e.getCause();
 		}
 
+	}
+
+	@Test
+	public void testCheckNotNull() {
+
+		assertEquals("foo", checkNotNull("foo"));
+
+		assertEquals("foo", checkNotNull("foo", "bar"));
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCheckNotNull_Exception() {
+		checkNotNull(null);
 	}
 
 	@Test

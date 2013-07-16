@@ -41,6 +41,22 @@ public class SelectionsTest {
 	}
 
 	@Test
+	public void testSelectNotNull() {
+
+		assertEquals("foo", Selections.selectNotNull("foo", "bar"));
+
+		assertEquals("foo", Selections.selectNotNull("foo", null));
+
+		assertEquals("bar", Selections.selectNotNull(null, "bar"));
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSelectNotNull_Exception() {
+		Selections.selectNotNull(null, null);
+	}
+
+	@Test
 	public void testSelectFirst_Collection() {
 
 		List<String> c = Arrays.asList("foo", "bar");

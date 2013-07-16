@@ -37,7 +37,6 @@ public class CsvReaderImplTest {
 	@Test
 	public void testSetParameters() throws IOException {
 
-		target.setUnknownPrefix("ERROR-");
 		target.setCharset(Charset.forName("UTF-16"));
 		target.setSeparator('|');
 		target.setQuote('\'');
@@ -142,6 +141,38 @@ public class CsvReaderImplTest {
 
 		try {
 			checkContent(target.read(in));
+		} finally {
+			IOs.closeQuietly(in);
+		}
+
+	}
+
+	@Test
+	public void testRead_Stream_Empty() throws IOException {
+
+		URL url = getClass().getClassLoader().getResource(
+				"CsvReaderImplTest_Empty.csv");
+
+		InputStream in = url.openStream();
+
+		try {
+			assertEquals(0, target.read(in).size());
+		} finally {
+			IOs.closeQuietly(in);
+		}
+
+	}
+
+	@Test(expected = IOException.class)
+	public void testRead_Stream_Invalid() throws IOException {
+
+		URL url = getClass().getClassLoader().getResource(
+				"CsvReaderImplTest_Invalid.csv");
+
+		InputStream in = url.openStream();
+
+		try {
+			target.read(in);
 		} finally {
 			IOs.closeQuietly(in);
 		}

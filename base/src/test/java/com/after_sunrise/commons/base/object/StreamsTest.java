@@ -3,11 +3,15 @@ package com.after_sunrise.commons.base.object;
 import static com.after_sunrise.commons.base.object.Streams.getBytes;
 import static com.after_sunrise.commons.base.object.Streams.openBufferedStream;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -59,6 +63,32 @@ public class StreamsTest {
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
+
+	}
+
+	@Test
+	public void testwrapUncloseable_InputStream() throws IOException {
+
+		InputStream underlying = mock(InputStream.class);
+
+		in = Streams.wrapUncloseable(underlying);
+
+		in.close();
+
+		verify(underlying, never()).close();
+
+	}
+
+	@Test
+	public void testwrapUncloseable_OutputStream() throws IOException {
+
+		OutputStream underlying = mock(OutputStream.class);
+
+		OutputStream out = Streams.wrapUncloseable(underlying);
+
+		out.close();
+
+		verify(underlying, never()).close();
 
 	}
 

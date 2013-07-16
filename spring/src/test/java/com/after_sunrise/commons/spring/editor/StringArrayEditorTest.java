@@ -33,9 +33,20 @@ public class StringArrayEditorTest {
 	}
 
 	@Test
-	public void testSetAsText_Blank() {
+	public void testSetAsText_Empty() {
 
 		target.setAsText("");
+
+		String[] arr = (String[]) target.getValue();
+
+		assertEquals(0, arr.length);
+
+	}
+
+	@Test
+	public void testSetAsText_Null() {
+
+		target.setAsText(null);
 
 		String[] arr = (String[]) target.getValue();
 

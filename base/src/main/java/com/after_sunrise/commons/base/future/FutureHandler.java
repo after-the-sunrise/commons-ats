@@ -27,6 +27,8 @@ public class FutureHandler<K, V> implements Runnable {
 
 	private final Map<K, Throwable> fail = new IdentityHashMap<K, Throwable>();
 
+	private final Map<K, Future<V>> cancel = new IdentityHashMap<K, Future<V>>();
+
 	private final Map<K, Future<V>> values;
 
 	private final FutureCallback<K, V> callback;
@@ -103,7 +105,7 @@ public class FutureHandler<K, V> implements Runnable {
 
 			} catch (InterruptedException e) {
 
-				cancelled = true;
+				cancel();
 
 				break;
 
@@ -135,6 +137,8 @@ public class FutureHandler<K, V> implements Runnable {
 
 			Entry<K, Future<V>> entry = itr.next();
 
+			cancel.put(entry.getKey(), entry.getValue());
+
 			callback.onCancel(entry.getKey());
 
 			itr.remove();
@@ -157,6 +161,10 @@ public class FutureHandler<K, V> implements Runnable {
 
 	public Map<K, Throwable> getFail() {
 		return Collections.unmodifiableMap(fail);
+	}
+
+	public Map<K, Future<V>> getCancel() {
+		return Collections.unmodifiableMap(cancel);
 	}
 
 }

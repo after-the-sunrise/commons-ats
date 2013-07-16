@@ -33,10 +33,6 @@ public class CsvReaderImpl implements CsvReader {
 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 
-	private static final String UNKNOWN_COLUMN = "__UNKNOWN-";
-
-	private String unknownPrefix = UNKNOWN_COLUMN;
-
 	private Charset charset = CHARSET;
 
 	private char separator = DEFAULT_SEPARATOR;
@@ -48,10 +44,6 @@ public class CsvReaderImpl implements CsvReader {
 	private int skip = DEFAULT_SKIP_LINES;
 
 	private boolean strict = DEFAULT_STRICT_QUOTES;
-
-	public void setUnknownPrefix(String unknownPrefix) {
-		this.unknownPrefix = checkNotNull(unknownPrefix);
-	}
 
 	public void setCharset(Charset charset) {
 		this.charset = checkNotNull(charset);
@@ -234,17 +226,7 @@ public class CsvReaderImpl implements CsvReader {
 			}
 
 			for (int i = 0; i < values.length; i++) {
-
-				String header;
-
-				if (headers.length > i) {
-					header = headers[i];
-				} else {
-					header = unknownPrefix + (i + 1);
-				}
-
-				line.put(header, values[i]);
-
+				line.put(headers[i], values[i]);
 			}
 
 			handler.handle(line);

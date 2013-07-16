@@ -1,6 +1,7 @@
 package com.after_sunrise.commons.base.object;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -15,6 +16,8 @@ import java.lang.reflect.Modifier;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.after_sunrise.commons.base.bean.Reference;
 
 /**
  * @author takanori.takase
@@ -50,6 +53,24 @@ public class ReferencesTest {
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
+
+	}
+
+	@Test
+	public void testReference() {
+
+		Reference<?> ref = References.reference(referent);
+
+		assertSame(referent, ref.get());
+
+	}
+
+	@Test
+	public void testReferenceCache() {
+
+		assertNotNull(References.referenceCache());
+
+		assertNotNull(References.referenceCache(100));
 
 	}
 

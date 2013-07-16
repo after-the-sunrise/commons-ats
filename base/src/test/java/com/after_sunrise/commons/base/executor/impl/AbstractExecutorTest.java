@@ -5,11 +5,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.lang.Thread.State;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +58,13 @@ public class AbstractExecutorTest {
 	@Test(timeout = 5000L)
 	public void testUncaughtException() throws Exception {
 
+		UncaughtExceptionHandler h = mock(UncaughtExceptionHandler.class);
+
 		target.setDaemon(false);
 
 		target.setNamePrefix(null);
+
+		target.setUncaughtExceptionHandler(h);
 
 		Runnable runnable = mock(Runnable.class);
 
@@ -76,6 +83,8 @@ public class AbstractExecutorTest {
 		t.join();
 
 		verify(runnable).run();
+
+		verify(h).uncaughtException(eq(t), any(RuntimeException.class));
 
 	}
 

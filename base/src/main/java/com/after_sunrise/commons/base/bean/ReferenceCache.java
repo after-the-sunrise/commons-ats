@@ -42,7 +42,7 @@ public class ReferenceCache<K, V> {
 
 			Object[] keys = cache.keySet().toArray();
 
-			int idx = (int) System.currentTimeMillis() % keys.length;
+			int idx = (int) (System.currentTimeMillis() % keys.length);
 
 			cache.remove(keys[idx]);
 

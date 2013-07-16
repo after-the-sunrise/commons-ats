@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.beust.jcommander.ParameterException;
+
 /**
  * @author takanori.takase
  */
@@ -23,6 +25,11 @@ public class DateConverterTest {
 		target = new DateConverter();
 	}
 
+	@Test(expected = ParameterException.class)
+	public void testValidate_Exception() throws Exception {
+		target.validate(null, "foo");
+	}
+
 	private void check(DateFormat df, Map<String, String> map) throws Exception {
 
 		for (Entry<String, String> entry : map.entrySet()) {
@@ -32,6 +39,8 @@ public class DateConverterTest {
 			String val = entry.getValue();
 
 			String msg = String.format("Input[%s] Expect[%s]", key, val);
+
+			target.validate(null, val);
 
 			assertEquals(msg, df.parse(key), target.convert(val));
 

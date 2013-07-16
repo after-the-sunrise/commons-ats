@@ -64,6 +64,11 @@ public class TimeRangeEditorTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetAsText_InvalidTime() {
+		target.setAsText("12:34:56:789");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetAsText_PartialTime() {
 		target.setAsText("-12:34:56:789");
 	}
 

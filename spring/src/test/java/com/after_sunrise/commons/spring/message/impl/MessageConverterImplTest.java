@@ -39,6 +39,11 @@ public class MessageConverterImplTest {
 	}
 
 	@Test
+	public void testConstructor() {
+		target = new MessageConverterImpl();
+	}
+
+	@Test
 	public void testConvert() {
 
 		String key = "foo.bar.test";
@@ -58,6 +63,8 @@ public class MessageConverterImplTest {
 		testConvert();
 
 		assertNull(target.convert(null, (Object[]) null));
+
+		assertNull(target.convert("", (Object[]) null));
 
 	}
 
@@ -80,6 +87,10 @@ public class MessageConverterImplTest {
 		testConvert();
 
 		target.setKeyPrefix(null);
+
+		assertEquals("hoge", target.convert("foo.bar.test", (Object[]) null));
+
+		target.setKeyPrefix("");
 
 		assertEquals("hoge", target.convert("foo.bar.test", (Object[]) null));
 

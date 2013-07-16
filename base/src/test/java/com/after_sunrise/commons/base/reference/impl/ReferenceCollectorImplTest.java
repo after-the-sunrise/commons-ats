@@ -31,6 +31,7 @@ public class ReferenceCollectorImplTest {
 		Reference<?> soft = target.collectSoft(new Object(), r1);
 		Reference<?> weak = target.collectWeak(new Object(), r2);
 		Reference<?> phantom = target.collectPhantom(new Object(), r3);
+		Reference<?> nullable = target.collectPhantom(new Object(), null);
 
 		soft.enqueue();
 		target.run();
@@ -38,6 +39,7 @@ public class ReferenceCollectorImplTest {
 
 		weak.enqueue();
 		phantom.enqueue();
+		nullable.enqueue();
 		target.run();
 		verify(r2).run();
 		verify(r3).run();

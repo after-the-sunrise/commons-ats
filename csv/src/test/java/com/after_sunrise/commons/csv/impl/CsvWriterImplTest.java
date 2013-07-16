@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,19 +86,21 @@ public class CsvWriterImplTest {
 		values.add(Arrays.asList("r3c1"));
 		values.add(null);
 		values.add(Arrays.asList("r5c1", "r5c2"));
+		values.add(Arrays.<String> asList());
 
 		target.write((File) null, headers, values);
 
 		String result = new String(out.toByteArray(), UTF_8);
 
 		String[] arr = result.split("\\r?\\n");
-		assertEquals(6, arr.length);
+		assertEquals(7, arr.length);
 		assertEquals("'col1','col2'", arr[0]);
 		assertEquals("'r1c1','r1c2'", arr[1]);
 		assertEquals("'r2c1','r2c2','r2c3'", arr[2]);
 		assertEquals("'r3c1',", arr[3]);
 		assertEquals(",", arr[4]);
 		assertEquals("'r5c1','r5c2'", arr[5]);
+		assertEquals(",", arr[6]);
 
 	}
 
@@ -128,6 +131,7 @@ public class CsvWriterImplTest {
 		Map<String, String> map5 = new HashMap<String, String>();
 		map5.put("col1", "r5c1");
 		map5.put("col2", "r5c2");
+		Map<String, String> map6 = Collections.emptyMap();
 
 		List<Map<String, String>> values = new ArrayList<Map<String, String>>();
 		values.add(map1);
@@ -135,19 +139,21 @@ public class CsvWriterImplTest {
 		values.add(map3);
 		values.add(map4);
 		values.add(map5);
+		values.add(map6);
 
 		target.writeMap((File) null, headers, values);
 
 		String result = new String(out.toByteArray(), UTF_8);
 
 		String[] arr = result.split("\n");
-		assertEquals(6, arr.length);
+		assertEquals(7, arr.length);
 		assertEquals("'col1','col2'", arr[0]);
 		assertEquals("'r1c1','r1c2'", arr[1]);
 		assertEquals("'r2c1','r2c2'", arr[2]);
 		assertEquals("'r3c1',", arr[3]);
 		assertEquals(",", arr[4]);
 		assertEquals("'r5c1','r5c2'", arr[5]);
+		assertEquals(",", arr[6]);
 
 	}
 
@@ -174,6 +180,7 @@ public class CsvWriterImplTest {
 		Map<String, String> map5 = new HashMap<String, String>();
 		map5.put("col1", "r5c1");
 		map5.put("col2", "r5c2");
+		Map<String, String> map6 = Collections.emptyMap();
 
 		List<Map<String, String>> values = new ArrayList<Map<String, String>>();
 		values.add(map1);
@@ -181,19 +188,21 @@ public class CsvWriterImplTest {
 		values.add(map3);
 		values.add(map4);
 		values.add(map5);
+		values.add(map6);
 
 		target.writeMap((File) null, values);
 
 		String result = new String(out.toByteArray(), UTF_8);
 
 		String[] arr = result.split("\n");
-		assertEquals(6, arr.length);
+		assertEquals(7, arr.length);
 		assertEquals("'col1','col2','col3'", arr[0]);
 		assertEquals("'r1c1','r1c2',", arr[1]);
 		assertEquals("'r2c1','r2c2','r2c3'", arr[2]);
 		assertEquals("'r3c1',,", arr[3]);
 		assertEquals(",,", arr[4]);
 		assertEquals("'r5c1','r5c2',", arr[5]);
+		assertEquals(",,", arr[6]);
 
 	}
 }

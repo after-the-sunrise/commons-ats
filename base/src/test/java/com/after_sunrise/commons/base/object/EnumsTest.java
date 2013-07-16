@@ -97,6 +97,8 @@ public class EnumsTest {
 
 		assertNull(Enums.find(RoundingMode.class, "foo"));
 
+		assertNull(Enums.find(RoundingMode.class, ""));
+
 		assertNull(Enums.find(RoundingMode.class, (String) null));
 
 		assertNull(Enums.find((Class<RoundingMode>) null, "foo"));

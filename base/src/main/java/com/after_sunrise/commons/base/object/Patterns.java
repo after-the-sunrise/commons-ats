@@ -1,6 +1,6 @@
 package com.after_sunrise.commons.base.object;
 
-import static com.after_sunrise.commons.base.object.References.referecenCache;
+import static com.after_sunrise.commons.base.object.References.referenceCache;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -19,7 +19,7 @@ public final class Patterns {
 
 	private static final int MAX = 100;
 
-	private static final ReferenceCache<String, Pattern> CACHE = referecenCache(MAX);
+	private static final ReferenceCache<String, Pattern> CACHE = referenceCache(MAX);
 
 	public static Pattern compile(String pattern) {
 

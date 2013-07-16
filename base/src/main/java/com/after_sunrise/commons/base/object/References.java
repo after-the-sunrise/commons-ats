@@ -17,15 +17,15 @@ public final class References {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
 	}
 
-	public static <T> Reference<T> refecence(T value) {
+	public static <T> Reference<T> reference(T value) {
 		return new Reference<T>(value);
 	}
 
-	public static <K, V> ReferenceCache<K, V> referecenCache() {
+	public static <K, V> ReferenceCache<K, V> referenceCache() {
 		return new ReferenceCache<K, V>();
 	}
 
-	public static <K, V> ReferenceCache<K, V> referecenCache(int capacity) {
+	public static <K, V> ReferenceCache<K, V> referenceCache(int capacity) {
 		return new ReferenceCache<K, V>(capacity);
 	}
 

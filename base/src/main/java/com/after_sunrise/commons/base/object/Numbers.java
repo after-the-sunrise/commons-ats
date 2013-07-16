@@ -1,6 +1,6 @@
 package com.after_sunrise.commons.base.object;
 
-import static com.after_sunrise.commons.base.object.References.referecenCache;
+import static com.after_sunrise.commons.base.object.References.referenceCache;
 import static java.math.BigDecimal.ONE;
 import static java.math.RoundingMode.DOWN;
 
@@ -20,11 +20,11 @@ public final class Numbers {
 
 	private static final int MAX = 1000;
 
-	private static final ReferenceCache<String, Long> CACHE_LONG = referecenCache(MAX);
+	private static final ReferenceCache<String, Long> CACHE_LONG = referenceCache(MAX);
 
-	private static final ReferenceCache<String, Double> CACHE_DOUBLE = referecenCache(MAX);
+	private static final ReferenceCache<String, Double> CACHE_DOUBLE = referenceCache(MAX);
 
-	private static final ReferenceCache<String, BigDecimal> CACHE_DECIMAL = referecenCache(MAX);
+	private static final ReferenceCache<String, BigDecimal> CACHE_DECIMAL = referenceCache(MAX);
 
 	public static Long convertLong(String value) {
 		return convertLong(value, null);
