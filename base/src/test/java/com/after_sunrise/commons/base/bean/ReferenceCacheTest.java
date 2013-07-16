@@ -38,6 +38,8 @@ public class ReferenceCacheTest {
 
 		assertEquals(val, cached.get());
 
+		assertNull(target.get(null));
+
 	}
 
 	@Test(expected = IllegalArgumentException.class)

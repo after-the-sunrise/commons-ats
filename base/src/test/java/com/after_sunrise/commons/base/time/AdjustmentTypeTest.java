@@ -4,6 +4,8 @@ import static com.after_sunrise.commons.base.time.AdjustmentType.FOLLOWING;
 import static com.after_sunrise.commons.base.time.AdjustmentType.MODIFIED_FOLLOWING;
 import static com.after_sunrise.commons.base.time.AdjustmentType.MODIFIED_PRECEDING;
 import static com.after_sunrise.commons.base.time.AdjustmentType.PRECEDING;
+import static com.after_sunrise.commons.base.time.DayType.SATURDAY;
+import static com.after_sunrise.commons.base.time.DayType.SUNDAY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -77,12 +79,12 @@ public class AdjustmentTypeTest {
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend
-		List<DayType> weekends = Arrays.asList(DayType.SUNDAY, null);
+		List<DayType> weekends = Arrays.asList(SATURDAY, SUNDAY, null);
 		next = FOLLOWING.getNext(timestamp, tz, weekends, null);
 		assertEquals("2012-04-30 12:34:56.789", df.format(new Date(next)));
 
 		// Holiday
-		List<Long> holidays = Arrays.asList(next, null);
+		List<Long> holidays = Arrays.asList(next, next, null);
 		next = FOLLOWING.getNext(timestamp, tz, weekends, holidays);
 		assertEquals("2012-05-01 12:34:56.789", df.format(new Date(next)));
 
@@ -119,7 +121,7 @@ public class AdjustmentTypeTest {
 		assertEquals("2012-04-01 12:34:56.789", df.format(new Date(next)));
 
 		// Holiday
-		List<Long> holidays = Arrays.asList(next, null);
+		List<Long> holidays = Arrays.asList(next, next, null);
 		next = PRECEDING.getNext(timestamp, tz, weekends, holidays);
 		assertEquals("2012-03-31 12:34:56.789", df.format(new Date(next)));
 
@@ -151,14 +153,14 @@ public class AdjustmentTypeTest {
 		assertEquals("2012-04-29 12:34:56.789", df.format(new Date(next)));
 
 		// Weekend
-		List<DayType> weekends = Arrays.asList(DayType.SUNDAY, null);
+		List<DayType> weekends = Arrays.asList(SATURDAY, SUNDAY, null);
 		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, weekends, null);
 		assertEquals("2012-04-30 12:34:56.789", df.format(new Date(next)));
 
 		// Holiday
-		List<Long> holidays = Arrays.asList(next, null);
+		List<Long> holidays = Arrays.asList(next, next, null);
 		next = MODIFIED_FOLLOWING.getNext(timestamp, tz, weekends, holidays);
-		assertEquals("2012-04-28 12:34:56.789", df.format(new Date(next)));
+		assertEquals("2012-04-27 12:34:56.789", df.format(new Date(next)));
 
 	}
 
@@ -193,7 +195,7 @@ public class AdjustmentTypeTest {
 		assertEquals("2012-04-01 12:34:56.789", df.format(new Date(next)));
 
 		// Holiday
-		List<Long> holidays = Arrays.asList(next, null);
+		List<Long> holidays = Arrays.asList(next, next, null);
 		next = MODIFIED_PRECEDING.getNext(timestamp, tz, weekends, holidays);
 		assertEquals("2012-04-03 12:34:56.789", df.format(new Date(next)));
 

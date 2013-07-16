@@ -56,6 +56,7 @@ public class FutureHandlerTest {
 		values.put("f1", future1);
 		values.put("f2", future2);
 		values.put("f3", future3);
+		values.put("f4", null);
 
 		callback = mock(FutureCallback.class);
 
@@ -83,13 +84,13 @@ public class FutureHandlerTest {
 
 		InOrder inOrder = Mockito.inOrder(callback);
 		inOrder.verify(callback).onStart();
-		inOrder.verify(callback, times(3)).onSuccess(anyString(),
+		inOrder.verify(callback, times(4)).onSuccess(anyString(),
 				any(BigDecimal.class));
 		inOrder.verify(callback).onProgress(anyInt(), anyInt());
 		inOrder.verify(callback).onEnd();
 		inOrder.verifyNoMoreInteractions();
 
-		assertEquals(3, target.getDone().size());
+		assertEquals(4, target.getDone().size());
 		assertEquals(0, target.getFail().size());
 		assertEquals(0, target.getCancel().size());
 
@@ -121,15 +122,16 @@ public class FutureHandlerTest {
 
 		InOrder inOrder = Mockito.inOrder(callback);
 		inOrder.verify(callback).onStart();
+		inOrder.verify(callback).onSuccess("f4", null);
 		inOrder.verify(callback).onSuccess("f1", BigDecimal.ONE);
-		inOrder.verify(callback).onProgress(3, 1);
+		inOrder.verify(callback).onProgress(4, 2);
 		inOrder.verify(callback).onFailure("f3", e3);
-		inOrder.verify(callback).onProgress(3, 2);
+		inOrder.verify(callback).onProgress(4, 3);
 		inOrder.verify(callback).onCancel("f2");
 		inOrder.verify(callback).onEnd();
 		inOrder.verifyNoMoreInteractions();
 
-		assertEquals(1, target.getDone().size());
+		assertEquals(2, target.getDone().size());
 		assertEquals(1, target.getFail().size());
 		assertEquals(1, target.getCancel().size());
 
@@ -148,13 +150,41 @@ public class FutureHandlerTest {
 
 		InOrder inOrder = Mockito.inOrder(callback);
 		inOrder.verify(callback).onStart();
-		inOrder.verify(callback, times(3)).onCancel(anyString());
+		inOrder.verify(callback, times(4)).onCancel(anyString());
 		inOrder.verify(callback).onEnd();
 		inOrder.verifyNoMoreInteractions();
 
 		assertEquals(0, target.getDone().size());
 		assertEquals(0, target.getFail().size());
-		assertEquals(3, target.getCancel().size());
+		assertEquals(4, target.getCancel().size());
+
+	}
+
+	@Test(timeout = 5000L)
+	public void testCancel_MultipleRun() {
+
+		target.cancel();
+
+		target.run();
+		target.run();
+		target.run();
+
+		InOrder inOrder = Mockito.inOrder(callback);
+		inOrder.verify(callback).onStart();
+		inOrder.verify(callback, times(4)).onCancel(anyString());
+		inOrder.verify(callback).onEnd();
+
+		inOrder.verify(callback).onStart();
+		inOrder.verify(callback).onEnd();
+
+		inOrder.verify(callback).onStart();
+		inOrder.verify(callback).onEnd();
+
+		inOrder.verifyNoMoreInteractions();
+
+		assertEquals(0, target.getDone().size());
+		assertEquals(0, target.getFail().size());
+		assertEquals(4, target.getCancel().size());
 
 	}
 
