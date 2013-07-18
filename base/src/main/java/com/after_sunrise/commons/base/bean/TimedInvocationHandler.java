@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -23,17 +25,21 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 
 	private static final long TIMEOUT = MILLISECONDS.convert(60, MINUTES);
 
-	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private final ReentrantReadWriteLock closeLock = new ReentrantReadWriteLock();
 
 	private final ReentrantLock initLock = new ReentrantLock();
 
-	private long timeoutInMillis = TIMEOUT;
+	private final AtomicReference<T> reference = new AtomicReference<T>();
 
-	private volatile long lastAccess;
+	private final AtomicLong lastAccess = new AtomicLong();
 
-	private volatile T target;
+	private final long timeoutInMillis;
 
-	public void setTimeoutInMillis(long timeoutInMillis) {
+	public TimedInvocationHandler() {
+		this(TIMEOUT);
+	}
+
+	public TimedInvocationHandler(long timeoutInMillis) {
 		this.timeoutInMillis = timeoutInMillis;
 	}
 
@@ -68,74 +74,83 @@ public abstract class TimedInvocationHandler<T extends Closeable> implements
 	public void close() throws IOException {
 		try {
 
-			lock.writeLock().lock();
+			closeLock.writeLock().lock();
 
-			if (target == null) {
-				return;
+			T target = reference.get();
+
+			if (target != null) {
+
+				target.close();
+
+				reference.set(null);
+
 			}
 
-			target.close();
-
-			target = null;
-
 		} finally {
-			lock.writeLock().unlock();
+			closeLock.writeLock().unlock();
 		}
 	}
 
-	protected boolean closeIfStale() throws IOException {
+	protected void closeIfStale() throws IOException {
 		try {
 
-			lock.writeLock().lock();
+			closeLock.writeLock().lock();
 
-			if (target == null) {
-				return false;
+			long timeLimit = getLastAccess() + timeoutInMillis;
+
+			if (timeLimit < getTime()) {
+
+				close();
+
 			}
-
-			long limit = lastAccess + timeoutInMillis;
-
-			if (limit >= System.currentTimeMillis()) {
-				return false;
-			}
-
-			target.close();
-
-			target = null;
-
-			return true;
 
 		} finally {
-			lock.writeLock().unlock();
+			closeLock.writeLock().unlock();
 		}
+	}
+
+	protected long getTime() {
+		return System.currentTimeMillis();
+	}
+
+	protected long getLastAccess() {
+		return lastAccess.get();
 	}
 
 	@Override
 	public Object invoke(Object p, Method m, Object[] v) throws Throwable {
 		try {
 
-			lock.readLock().lock();
+			closeLock.readLock().lock();
+
+			T target;
 
 			try {
+
 				initLock.lock();
 
+				target = reference.get();
+
 				if (target == null) {
+
 					target = generateTarget();
+
+					reference.set(target);
+
 				}
 
 			} finally {
 				initLock.unlock();
 			}
 
-			lastAccess = System.currentTimeMillis();
+			lastAccess.set(getTime());
 
 			return m.invoke(target, v);
 
 		} catch (InvocationTargetException e) {
-
 			throw e.getCause();
-
 		} finally {
-			lock.readLock().unlock();
+			closeLock.readLock().unlock();
 		}
 	}
 

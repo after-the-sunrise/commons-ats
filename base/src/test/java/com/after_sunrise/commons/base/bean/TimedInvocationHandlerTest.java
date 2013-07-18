@@ -1,20 +1,24 @@
 package com.after_sunrise.commons.base.bean;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,184 +31,198 @@ public class TimedInvocationHandlerTest {
 
 	private TimedInvocationHandler<Closeable> target;
 
-	private int concurrency;
-
-	private ExecutorService executorService;
-
-	private AtomicLong invocationCount;
-
-	private AtomicLong closeCount;
-
-	private AtomicLong errorCount;
+	private List<Closeable> generated;
 
 	@Before
 	public void setUp() throws Exception {
 
-		concurrency = 8;
+		generated = new ArrayList<Closeable>();
 
-		executorService = Executors.newFixedThreadPool(concurrency);
-
-		// Accumulated "toString()" invocation count.
-		invocationCount = new AtomicLong();
-
-		// Accumulated "close()" invocation count.
-		closeCount = new AtomicLong();
-
-		// Accumulated error count. Should be zero.
-		errorCount = new AtomicLong();
-
-		target = new TimedInvocationHandler<Closeable>() {
+		target = spy(new TimedInvocationHandler<Closeable>() {
 			@Override
 			protected Closeable generateTarget() {
 
-				return new Closeable() {
+				Closeable mock = mock(Closeable.class);
 
-					private final AtomicBoolean closed = new AtomicBoolean();
+				generated.add(mock);
 
-					@Override
-					public void close() throws IOException {
+				return mock;
 
-						closeCount.incrementAndGet();
-
-						if (closed.getAndSet(true)) {
-
-							errorCount.incrementAndGet();
-
-							throw new IOException("Closed multiple times.");
-
-						}
-
-					}
-
-					@Override
-					public String toString() {
-
-						invocationCount.incrementAndGet();
-
-						if (closed.get()) {
-
-							errorCount.incrementAndGet();
-
-							throw new RuntimeException("Already closed.");
-
-						}
-
-						return super.toString();
-
-					}
-				};
 			}
-		};
+		});
 
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@Test
+	public void testLoad() throws Throwable {
 
-		executorService.shutdown();
+		doReturn(null).when(target).invoke(any(), any(Method.class),
+				any(Object[].class));
 
-		executorService.awaitTermination(1, TimeUnit.MINUTES);
+		target.load();
 
-	}
-
-	@Test(timeout = 10000L)
-	public void testConcurrency() throws Exception {
-
-		final Method m = Object.class.getMethod("toString");
-
-		final Object[] v = new Object[0];
-
-		final AtomicInteger actionCount = new AtomicInteger();
-
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				while (!executorService.isShutdown()) {
-					try {
-
-						int i = actionCount.incrementAndGet();
-
-						target.setTimeoutInMillis(i);
-
-						switch (i % 8) {
-						case 0:
-							target.load();
-							break;
-						case 1:
-							target.clear();
-							break;
-						case 2:
-							target.refresh();
-							break;
-						case 3:
-							target.close();
-							break;
-						case 4:
-							target.closeIfStale();
-							break;
-						default:
-							target.invoke(null, m, v);
-							break;
-						}
-
-						Thread.sleep(1L);
-
-					} catch (Throwable e) {
-						errorCount.incrementAndGet();
-					}
-				}
-			}
-		};
-
-		for (int i = 0; i < concurrency; i++) {
-			executorService.execute(runnable);
-		}
-
-		Thread.sleep(1000L);
-
-		// System.out.println("Invoke : " + invocationCount.get());
-		// System.out.println("Closed : " + closeCount.get());
-		// System.out.println("Error  : " + errorCount.get());
-		// System.out.println("Action : " + actionCount.get());
-
-		assertTrue(concurrency * 8 <= invocationCount.get());
-		assertTrue(concurrency * 8 <= closeCount.get());
-		assertTrue(concurrency * 0 == errorCount.get());
-		assertTrue(concurrency * 8 <= actionCount.get());
+		verify(target).invoke(any(), any(Method.class), any(Object[].class));
 
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testLoad_Exception() throws Exception {
+	public void testLoad_Exception() throws Throwable {
 
-		target = new TimedInvocationHandler<Closeable>() {
-			@Override
-			protected Closeable generateTarget() {
-				return null;
-			}
-		};
+		doThrow(new IllegalArgumentException("test")).when(target).invoke(
+				any(), any(Method.class), any(Object[].class));
 
 		target.load();
 
+		verify(target).invoke(any(), any(Method.class), any(Object[].class));
+
 	}
 
-	@Test(expected = IOException.class)
-	public void testInvoke_Exception() throws Exception {
+	@Test
+	public void testClear() throws Exception {
 
-		final Closeable delegate = mock(Closeable.class);
+		doNothing().when(target).close();
 
-		doThrow(new IOException("test")).when(delegate).close();
+		target.clear();
 
-		target = new TimedInvocationHandler<Closeable>() {
-			@Override
-			protected Closeable generateTarget() {
-				return delegate;
-			}
-		};
+		verify(target).close();
+
+	}
+
+	@Test
+	public void testClear_Exception() throws Exception {
+
+		doThrow(new IOException("test")).when(target).close();
+
+		target.clear();
+
+		verify(target).close();
+
+	}
+
+	@Test
+	public void testRefresh() throws Exception {
+
+		doNothing().when(target).load();
+
+		doNothing().when(target).clear();
+
+		target.refresh();
+
+		verify(target).load();
+
+		verify(target).clear();
+
+	}
+
+	@Test
+	public void testClose() throws Exception {
+		target.close();
+	}
+
+	@Test
+	public void testCloseIfStale() throws Exception {
+
+		doReturn(System.currentTimeMillis()).when(target).getLastAccess();
+
+		target.closeIfStale();
+
+		verify(target, never()).close();
+
+	}
+
+	@Test
+	public void testCloseIfStale_Stale() throws Exception {
+
+		doReturn(0L).when(target).getLastAccess();
+
+		target.closeIfStale();
+
+		verify(target).close();
+
+	}
+
+	@Test
+	public void testGetTime() {
+
+		long time = System.currentTimeMillis();
+
+		assertTrue(time <= target.getTime());
+
+	}
+
+	@Test
+	public void testLastAccess() {
+		assertEquals(0L, target.getLastAccess());
+	}
+
+	@Test
+	public void testInvoke() throws Throwable {
 
 		Closeable proxy = Proxies.delegate(Closeable.class, target);
 
+		assertEquals(0, generated.size());
+
+		// Generate first
 		proxy.close();
+
+		assertEquals(1, generated.size());
+		verify(generated.get(0), times(1)).close();
+
+		// Invoke on first
+		proxy.close();
+		proxy.close();
+		proxy.close();
+
+		assertEquals(1, generated.size());
+		verify(generated.get(0), times(4)).close();
+
+		// Terminate first
+		target.close();
+
+		// Generate second
+		proxy.close();
+
+		assertEquals(2, generated.size());
+		verify(generated.get(1), times(1)).close();
+
+		// Not stale yet
+		target.closeIfStale();
+
+		// Invoke on second
+		proxy.close();
+		proxy.close();
+
+		assertEquals(2, generated.size());
+		verify(generated.get(1), times(3)).close();
+
+	}
+
+	@Test
+	public void testInvoke_Exception() throws Throwable {
+
+		Closeable proxy = Proxies.delegate(Closeable.class, target);
+
+		assertEquals(0, generated.size());
+
+		// Generate first
+		proxy.close();
+
+		assertEquals(1, generated.size());
+		verify(generated.get(0), times(1)).close();
+
+		// Simulate invocation failure
+		IOException exp = new IOException("test");
+		doThrow(exp).when(generated.get(0)).close();
+
+		try {
+
+			proxy.close();
+
+		} catch (IOException e) {
+
+			assertSame(exp, e);
+
+		}
 
 	}
 
