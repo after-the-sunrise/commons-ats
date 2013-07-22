@@ -28,6 +28,15 @@ public class FailureFutureTest {
 
 	}
 
+	@Test(timeout = 1000L)
+	public void testCreate() throws Exception {
+		try {
+			FailureFuture.create(throwable).get();
+		} catch (ExecutionException e) {
+			assertSame(throwable, e.getCause());
+		}
+	}
+
 	@Test
 	public void testCancel() {
 		assertFalse(target.cancel(true));

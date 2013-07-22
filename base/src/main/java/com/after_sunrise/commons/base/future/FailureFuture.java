@@ -10,6 +10,10 @@ import java.util.concurrent.TimeoutException;
  */
 public class FailureFuture<V> implements Future<V> {
 
+	public static <V> Future<V> create(Throwable throwable) {
+		return new FailureFuture<V>(throwable);
+	}
+
 	private final Throwable throwable;
 
 	public FailureFuture(Throwable throwable) {

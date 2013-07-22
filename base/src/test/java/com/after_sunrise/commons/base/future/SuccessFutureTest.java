@@ -2,6 +2,7 @@ package com.after_sunrise.commons.base.future;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -25,6 +26,16 @@ public class SuccessFutureTest {
 
 		target = new SuccessFuture<String>(value);
 
+	}
+
+	@Test(timeout = 1000L)
+	public void testCreate() throws Exception {
+		assertEquals(value, SuccessFuture.create(value).get());
+	}
+
+	@Test(timeout = 1000L)
+	public void testEmpty() throws Exception {
+		assertNull(SuccessFuture.empty().get());
 	}
 
 	@Test

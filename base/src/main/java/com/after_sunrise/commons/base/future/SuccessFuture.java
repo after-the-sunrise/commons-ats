@@ -10,6 +10,18 @@ import java.util.concurrent.TimeoutException;
  */
 public class SuccessFuture<V> implements Future<V> {
 
+	@SuppressWarnings("rawtypes")
+	private static final Future EMPTY = create(null);
+
+	@SuppressWarnings("unchecked")
+	public static <V> Future<V> empty() {
+		return EMPTY;
+	}
+
+	public static <V> Future<V> create(V value) {
+		return new SuccessFuture<V>(value);
+	}
+
 	private final V value;
 
 	public SuccessFuture(V value) {
