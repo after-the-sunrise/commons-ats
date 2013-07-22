@@ -1,13 +1,12 @@
 package com.after_sunrise.commons.base.future;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.after_sunrise.commons.base.object.Selections;
@@ -21,7 +20,7 @@ public class FutureHandler<K, V> implements Runnable {
 	@SuppressWarnings("rawtypes")
 	private static final FutureCallback NULL = new FutureCallbackAdapter();
 
-	private static final long INTERVAL = 100L;
+	private static final long TIMEOUT = 1000L;
 
 	private final Map<K, V> done = new IdentityHashMap<K, V>();
 
@@ -33,7 +32,7 @@ public class FutureHandler<K, V> implements Runnable {
 
 	private final FutureCallback<K, V> callback;
 
-	private final long interval;
+	private final long timeout;
 
 	private volatile boolean cancelled = false;
 
@@ -43,15 +42,15 @@ public class FutureHandler<K, V> implements Runnable {
 
 	public FutureHandler(Map<K, ? extends Future<V>> values,
 			FutureCallback<K, V> callback) {
-		this(values, callback, INTERVAL);
+		this(values, callback, TIMEOUT);
 	}
 
 	@SuppressWarnings("unchecked")
 	public FutureHandler(Map<K, ? extends Future<V>> values,
-			FutureCallback<K, V> callback, long interval) {
+			FutureCallback<K, V> callback, long timeout) {
 		this.values = new IdentityHashMap<K, Future<V>>(values);
 		this.callback = Selections.selectNotNull(callback, NULL);
-		this.interval = Validations.checkNotNegative(interval);
+		this.timeout = Validations.checkNotNegative(timeout);
 	}
 
 	@Override
@@ -75,6 +74,8 @@ public class FutureHandler<K, V> implements Runnable {
 
 		Iterator<Entry<K, Future<V>>> itr = map.entrySet().iterator();
 
+		long timeLimit = System.currentTimeMillis() + timeout;
+
 		while (itr.hasNext() && !cancelled) {
 
 			Entry<K, Future<V>> entry = itr.next();
@@ -88,9 +89,15 @@ public class FutureHandler<K, V> implements Runnable {
 				V value;
 
 				if (future != null) {
-					value = future.get(interval, MILLISECONDS);
+
+					long timeout = timeLimit - System.currentTimeMillis();
+
+					value = future.get(timeout, TimeUnit.MILLISECONDS);
+
 				} else {
+
 					value = null;
+
 				}
 
 				done.put(key, value);
@@ -99,8 +106,6 @@ public class FutureHandler<K, V> implements Runnable {
 
 			} catch (TimeoutException e) {
 
-				// Instead of checking Future#isDone(),
-				// let it timeout to trigger internal transformation.
 				continue;
 
 			} catch (InterruptedException e) {
