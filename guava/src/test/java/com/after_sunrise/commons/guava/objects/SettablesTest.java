@@ -2,6 +2,8 @@ package com.after_sunrise.commons.guava.objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.ref.PhantomReference;
@@ -15,6 +17,7 @@ import java.lang.reflect.Modifier;
 import org.junit.Test;
 
 import com.after_sunrise.commons.guava.object.Settables;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 /**
@@ -38,6 +41,19 @@ public class SettablesTest {
 		} catch (InvocationTargetException e) {
 			throw e.getCause();
 		}
+
+	}
+
+	@Test(timeout = 1000L)
+	public void testEmpty() throws Exception {
+
+		ListenableFuture<String> f = Settables.empty();
+
+		assertSame(Settables.empty(), f);
+		assertSame(Settables.empty(), f);
+		assertSame(Settables.empty(), f);
+
+		assertNull(f.get());
 
 	}
 

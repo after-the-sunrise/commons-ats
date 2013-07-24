@@ -2,6 +2,8 @@ package com.after_sunrise.commons.guava.object;
 
 import java.lang.ref.Reference;
 
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 
 /**
@@ -11,6 +13,14 @@ public final class Settables {
 
 	private Settables() {
 		throw new IllegalAccessError("Utility class shouldn't be instantiated.");
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static final ListenableFuture EMPTY = Futures.immediateFuture(null);
+
+	@SuppressWarnings("unchecked")
+	public static <V> ListenableFuture<V> empty() {
+		return EMPTY;
 	}
 
 	public static <V> boolean set(Reference<SettableFuture<V>> reference,
