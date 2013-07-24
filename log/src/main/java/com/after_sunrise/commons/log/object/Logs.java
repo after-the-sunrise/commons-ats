@@ -1,4 +1,4 @@
-package com.after_sunrise.commons.log.objects;
+package com.after_sunrise.commons.log.object;
 
 import org.apache.commons.logging.Log;
 

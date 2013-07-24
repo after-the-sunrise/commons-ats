@@ -12,8 +12,6 @@ import org.apache.commons.logging.Log;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.after_sunrise.commons.log.objects.Logs;
-
 /**
  * @author takanori.takase
  */
