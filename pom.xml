@@ -16,6 +16,7 @@
 		<module>log</module>
 		<module>spring</module>
 		<module>thrift</module>
+		<module>ui</module>
 	</modules>
 
 	<name>ATS Commons</name>
