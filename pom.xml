@@ -4,7 +4,7 @@
 
 	<groupId>com.after_sunrise.commons</groupId>
 	<artifactId>commons-ats</artifactId>
-	<version>0.2.5-SNAPSHOT</version>
+	<version>0.2.5</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -54,7 +54,7 @@
 		<url>https://github.com/after-the-sunrise/${project.artifactId}</url>
 		<connection>scm:git:git://github.com/after-the-sunrise/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:git@github.com:after-the-sunrise/${project.artifactId}.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>0.2.5</tag>
   </scm>
 
 	<issueManagement>
