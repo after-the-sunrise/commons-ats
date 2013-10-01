@@ -3,6 +3,7 @@ package com.after_sunrise.commons.base.object;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +30,7 @@ public class DateFormatsTest {
 	@Before
 	public void setUp() throws Exception {
 
-		pattern = "yyyy-MM-dd HH:mm:ss.SSS";
+		pattern = "yyyy-MM-dd HH:mm:ss.SSS z";
 
 		timeZone = TimeZone.getTimeZone("America/Los_Angeles");
 
@@ -90,7 +91,7 @@ public class DateFormatsTest {
 
 		String value = dateFormat.format(date);
 
-		assertNull(DateFormats.parse(value));
+		assertEquals(date, DateFormats.parse(value));
 
 		assertNull(DateFormats.parse(""));
 
@@ -134,6 +135,104 @@ public class DateFormatsTest {
 		assertNull(DateFormats.parse(value, pattern, null));
 
 		assertNull(DateFormats.parse(value, "foo", timeZone));
+
+	}
+
+	@Test
+	public void testParseStrict() {
+
+		Date date = new Date();
+
+		dateFormat.setTimeZone(TimeZone.getDefault());
+
+		String value = dateFormat.format(date);
+
+		assertEquals(date, DateFormats.parseStrict(value));
+
+	}
+
+	@Test
+	public void testParseStrict_WithFormat() {
+
+		Date date = new Date();
+
+		dateFormat.setTimeZone(TimeZone.getDefault());
+
+		String value = dateFormat.format(date);
+
+		assertEquals(date, DateFormats.parseStrict(value, pattern));
+
+	}
+
+	@Test
+	public void testParseStrict_WithFormat_WithZone() {
+
+		Date date = new Date();
+
+		String value = dateFormat.format(date);
+
+		assertEquals(date, DateFormats.parseStrict(value, pattern, timeZone));
+
+	}
+
+	@Test
+	public void testParseStrict_ErrorneousConversion() {
+
+		String p = "yyyy-MM-dd HH:mm:ss.SSS";
+
+		TimeZone z = TimeZone.getTimeZone("GMT");
+
+		try {
+
+			// With milliseconds
+			Date d = DateFormats.parseStrict("1970-01-01 00:00:00.123", p, z);
+
+			assertEquals(123L, d.getTime());
+
+		} catch (IllegalArgumentException e) {
+
+			fail(e.toString());
+
+		}
+
+		try {
+
+			// With zero-stripped milliseconds
+			DateFormats.parseStrict("1970-01-01 00:00:00.1", p, z);
+
+			fail("Should detect errorneous microsecond conversion.");
+
+		} catch (IllegalArgumentException e) {
+
+			// Success
+
+		}
+
+		try {
+
+			// With microseconds
+			DateFormats.parseStrict("1970-01-01 00:00:00.1234", p, z);
+
+			fail("Should detect errorneous microsecond conversion.");
+
+		} catch (IllegalArgumentException e) {
+
+			// Success
+
+		}
+
+		try {
+
+			// Invalid element range
+			DateFormats.parseStrict("1970-13-32 25:61:72.000", p, z);
+
+			fail("Should detect errorneous range conversion.");
+
+		} catch (IllegalArgumentException e) {
+
+			// Success
+
+		}
 
 	}
 

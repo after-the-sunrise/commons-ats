@@ -108,6 +108,35 @@ public final class DateFormats {
 
 	}
 
+	public static Date parseStrict(String value)
+			throws IllegalArgumentException {
+		return parseStrict(value, DEFAULT_FORMAT, DEFAULT_TIMEZONE);
+	}
+
+	public static Date parseStrict(String value, String format)
+			throws IllegalArgumentException {
+		return parseStrict(value, format, DEFAULT_TIMEZONE);
+	}
+
+	public static Date parseStrict(String value, String format,
+			TimeZone timeZone) throws IllegalArgumentException {
+
+		Date date = parse(value, format, timeZone);
+
+		String rev = format(date, format, timeZone);
+
+		if (!Comparisons.isEqual(value, rev)) {
+
+			String m = "Errorneous date conversion : [%s] -> [%s]";
+
+			throw new IllegalArgumentException(String.format(m, value, rev));
+
+		}
+
+		return date;
+
+	}
+
 	public static String format(Long value) {
 		return format(value, DEFAULT_FORMAT, DEFAULT_TIMEZONE);
 	}
