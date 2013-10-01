@@ -54,8 +54,8 @@
 		<url>https://github.com/after-the-sunrise/${project.artifactId}</url>
 		<connection>scm:git:git://github.com/after-the-sunrise/${project.artifactId}.git</connection>
 		<developerConnection>scm:git:git@github.com:after-the-sunrise/${project.artifactId}.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
@@ -145,6 +145,7 @@
 				<configuration>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<pushChanges>false</pushChanges>
+					<resume>false</resume>
 					<tagNameFormat>@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
