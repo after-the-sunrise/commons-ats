@@ -1,7 +1,9 @@
 package com.after_sunrise.commons.guava.object;
 
 import java.lang.ref.Reference;
+import java.util.concurrent.Executor;
 
+import com.after_sunrise.commons.guava.future.DelegatingFutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
@@ -48,6 +50,17 @@ public final class Settables {
 
 		return future.setException(throwable);
 
+	}
+
+	public static <V> void addCallback(ListenableFuture<V> source,
+			SettableFuture<? super V> target) {
+		Futures.addCallback(source, new DelegatingFutureCallback<V>(target));
+	}
+
+	public static <V> void addCallback(ListenableFuture<V> source,
+			SettableFuture<? super V> target, Executor executor) {
+		Futures.addCallback(source, new DelegatingFutureCallback<V>(target),
+				executor);
 	}
 
 }

@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import com.after_sunrise.commons.guava.object.Settables;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 
 /**
@@ -138,6 +139,39 @@ public class SettablesTest {
 		assertFalse(Settables.setException(ref, new RuntimeException("test")));
 
 		assertFalse(future.isDone());
+
+	}
+
+	@Test
+	public void testAddCallback() {
+
+		SettableFuture<Integer> source = SettableFuture.create();
+		SettableFuture<Number> target = SettableFuture.create();
+
+		Settables.addCallback(source, target);
+
+		assertFalse(target.isDone());
+
+		source.set(1);
+
+		assertTrue(target.isDone());
+
+	}
+
+	@Test
+	public void testAddCallback_Executor() {
+
+		SettableFuture<Integer> source = SettableFuture.create();
+		SettableFuture<Number> target = SettableFuture.create();
+
+		Settables.addCallback(source, target,
+				MoreExecutors.sameThreadExecutor());
+
+		assertFalse(target.isDone());
+
+		source.set(1);
+
+		assertTrue(target.isDone());
 
 	}
 
