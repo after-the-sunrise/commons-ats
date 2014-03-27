@@ -20,7 +20,7 @@
 	</modules>
 
 	<name>ATS Commons</name>
-	<description>Miscellaneous code snippets for common usage.</description>
+	<description>Miscellaneous code snippets for lazy developers.</description>
 	<url>https://github.com/after-the-sunrise/${project.artifactId}</url>
 	<inceptionYear>2012</inceptionYear>
 
@@ -67,6 +67,19 @@
 		<url>https://ci.after-sunrise.com/jenkins/job/${project.artifactId}/</url>
 	</ciManagement>
 
+	<repositories>
+		<repository>
+			<id>rp.after-sunrise_release</id>
+			<name>after-sunrise Release</name>
+			<url>https://rp.after-sunrise.com/maven/release</url>
+		</repository>
+		<repository>
+			<id>rp.after-sunrise_snapshot</id>
+			<name>after-sunrise Snapshot</name>
+			<url>https://rp.after-sunrise.com/maven/snapshot</url>
+		</repository>
+	</repositories>
+
 	<distributionManagement>
 		<repository>
 			<id>s3.after-sunrise</id>
@@ -91,23 +104,23 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<build.plugin.compiler.version>3.0</build.plugin.compiler.version>
+		<build.plugin.compiler.version>3.1</build.plugin.compiler.version>
 		<build.plugin.compiler.source>1.6</build.plugin.compiler.source>
 		<build.plugin.compiler.target>1.6</build.plugin.compiler.target>
 		<build.plugin.sources.version>2.2.1</build.plugin.sources.version>
-		<build.plugin.release.version>2.4.1</build.plugin.release.version>
-		<build.plugin.report.version>2.6</build.plugin.report.version>
-		<build.plugin.site.version>3.2</build.plugin.site.version>
-		<build.plugin.surefire.version>2.13</build.plugin.surefire.version>
-		<build.plugin.coberture.version>2.5.2</build.plugin.coberture.version>
-		<build.plugin.findbugs.version>2.5.2</build.plugin.findbugs.version>
-		<build.plugin.checkstyle.version>2.9.1</build.plugin.checkstyle.version>
-		<build.plugin.javadoc.version>2.9</build.plugin.javadoc.version>
-		<build.plugin.jxr.version>2.3</build.plugin.jxr.version>
+		<build.plugin.release.version>2.5</build.plugin.release.version>
+		<build.plugin.report.version>2.7</build.plugin.report.version>
+		<build.plugin.site.version>3.3</build.plugin.site.version>
+		<build.plugin.surefire.version>2.17</build.plugin.surefire.version>
+		<build.plugin.coberture.version>2.6</build.plugin.coberture.version>
+		<build.plugin.findbugs.version>2.5.3</build.plugin.findbugs.version>
+		<build.plugin.checkstyle.version>2.12</build.plugin.checkstyle.version>
+		<build.plugin.javadoc.version>2.9.1</build.plugin.javadoc.version>
+		<build.plugin.jxr.version>2.4</build.plugin.jxr.version>
 		<build.plugin.javancss.version>2.0</build.plugin.javancss.version>
 		<build.plugin.aws.version>3.0.0.RELEASE</build.plugin.aws.version>
 
-		<dependency.findbugs.version>2.0.1</dependency.findbugs.version>
+		<dependency.findbugs.version>2.0.3</dependency.findbugs.version>
 		<dependency.junit.version>4.11</dependency.junit.version>
 		<dependency.mockito.version>1.9.5</dependency.mockito.version>
 	</properties>
