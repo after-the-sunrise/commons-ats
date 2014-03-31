@@ -1,8 +1,15 @@
-/logs
-/target
 /.classpath
 /.project
 /.settings
+/logs
+/target
 /pom.xml.releaseBackup
 /release.properties
 
+/**/.classpath
+/**/.project
+/**/.settings
+/**/logs
+/**/target
+/**/pom.xml.releaseBackup
+/**/release.properties
