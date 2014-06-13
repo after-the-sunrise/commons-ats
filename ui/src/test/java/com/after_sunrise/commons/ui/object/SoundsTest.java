@@ -132,14 +132,16 @@ public class SoundsTest {
 
 			Clip clip = Sounds.getClip(sample);
 
+			assertNotNull(clip);
+
 			try {
-				assertNotNull(clip);
-			} finally {
 				clip.close();
+			} catch (RuntimeException e) {
+				// Ignore close error
 			}
 
 		} catch (IOException e) {
-			// Ignore as some platform may not like ".wav"
+			// Ignore since some platform may not like ".wav"
 		}
 
 		assertNull(Sounds.getClip(new byte[0]));
