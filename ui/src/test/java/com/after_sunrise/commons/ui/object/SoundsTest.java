@@ -128,21 +128,27 @@ public class SoundsTest {
 	@Test
 	public void testGetClip() throws IOException {
 
+		Clip clip;
+
 		try {
-
-			Clip clip = Sounds.getClip(sample);
-
-			assertNotNull(clip);
-
-			try {
-				clip.close();
-			} catch (RuntimeException e) {
-				// Ignore close error
-			}
-
-		} catch (IOException e) {
+			clip = Sounds.getClip(sample);
+		} catch (Exception e) {
 			// Ignore since some platform may not like ".wav"
+			return;
 		}
+
+		assertNotNull(clip);
+
+		try {
+			clip.close();
+		} catch (Exception e) {
+			// Ignore close error
+		}
+
+	}
+
+	@Test
+	public void testGetClip_Empty() throws IOException {
 
 		assertNull(Sounds.getClip(new byte[0]));
 
