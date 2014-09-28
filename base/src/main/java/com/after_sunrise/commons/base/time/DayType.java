@@ -7,8 +7,10 @@ import java.util.Calendar;
  * Enum constants to represent day of a week in single byte. Each day is
  * assigned to a bit, which will allow a single byte to contain multiple days.
  * 8th bit (the bit on the very left) is not used and will be considered as undefined bit.
+ * </pre>
  * 
  * <table border="1">
+ * <caption>Day Mapping</caption>
  * <tr><th>DayOfWeek</th><th>bits</th><th>byte value</th><tr>
  * <tr><td>Sunday</td><td>01000000</td><td>64</td><tr>
  * <tr><td>Monday</td><td>00100000</td><td>32</td><tr>
@@ -18,7 +20,6 @@ import java.util.Calendar;
  * <tr><td>Friday</td><td>00000010</td><td>2</td><tr>
  * <tr><td>Saturday</td><td>00000001</td><td>1</td><tr>
  * </table>
- * </pre>
  * 
  * @author takanori.takase
  */
