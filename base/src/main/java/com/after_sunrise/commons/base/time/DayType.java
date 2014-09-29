@@ -11,14 +11,46 @@ import java.util.Calendar;
  * 
  * <table border="1">
  * <caption>Day Mapping</caption>
- * <tr><th>DayOfWeek</th><th>bits</th><th>byte value</th><tr>
- * <tr><td>Sunday</td><td>01000000</td><td>64</td><tr>
- * <tr><td>Monday</td><td>00100000</td><td>32</td><tr>
- * <tr><td>Tuesday</td><td>00010000</td><td>16</td><tr>
- * <tr><td>Wednesday</td><td>00001000</td><td>8</td><tr>
- * <tr><td>Thursday</td><td>00000100</td><td>4</td><tr>
- * <tr><td>Friday</td><td>00000010</td><td>2</td><tr>
- * <tr><td>Saturday</td><td>00000001</td><td>1</td><tr>
+ * <tr>
+ * <th>DayOfWeek</th>
+ * <th>bits</th>
+ * <th>byte value</th>
+ * <tr>
+ * <tr>
+ * <td>Sunday</td>
+ * <td>01000000</td>
+ * <td>64</td>
+ * <tr>
+ * <tr>
+ * <td>Monday</td>
+ * <td>00100000</td>
+ * <td>32</td>
+ * <tr>
+ * <tr>
+ * <td>Tuesday</td>
+ * <td>00010000</td>
+ * <td>16</td>
+ * <tr>
+ * <tr>
+ * <td>Wednesday</td>
+ * <td>00001000</td>
+ * <td>8</td>
+ * <tr>
+ * <tr>
+ * <td>Thursday</td>
+ * <td>00000100</td>
+ * <td>4</td>
+ * <tr>
+ * <tr>
+ * <td>Friday</td>
+ * <td>00000010</td>
+ * <td>2</td>
+ * <tr>
+ * <tr>
+ * <td>Saturday</td>
+ * <td>00000001</td>
+ * <td>1</td>
+ * <tr>
  * </table>
  * 
  * @author takanori.takase
