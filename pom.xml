@@ -73,17 +73,17 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
-		<build.plugin.sources.version>2.2.1</build.plugin.sources.version>
-		<build.plugin.release.version>2.5</build.plugin.release.version>
+		<build.plugin.sources.version>2.3</build.plugin.sources.version>
+		<build.plugin.release.version>2.5.1</build.plugin.release.version>
 		<build.plugin.report.version>2.7</build.plugin.report.version>
 		<build.plugin.surefire.version>2.17</build.plugin.surefire.version>
 		<build.plugin.coberture.version>2.6</build.plugin.coberture.version>
 		<build.plugin.findbugs.version>3.0.0</build.plugin.findbugs.version>
-		<build.plugin.checkstyle.version>2.12</build.plugin.checkstyle.version>
+		<build.plugin.checkstyle.version>2.13</build.plugin.checkstyle.version>
 		<build.plugin.javadoc.version>2.9.1</build.plugin.javadoc.version>
 		<build.plugin.jxr.version>2.4</build.plugin.jxr.version>
 
-		<dependency.findbugs.version>2.0.3</dependency.findbugs.version>
+		<dependency.findbugs.version>3.0.0</dependency.findbugs.version>
 		<dependency.junit.version>4.11</dependency.junit.version>
 		<dependency.mockito.version>1.9.5</dependency.mockito.version>
 	</properties>

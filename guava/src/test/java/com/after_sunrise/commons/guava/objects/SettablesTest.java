@@ -164,8 +164,7 @@ public class SettablesTest {
 		SettableFuture<Integer> source = SettableFuture.create();
 		SettableFuture<Number> target = SettableFuture.create();
 
-		Settables.addCallback(source, target,
-				MoreExecutors.sameThreadExecutor());
+		Settables.addCallback(source, target, MoreExecutors.directExecutor());
 
 		assertFalse(target.isDone());
 
