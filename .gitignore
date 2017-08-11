@@ -1,14 +1,23 @@
-/.classpath
-/.project
-/.settings
-/logs
-/target
-/pom.xml.releaseBackup
-/release.properties
+# OS
+/**/.DS_Store
+/**/Thumbs.db
 
+# IDE (Eclipse)
 /**/.classpath
 /**/.project
 /**/.settings
+/**/build
+
+# IDE (Intellij IDEA)
+/**/*.iml
+/**/.idea
+/**/out
+
+# Gradle
+/**/.gradle
+/**/build
+
+# Runtime
 /**/logs
 /**/target
 /**/pom.xml.releaseBackup
