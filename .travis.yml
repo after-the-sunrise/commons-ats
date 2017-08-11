@@ -10,5 +10,10 @@ notifications:
     email:
         - scm@after-sunrise.com
 
+addons:
+    hosts:
+        - travis-hostname
+    hostname: travis-hostname
+
 after_success:
     - mvn site coveralls:report
