@@ -34,7 +34,7 @@ Refer to each module's `README.md` documentation for the details.
 |[commons-log][log_]        |commons-logging : commons-logging    |
 |[commons-spring][sprg]     |org.springframework : spring-context |
 |[commons-thrift][thft]     |org.apache.thrift : libthrift        |
-|[commons-ui][ui]           |JDK 1.6 (AWT, sound, ...)            |
+|[commons-ui][ui__]           |JDK 1.6 (AWT, sound, ...)            |
 
 [base]:https://github.com/after-the-sunrise/commons-ats/tree/master/base
 [comp]:https://github.com/after-the-sunrise/commons-ats/tree/master/compress
