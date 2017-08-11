@@ -9,3 +9,6 @@ jdk:
 notifications:
     email:
         - scm@after-sunrise.com
+
+after_success:
+    - mvn site coveralls:report
