@@ -24,18 +24,27 @@ Each modules are aimed to provide support for specific libraries.
 Refer to each module's `README.md` documentation for the details.
 
 
-|Module                                      |Libraries                            |
-|--------------------------------------------|-------------------------------------|
-|[commons-base](tree/master/base)            |JDK 1.6                              |
-|[commons-compress](tree/master/compress)    |org.apache.commons : commons-compress|
-|[commons-csv](tree/master/csv)              |net.sf.opencsv : opencsv             |
-|[commons-guava](tree/master/guava)          |com.google.guava : guava             |
-|[commons-jcommander](tree/master/jcommander)|com.beust : jcommander               |
-|[commons-log](tree/master/log)              |commons-logging : commons-logging    |
-|[commons-spring](tree/master/spring)        |org.springframework : spring-context |
-|[commons-thrift](tree/master/thrift)        |org.apache.thrift : libthrift        |
-|[commons-ui](tree/master/ui)                |JDK 1.6 (AWT, sound, ...)            |
+|Modules                    |Libraries                            |
+|---------------------------|-------------------------------------|
+|[commons-base][base]       |JDK 1.6                              |
+|[commons-compress][comp]   |org.apache.commons : commons-compress|
+|[commons-csv][csv_]        |net.sf.opencsv : opencsv             |
+|[commons-guava][guav]      |com.google.guava : guava             |
+|[commons-jcommander][jcom] |com.beust : jcommander               |
+|[commons-log][log_]        |commons-logging : commons-logging    |
+|[commons-spring][sprg]     |org.springframework : spring-context |
+|[commons-thrift][thft]     |org.apache.thrift : libthrift        |
+|[commons-ui][ui]           |JDK 1.6 (AWT, sound, ...)            |
 
+[base]:https://github.com/after-the-sunrise/commons-ats/tree/master/base
+[comp]:https://github.com/after-the-sunrise/commons-ats/tree/master/compress
+[csv_]:https://github.com/after-the-sunrise/commons-ats/tree/master/csv
+[guav]:https://github.com/after-the-sunrise/commons-ats/tree/master/guava
+[jcom]:https://github.com/after-the-sunrise/commons-ats/tree/master/jcommander
+[log_]:https://github.com/after-the-sunrise/commons-ats/tree/master/log
+[sprg]:https://github.com/after-the-sunrise/commons-ats/tree/master/spring
+[thft]:https://github.com/after-the-sunrise/commons-ats/tree/master/thrift
+[ui__]:https://github.com/after-the-sunrise/commons-ats/tree/master/ui
 
 [travis-page]:https://travis-ci.org/after-the-sunrise/commons-ats
 [travis-icon]:https://travis-ci.org/after-the-sunrise/commons-ats.svg?branch=master
@@ -43,3 +52,4 @@ Refer to each module's `README.md` documentation for the details.
 [coverall-icon]:https://coveralls.io/repos/github/after-the-sunrise/commons-ats/badge.svg?branch=master
 [maven-page]:https://maven-badges.herokuapp.com/maven-central/com.after_sunrise.commons/commons-ats
 [maven-icon]:https://maven-badges.herokuapp.com/maven-central/com.after_sunrise.commons/commons-ats/badge.svg
+
