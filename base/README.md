@@ -7,12 +7,12 @@ Boilerplate code libraries to support the standard Java libraries.
 
 ### JVM Process ID
 ```java
-    Runtimes.getProcessId()); // Java 9 : java.lang.Process#pid​()
+        Runtimes.getProcessId()); // Java 9 : java.lang.Process#pid​()
 ```
 
 ### Listener Management
 ```java
-       Runnable r1 = new Runnable() {
+        Runnable r1 = new Runnable() {
             @Override
             public void run() {
                 // Do something 1

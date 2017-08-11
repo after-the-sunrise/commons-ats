@@ -7,12 +7,12 @@ Miscellaneous code snippets for lazy developers.
 ## Overview
 
 Commons ATS is a collection of generic code snippets, providing 
-boilerplate codes out-of-the-box to prevent reinventing the wheels.
-
-Although the standard Java library and 3rd party libraries are getting better and better, 
-there are still some codes which are repeatedly reimplemented across various projects. 
-This project is intended to externalize those boilerplate codes 
+boilerplate codes out-of-the-box, to avoid reinventing the wheels 
 and keep things [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
+
+Although the standard Java library and 3rd party libraries offer rich set of features, 
+there are still some codes which are repeatedly reimplemented across various projects. 
+This project is intended to externalize those boilerplate codes which are somewhat complex but still generic.
 
 *'Don't repeat yourself. Life is too short to reinvent the wheels. Again, don't repeat yourself.*
  
@@ -34,7 +34,7 @@ Refer to each module's `README.md` documentation for the details.
 |[commons-log][log_]        |commons-logging : commons-logging    |
 |[commons-spring][sprg]     |org.springframework : spring-context |
 |[commons-thrift][thft]     |org.apache.thrift : libthrift        |
-|[commons-ui][ui__]           |JDK 1.6 (AWT, sound, ...)            |
+|[commons-ui][ui__]         |JDK 1.6 (AWT, sound, ...)            |
 
 [base]:https://github.com/after-the-sunrise/commons-ats/tree/master/base
 [comp]:https://github.com/after-the-sunrise/commons-ats/tree/master/compress
